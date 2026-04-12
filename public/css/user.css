@@ -1,0 +1,32 @@
+/* File định dạng CSS chung cho toàn bộ trang Giao diện Người dùng (Sinh viên) */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
+}
+
+.user-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.user-nav a:hover {
+    text-decoration: underline;
+}
+
+.user-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
