@@ -1,3 +1,3 @@
-Họ và tên : Đặng Văn Tùng Dương
-MSV: 2221050152
-Lớp: CNPM 05A
+Họ và tên : Phạm Thành Vinh 
+MSV: 2521050332
+Lớp: CNTT K70B2
