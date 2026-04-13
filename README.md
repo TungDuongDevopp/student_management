@@ -86,7 +86,7 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 ### 2.3 Ràng buộc thiết kế
 Để đảm bảo hệ thống vận hành ổn định và có khả năng mở rộng tốt, nhóm chúng em tuân thủ các ràng buộc kỹ thuật sau:
 
-* **Ngôn ngữ lập trình & Framework:** Phát triển theo mô hình Web App (Monolithic). Backend sử dụng ngôn ngữ **PHP** (Framework **Laravel**) đáp ứng khả năng phân luồng và bảo mật cao. Giao diện Frontend được xây dựng chuẩn hóa bằng **HTML5, CSS3, JavaScript** kết hợp các thư viện UI hiện đại.
+* **Ngôn ngữ lập trình & Framework:** Phát triển theo mô hình Web App. Backend sử dụng ngôn ngữ **PHP** (Framework **Laravel**) đáp ứng khả năng phân luồng và bảo mật cao. Giao diện Frontend được xây dựng chuẩn hóa bằng **HTML5, CSS3, JavaScript** kết hợp các thư viện UI hiện đại.
 * **Cơ sở dữ liệu (Database):** Hệ thống vận hành trên nền tảng **SQL Server**, đảm bảo khả năng lưu trữ dữ liệu lớn, tính toàn vẹn và bảo mật cao cho toàn bộ thông tin sinh viên, điểm số và học phí.
 * **Tích hợp dịch vụ bên ngoài:** Triển khai kết nối đa nền tảng qua **RESTful API**, tích hợp giải pháp **SePay/VietQR** để tự động gạch nợ tức thời qua **Webhooks** và sử dụng **SMTP Server** để thực hiện chiến dịch **Email Automation** gửi biên lai số tự động.
 * **An toàn và Bảo mật:** Triển khai chứng chỉ **SSL (HTTPS)** cho toàn bộ hệ thống. Áp dụng mô hình phân quyền **RBAC (Role-Based Access Control)** để kiểm soát quyền truy cập chặt chẽ giữa Admin, Giảng viên và Sinh viên.
