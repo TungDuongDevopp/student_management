@@ -128,8 +128,14 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 - Hủy đăng ký môn học  
 - Xem danh sách môn học 
 - Xem kết quả điểm danh 
+- Phản hồi thông tin
 
-    
+ ### 3.2 Phân tích use case chi tiết
+
+ #### 3.2.1 Usecase tổng quan
+
+ #### 3.2.2 Usercase sinh viên
+
 
 ## IV. Thiết kế CSDL
 
