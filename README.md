@@ -105,6 +105,8 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 - Quản lý thời khóa biểu  
 - Quản lý thông báo  
 - Quản lý tài khoản  
+- Quản lý ý kiến phản hồi
+- Cấu hình hệ thống
 
 ---
 
@@ -115,6 +117,7 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 - Xem thời khóa biểu  
 - Xem thông báo  
 - Điểm danh sinh viên
+- Gửi ý kiến phản hồi
 
 ---
 
@@ -128,7 +131,7 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 - Hủy đăng ký môn học  
 - Xem danh sách môn học 
 - Xem kết quả điểm danh 
-- Phản hồi thông tin
+- Đóng góp ý kiến
 
  ### 3.2 Phân tích use case chi tiết
 
