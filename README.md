@@ -102,9 +102,9 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
 - Quản lý môn học  
 - Quản lý điểm  
 - Quản lý học phí  
-- Quản lý thời khóa biểu  
+- Quản lý thời khóa biểu
 - Quản lý thông báo  
-- Quản lý tài khoản  
+- Quản lý người dùng 
 - Quản lý ý kiến phản hồi
 - Cấu hình hệ thống
 
@@ -171,7 +171,53 @@ rectangle "Hệ thống Quản lý Sinh viên" {
 }
 @enduml
 </pre>
+#### 3.2.3 Usercase giảng viên
 
+#### 3.2.4 Usercase admin
+<pre>
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Admin" as admin
+
+rectangle "Hệ thống Quản lý Đào tạo" {
+    
+    ' Nhóm quản lý đối tượng (Master Data)
+    package "Quản lý Người dùng & Đối tượng" {
+        usecase "Quản lý Người dùng" as UC_Users
+        usecase "Quản lý Sinh viên" as UC_Students
+        usecase "Quản lý Giảng viên" as UC_Faculty
+    }
+
+    ' Nhóm quản lý nghiệp vụ đào tạo
+    package "Quản lý Đào tạo" {
+        usecase "Quản lý Môn học & Lớp học" as UC_Course
+        usecase "Quản lý Thời khóa biểu" as UC_Schedule
+        usecase "Quản lý Điểm số" as UC_Grades
+    }
+
+    ' Nhóm quản lý vận hành
+    package "Vận hành & Hệ thống" {
+        usecase "Quản lý Học phí" as UC_Fees
+        usecase "Quản lý Thông báo & Phản hồi" as UC_Comm
+        usecase "Cấu hình hệ thống" as UC_Config
+    }
+
+    ' Kết nối Admin với các Use Case chính
+    admin -- UC_Users
+    admin -- UC_Students
+    admin -- UC_Faculty
+    admin -- UC_Course
+    admin -- UC_Schedule
+    admin -- UC_Grades
+    admin -- UC_Fees
+    admin -- UC_Comm
+    admin -- UC_Config
+}
+
+@enduml
+</pre>
 ## IV. Thiết kế CSDL
 
 ## V. Thiết kế giao diện
