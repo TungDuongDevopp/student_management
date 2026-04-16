@@ -136,7 +136,100 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
  ### 3.2 Phân tích use case chi tiết
 
  #### 3.2.1 Usecase tổng quan
+@startuml
+left to right direction
+skinparam packageStyle rectangle
 
+actor "Sinh viên (User)" as SV
+actor "Giảng viên" as GV
+actor "Quản trị" as Admin
+
+SV --> (Đăng nhập)
+GV --> (Đăng nhập)
+Admin --> (Đăng nhập)
+
+rectangle "Phần mềm Của Sinh Viên" {
+  usecase "Cập nhật thông tin cá nhân" as SV0
+  usecase "Xem thời khóa biểu" as SV1
+  usecase "Xem bảng điểm" as SV2
+  usecase "Xem thông báo" as SV3
+  usecase "Thanh toán học phí" as SV4
+  usecase "Đăng ký môn học" as SV5
+  usecase "Xem danh sách môn học" as SV6
+  usecase "Xem kết quả điểm danh" as SV7
+}
+
+rectangle "Phần mềm Của Giảng Viên" {
+  usecase "Xem danh sách lớp học" as GV1
+  usecase "Xem danh sách sinh viên" as GV2
+  usecase "Nhập và cập nhật điểm" as GV3
+  usecase "Xem thời khóa biểu" as GV4
+  usecase "Xem thông báo" as GV5
+  usecase "Điểm danh sinh viên" as GV6
+}
+
+rectangle "Phần Mềm Quản Trị Hệ Thống" {
+  usecase "Quản lý sinh viên" as AD1
+  usecase "Quản lý giảng viên" as AD2
+  usecase "Quản lý môn học" as AD3
+  usecase "Quản lý điểm" as AD4
+  usecase "Quản lý thanh toán học phí" as AD5
+  usecase "Quản lý thời khóa biểu" as AD6
+  usecase "Quản lý thông báo" as AD7
+  usecase "Quản lý tài khoản" as AD8
+}
+
+SV --> SV0
+SV --> SV1
+SV --> SV2
+SV --> SV3
+SV --> SV4
+SV --> SV5
+SV --> SV6
+SV --> SV7
+
+GV --> GV1
+GV --> GV2
+GV --> GV3
+GV --> GV4
+GV --> GV5
+GV --> GV6
+
+Admin --> AD1
+Admin --> AD2
+Admin --> AD3
+Admin --> AD4
+Admin --> AD5
+Admin --> AD6
+Admin --> AD7
+Admin --> AD8
+
+(SV0) ..> (Đăng nhập) : <<include>>
+(SV1) ..> (Đăng nhập) : <<include>>
+(SV2) ..> (Đăng nhập) : <<include>>
+(SV3) ..> (Đăng nhập) : <<include>>
+(SV4) ..> (Đăng nhập) : <<include>>
+(SV5) ..> (Đăng nhập) : <<include>>
+(SV6) ..> (Đăng nhập) : <<include>>
+(SV7) ..> (Đăng nhập) : <<include>>
+
+(GV1) ..> (Đăng nhập) : <<include>>
+(GV2) ..> (Đăng nhập) : <<include>>
+(GV3) ..> (Đăng nhập) : <<include>>
+(GV4) ..> (Đăng nhập) : <<include>>
+(GV5) ..> (Đăng nhập) : <<include>>
+(GV6) ..> (Đăng nhập) : <<include>>
+
+(AD1) ..> (Đăng nhập) : <<include>>
+(AD2) ..> (Đăng nhập) : <<include>>
+(AD3) ..> (Đăng nhập) : <<include>>
+(AD4) ..> (Đăng nhập) : <<include>>
+(AD5) ..> (Đăng nhập) : <<include>>
+(AD6) ..> (Đăng nhập) : <<include>>
+(AD7) ..> (Đăng nhập) : <<include>>
+(AD8) ..> (Đăng nhập) : <<include>>
+
+@enduml
  #### 3.2.2 Usercase sinh viên
 <pre>
 @startuml
@@ -172,7 +265,42 @@ rectangle "Hệ thống Quản lý Sinh viên" {
 @enduml
 </pre>
 #### 3.2.3 Usercase giảng viên
+@startuml
+left to right direction
+skinparam packageStyle rectangle
 
+actor "Giảng viên" as gv
+
+rectangle "Hệ thống Quản lý Đào tạo" {
+    
+    ' Nhóm thông tin chung
+    package "Thông tin & Tra cứu" {
+        usecase "Xem thời khóa biểu" as UC_Schedule
+        usecase "Xem thông báo" as UC_Notif
+    }
+
+    ' Nhóm quản lý lớp học
+    package "Quản lý Lớp & Sinh viên" {
+        usecase "Xem danh sách lớp" as UC_ClassList
+        usecase "Xem danh sách sinh viên" as UC_StudentList
+    }
+
+    ' Nhóm nghiệp vụ giảng dạy
+    package "Nghiệp vụ Giảng dạy" {
+        usecase "Điểm danh sinh viên" as UC_Attendance
+        usecase "Nhập và cập nhật điểm" as UC_Grades
+    }
+
+    ' Kết nối Giảng viên với các Use Case chính
+    gv -- UC_Schedule
+    gv -- UC_Notif
+    gv -- UC_ClassList
+    gv -- UC_StudentList
+    gv -- UC_Attendance
+    gv -- UC_Grades
+}
+
+@enduml
 #### 3.2.4 Usercase admin
 <pre>
 @startuml
