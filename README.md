@@ -218,6 +218,7 @@ rectangle "Hệ thống Quản lý Đào tạo" {
 
 @enduml
 </pre>
+
 ## IV. Thiết kế CSDL
 
 ## V. Thiết kế giao diện
