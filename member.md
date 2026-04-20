@@ -532,7 +532,7 @@ Luồng sự kiện chính (Basic Flow):
 
 Người dùng truy cập module Thời khóa biểu.
 
-Hệ thống gọi API, ánh xạ dữ liệu lịch học/giảng dạy lên giao diện lịch (Calendar View).
+Hệ thống gọi API, đổ dữ liệu lịch học/giảng dạy lên giao diện lịch (Calendar View).
 
 (Thực thi nhánh Extend): Người dùng sử dụng Toggle Switch để chuyển sang chế độ Xem theo Tuần.
 
@@ -601,3 +601,238 @@ Luồng ngoại lệ (Alternative Flow):
 (A1) Thiếu thông tin bắt buộc: Nếu không chọn Chủ đề hoặc để trống Nội dung, hệ thống chặn gửi và báo đỏ.
 
 Hậu điều kiện: Ticket được lưu vào hệ thống, sinh ra mã theo dõi và đặt trạng thái Chờ xử lý.
+
+## 3.3 Biểu đồ Sequence 
+
+### 3.3.2 Biểu đồ sequence của giảng viên 
+#### 3.3.2.1 Đăng kí 
+
+<pre>
+@startuml
+autonumber "<b>0"
+actor "Giảng viên" as GV
+boundary "Giao diện\nĐăng ký" as UI
+control "Bộ xử lý\nTài khoản" as CTRL
+entity "Cơ sở dữ liệu" as DB
+
+GV -> UI : Nhập thông tin (Mã GV, Họ tên, Email, Mật khẩu)
+activate UI
+
+UI -> CTRL : requestRegister(thongTin)
+activate CTRL
+
+CTRL -> DB : checkExist(maGV, email)
+activate DB
+DB --> CTRL : Kết quả (Đã tồn tại / Chưa tồn tại)
+deactivate DB
+
+alt Thông tin hợp lệ (Chưa tồn tại)
+    CTRL -> CTRL : Mã hóa Mật khẩu
+    CTRL -> DB : createAccount(thongTin, status='Pending')
+    activate DB
+    DB --> CTRL : Success
+    deactivate DB
+    CTRL --> UI : Trả về thông báo thành công
+    UI --> GV : Hiển thị "Đăng ký thành công, chờ Admin duyệt"
+else Đã tồn tại Mã GV hoặc Email
+    CTRL --> UI : Trả về lỗi (Error)
+    UI --> GV : Cảnh báo "Email hoặc Mã GV đã được sử dụng"
+end
+
+deactivate CTRL
+deactivate UI
+@enduml
+</pre>
+
+#### 3.3.2.2 Đăng nhập 
+
+<pre>
+@startuml
+autonumber "<b>0"
+actor "Giảng viên" as GV
+boundary "Giao diện\nĐăng nhập" as UI
+control "Bộ xử lý\nXác thực" as CTRL
+entity "Cơ sở dữ liệu" as DB
+
+GV -> UI : Nhập Mã GV và Mật khẩu
+activate UI
+
+UI -> CTRL : requestLogin(maGV, password)
+activate CTRL
+
+CTRL -> CTRL : Mã hóa Password
+CTRL -> DB : verifyUser(maGV, encryptedPass)
+activate DB
+
+alt Xác thực thành công (Đúng Mã GV/Pass & Đã duyệt)
+    DB --> CTRL : Trả về thông tin User & Quyền (Role)
+    CTRL -> CTRL : Khởi tạo Session/Token
+    CTRL --> UI : return(Success)
+    UI --> GV : Điều hướng vào trang chủ (Dashboard)
+else Sai thông tin hoặc Tài khoản bị khóa
+    DB --> CTRL : return(Null)
+    CTRL --> UI : return(Error)
+    UI --> GV : Hiển thị thông báo "Thông tin đăng nhập không chính xác"
+end
+
+deactivate DB
+deactivate CTRL
+deactivate UI
+@enduml
+</pre>
+
+#### 3.3.2.3 Quên mật khẩu 
+
+<pre>
+@startuml
+autonumber "<b>0"
+actor "Giảng viên" as GV
+boundary "Giao diện\nQuên MK" as UI
+control "Bộ xử lý\nTài khoản" as CTRL
+entity "Hệ thống\nEmail (SMTP)" as Email
+entity "Cơ sở dữ liệu" as DB
+
+GV -> UI : Bấm "Quên mật khẩu" & Nhập Email
+activate UI
+
+UI -> CTRL : requestResetPassword(email)
+activate CTRL
+
+CTRL -> DB : verifyEmail(email)
+activate DB
+
+alt Email hợp lệ (Có liên kết với Mã GV)
+    DB --> CTRL : return(UserInfo)
+    CTRL -> CTRL : Generate Reset Token (Tạo mã khôi phục)
+    CTRL -> DB : saveToken(email, token)
+    
+    CTRL -> Email : sendResetLink(email, token)
+    activate Email
+    Email --> CTRL : Sent Success
+    deactivate Email
+    
+    CTRL --> UI : Thông báo gửi mail thành công
+    UI --> GV : Hiển thị "Vui lòng kiểm tra Email để đặt lại mật khẩu"
+else Email không tồn tại
+    DB --> CTRL : return(Null)
+    deactivate DB
+    CTRL --> UI : return(Error)
+    UI --> GV : Cảnh báo "Email không tồn tại trong hệ thống"
+end
+
+deactivate CTRL
+deactivate UI
+@enduml
+</pre>
+
+#### 3.3.2.4 Xem danh sách lớp học
+
+<pre>
+@startuml
+autonumber "<b>0"
+actor "Giảng viên" as GV
+boundary "Giao diện\nLớp & Sinh viên" as UI
+control "Bộ xử lý\nSinh viên" as CTRL
+entity "Cơ sở dữ liệu" as DB
+
+GV -> UI : Bấm "Xem chi tiết" tại 1 lớp học
+activate UI
+
+UI -> CTRL : requestDanhSachSV(maLop)
+activate CTRL
+
+CTRL -> DB : queryStudentsByClass(maLop)
+activate DB
+DB --> CTRL : listSinhVien
+deactivate DB
+
+CTRL --> UI : Đổ dữ liệu lên giao diện
+deactivate CTRL
+UI --> GV : Hiển thị danh sách sinh viên
+
+alt Giảng viên tìm kiếm
+    GV -> UI : Nhập "Mã SV" vào ô tìm kiếm
+    UI -> CTRL : searchSinhVien(maSV, maLop)
+    activate CTRL
+    CTRL -> DB : query(maSV)
+    activate DB
+    DB --> CTRL : result
+    deactivate DB
+    CTRL --> UI : updateView(result)
+    deactivate CTRL
+    UI --> GV : Hiển thị kết quả tìm kiếm
+else Giảng viên Xuất Excel
+    GV -> UI : Bấm nút "Xuất Excel"
+    UI -> CTRL : exportToExcel(maLop)
+    activate CTRL
+    CTRL -> CTRL : Generate File (.xlsx)
+    CTRL --> UI : Trả về File Download URL
+    deactivate CTRL
+    UI --> GV : Tải file xuống thiết bị
+end
+
+deactivate UI
+@enduml
+</pre>
+
+#### 3.3.2.5 Xem thời khóa biểu 
+<pre>
+@startuml
+autonumber "<b>0"
+actor "Giảng viên" as GV
+boundary "Giao diện\nThời khóa biểu" as UI
+control "Bộ xử lý\nHệ thống" as CTRL
+entity "Cơ sở dữ liệu" as DB
+
+== 1. Tải lịch giảng dạy tổng quan ==
+GV -> UI : Truy cập module Thời khóa biểu
+activate UI
+UI -> CTRL : getSchedule(maGV)
+activate CTRL
+CTRL -> DB : queryScheduleData(maGV)
+activate DB
+DB --> CTRL : listCaDay
+deactivate DB
+CTRL --> UI : Render dữ liệu lên Calendar View
+deactivate CTRL
+UI --> GV : Hiển thị lưới Thời khóa biểu
+
+== 2. Tương tác khoan sâu (Drill-down) vào Tiết dạy ==
+GV -> UI : Click vào block Tiết dạy môn X
+UI -> CTRL : getChiTietCaDay(maCaDay)
+activate CTRL
+CTRL -> DB : queryChiTiet(maCaDay)
+activate DB
+DB --> CTRL : thongTinCaDay (Giờ, Phòng, Lớp)
+deactivate DB
+CTRL --> UI : Render Popup Modal
+deactivate CTRL
+UI --> GV : Hiển thị Popup chi tiết ca dạy
+
+== 3. Các thao tác mở rộng từ Tiết dạy (Extend) ==
+alt Xem danh sách lớp tại chỗ
+    GV -> UI : Bấm nút "Xem danh sách SV"
+    UI -> CTRL : requestDanhSachSV(maLop)
+    activate CTRL
+    CTRL -> DB : queryStudents(maLop)
+    activate DB
+    DB --> CTRL : listSinhVien
+    deactivate DB
+    CTRL --> UI : Cập nhật UI Modal
+    deactivate CTRL
+    UI --> GV : Hiển thị danh sách SV ngay trên Popup
+else Download danh sách Excel
+    GV -> UI : Bấm nút "Tải danh sách (.xlsx)"
+    UI -> CTRL : exportExcel(maLop)
+    activate CTRL
+    CTRL -> CTRL : Generate File
+    CTRL --> UI : File Download URL
+    deactivate CTRL
+    UI --> GV : Trình duyệt tự động tải tệp xuống máy
+end
+
+deactivate UI
+@enduml
+</pre>
+
+### 3.3.2.6 Xem danh sách lớp học
