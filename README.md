@@ -506,7 +506,9 @@ rectangle "Hệ thống Quản lý Đào tạo" {
 
 @enduml
 </pre>
+### 3.3 Sequence
 
+### 3.4 Activity
 ## IV. Thiết kế CSDL
 
 ## V. Thiết kế giao diện
