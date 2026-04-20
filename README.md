@@ -609,8 +609,15 @@ a. Quản lý người dùng
 ### 3.3 Sequence
 
 ### 3.4 Activity
+
+### 3.5 Class
+
+### 3.6 Component
+
+### 3.7 Deployment
 ## IV. Thiết kế CSDL
+
 
 ## V. Thiết kế giao diện
 
-## VI. Cài đặt và thử nghiệ
+## VI. Cài đặt và thử nghiệm
