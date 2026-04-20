@@ -351,4 +351,4 @@ rectangle "Hệ thống Quản lý Đào tạo" {
 
 ## V. Thiết kế giao diện
 
-## VI. Cài đặt và thử nghiệ
+## VI. Cài đặt và thử nghiệm
