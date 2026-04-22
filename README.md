@@ -136,6 +136,7 @@ Sau khi tiến hành khảo sát thực tế và phân tích những bất cập
  ### 3.2 Phân tích use case chi tiết
 
  #### 3.2.1 Usecase tổng quan
+ <pre>
 @startuml
 left to right direction
 skinparam packageStyle rectangle
@@ -230,6 +231,7 @@ Admin --> AD8
 (AD8) ..> (Đăng nhập) : <<include>>
 
 @enduml
+</pre>
  #### 3.2.2 Usercase sinh viên
 <pre>
 @startuml
