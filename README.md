@@ -1,4 +1,4 @@
-# PHẦN MỀM QUẢN LÝ SINH VIÊN
+﻿# PHẦN MỀM QUẢN LÝ SINH VIÊN
 ## TÀI LIỆU MÔ TẢ THIẾT KẾ PHẦN MỀM
 ### Đề tài: Quản lý sinh viên
 
@@ -334,7 +334,6 @@ VIEW_ATT .> STATUS : <<include>>
 
 @enduml
 </pre>
-
 d.Usecase xem bảng điểm
 <pre>
 @startuml
@@ -428,7 +427,6 @@ d. Đặc tả usecase xem bảng điểm
     A1. Sinh viên không có bảng điểm
     1. Hệ thống thông báo lỗi không có bảng điểm
 </pre>
-
 #### 3.2.3 Usercase giảng viên
 <pre>
 @startuml
@@ -1804,7 +1802,7 @@ endif
 
 stop
 @enduml
-b. Quản lý lớp học phần 
+b. Activity quản lý lớp học phần 
 
 @startuml
 start
