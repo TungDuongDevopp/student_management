@@ -6,5 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    //
+    protected $fillable = [
+        'tuition_id',
+        'amount',
+        'payment_date'
+    ];
+
+    public function tuition()
+    {
+        return $this->belongsTo(Tuition::class);
+    }
 }

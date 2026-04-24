@@ -14,6 +14,11 @@ class Student extends Model
         'email'
     ];
 
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
