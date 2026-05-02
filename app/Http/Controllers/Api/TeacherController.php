@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
 {
@@ -21,7 +22,13 @@ class TeacherController extends Controller
             'faculty_id' => 'required|integer|exists:faculties,id',
             'teacher_code' => 'nullable|string|max:50|unique:teachers,teacher_code',
             'name' => 'nullable|string|max:100',
+            'email' => 'nullable|string|email|max:255',
+            'images' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
+
+        if ($request->hasFile('images')) {
+            $validated['images'] = $request->file('images')->store('images/teachers', 'public');
+        }
 
         $teacher = Teacher::create($validated);
         return response()->json($teacher, 201);
@@ -41,7 +48,17 @@ class TeacherController extends Controller
             'faculty_id' => 'sometimes|required|integer|exists:faculties,id',
             'teacher_code' => 'sometimes|nullable|string|max:50|unique:teachers,teacher_code,' . $id,
             'name' => 'nullable|string|max:100',
+            'email' => 'nullable|string|email|max:255',
+            'images' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
+
+        if ($request->hasFile('images')) {
+            // Xóa ảnh cũ nếu có
+            if ($teacher->images) {
+                Storage::disk('public')->delete($teacher->images);
+            }
+            $validated['images'] = $request->file('images')->store('images/teachers', 'public');
+        }
 
         $teacher->update($validated);
         return response()->json($teacher);
@@ -50,6 +67,10 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $teacher = Teacher::findOrFail($id);
+        // Xóa ảnh khi xóa giảng viên
+        if ($teacher->images) {
+            Storage::disk('public')->delete($teacher->images);
+        }
         $teacher->delete();
         return response()->json(null, 204);
     }
