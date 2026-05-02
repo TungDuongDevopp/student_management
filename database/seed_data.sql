@@ -70,12 +70,12 @@ INSERT INTO rooms (id, name) VALUES
 -- -----------------------------------------------
 -- 6. TEACHERS (5 giảng viên)
 -- -----------------------------------------------
-INSERT INTO teachers (id, account_id, faculty_id, teacher_code, name) VALUES
-(1, 2, 1, 'GV001', 'Nguyễn Anh Tuấn'),
-(2, 3, 1, 'GV002', 'Trần Thị Thu Hà'),
-(3, 4, 2, 'GV003', 'Lê Minh Đức'),
-(4, 5, 3, 'GV004', 'Phạm Thanh Lâm'),
-(5, 6, 4, 'GV005', 'Hoàng Văn Nam');
+INSERT INTO teachers (id, account_id, faculty_id, teacher_code, name, email, images) VALUES
+(1, 2, 1, 'GV001', 'Nguyễn Anh Tuấn','Tuan@teacher.edu.vn','images/teachers/anh_tuan.jpg'),
+(2, 3, 1, 'GV002', 'Trần Thị Thu Hà','Ha@teacher.edu.vn', 'images/teachers/thu_ha.jpg'),
+(3, 4, 2, 'GV003', 'Lê Minh Đức','Duc@teacher.edu.vn', 'images/teachers/minh_duc.jpg'),
+(4, 5, 3, 'GV004', 'Phạm Thanh Lâm','Lam@teacher.edu.vn', 'images/teachers/thanh_lam.jpg'),
+(5, 6, 4, 'GV005', 'Hoàng Văn Nam','Nam@teacher.edu.vn', 'images/teachers/hoang_nam.jpg');
 
 -- -----------------------------------------------
 -- 7. CLASSROOMS (10 lớp học)
@@ -95,17 +95,17 @@ INSERT INTO classrooms (id, faculty_id, teacher_id, semester_id, code, quantity)
 -- -----------------------------------------------
 -- 8. STUDENTS (10 sinh viên)
 -- -----------------------------------------------
-INSERT INTO students (id, account_id, classroom_id, student_code, name, email) VALUES
-(1,  7,  1, 'SV2025001', 'Nguyễn Văn A',  'vana@student.edu.vn'),
-(2,  8,  1, 'SV2025002', 'Trần Thị B',    'thib@student.edu.vn'),
-(3,  9,  2, 'SV2025003', 'Lê Văn C',      'vanc@student.edu.vn'),
-(4,  10, 2, 'SV2025004', 'Phạm Thị D',    'thid@student.edu.vn'),
-(5,  11, 3, 'SV2025005', 'Hoàng Văn E',   'vane@student.edu.vn'),
-(6,  12, 4, 'SV2025006', 'Đỗ Thị F',      'thif@student.edu.vn'),
-(7,  13, 5, 'SV2025007', 'Bùi Văn G',     'vang@student.edu.vn'),
-(8,  14, 6, 'SV2025008', 'Vũ Thị H',      'thih@student.edu.vn'),
-(9,  15, 8, 'SV2025009', 'Đinh Văn I',    'vani@student.edu.vn'),
-(10, 16, 9, 'SV2025010', 'Ngô Thị K',     'thik@student.edu.vn');
+INSERT INTO students (id, account_id, classroom_id, student_code, name, email, images) VALUES
+(1,  7,  1, 'SV2025001', 'Nguyễn Văn A',  'vana@student.edu.vn', 'images/students/van_a.jpg'),
+(2,  8,  1, 'SV2025002', 'Trần Thị B',    'thib@student.edu.vn', 'images/students/thi_b.jpg'),
+(3,  9,  2, 'SV2025003', 'Lê Văn C',      'vanc@student.edu.vn', 'images/students/van_c.jpg'),
+(4,  10, 2, 'SV2025004', 'Phạm Thị D',    'thid@student.edu.vn', 'images/students/thi_d.jpg'),
+(5,  11, 3, 'SV2025005', 'Hoàng Văn E',   'vane@student.edu.vn', 'images/students/van_e.jpg'),
+(6,  12, 4, 'SV2025006', 'Đỗ Thị F',      'thif@student.edu.vn', 'images/students/thi_f.jpg'),
+(7,  13, 5, 'SV2025007', 'Bùi Văn G',     'vang@student.edu.vn', 'images/students/van_g.jpg'),
+(8,  14, 6, 'SV2025008', 'Vũ Thị H',      'thih@student.edu.vn', 'images/students/thi_h.jpg'),
+(9,  15, 8, 'SV2025009', 'Đinh Văn I',    'vani@student.edu.vn', 'images/students/van_i.jpg'),
+(10, 16, 9, 'SV2025010', 'Ngô Thị K',     'thik@student.edu.vn', 'images/students/thi_k.jpg');
 
 -- -----------------------------------------------
 -- 9. SUBJECTS (10 môn học)

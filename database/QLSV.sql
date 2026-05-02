@@ -39,6 +39,7 @@ CREATE TABLE students (
     student_code VARCHAR(50) UNIQUE,
     name VARCHAR(100),
     email VARCHAR(255),
+    images VARCHAR(255),
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     FOREIGN KEY (classroom_id) REFERENCES classrooms(id)
 );
@@ -50,6 +51,8 @@ CREATE TABLE teachers (
     faculty_id INT NOT NULL,
     teacher_code VARCHAR(50) UNIQUE,
     name VARCHAR(100),
+    email VARCHAR(255),
+    images VARCHAR(255),
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     FOREIGN KEY (faculty_id) REFERENCES faculties(id)
 );
