@@ -10,7 +10,9 @@ class Teacher extends Model
         'account_id',
         'faculty_id',
         'teacher_code',
-        'name'
+        'name',
+        'email',
+        'images'
     ];
 
     public function account()

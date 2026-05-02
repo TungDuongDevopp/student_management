@@ -11,7 +11,8 @@ class Student extends Model
         'classroom_id',
         'student_code',
         'name',
-        'email'
+        'email',
+        'images'
     ];
 
     public function account()
