@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-
+Route::get('/setting', function () {
+    return view('setting');
+});
 Route::get('/login', function () {
     return view('login');
 })->name('login');
@@ -143,3 +145,7 @@ Route::prefix('teacher')->group(function () {
         return view('user.Teacher.feedback');
     })->name('teacher.feedback');
 });
+// Logout
+Route::get('/logout', function () {
+    return view('login');
+})->name('logout');
