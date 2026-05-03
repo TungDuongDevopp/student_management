@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;         
-            --primary-hover: #1d4ed8;   
-            --card-bg: #ffffff;         
-            --text-main: #1e293b;       
-            --text-muted: #64748b;      
-            --input-border: #cbd5e1;    
-            --input-bg: #f8fafc;        
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --input-border: #cbd5e1;
+            --input-bg: #f8fafc;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -24,8 +25,8 @@
         }
 
         body {
-            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
-                        url('https://media.sohuutritue.net.vn/files/quyentrung/2025/07/08/1-0927.jpg') center center/cover no-repeat;
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)),
+                url('https://media.sohuutritue.net.vn/files/quyentrung/2025/07/08/1-0927.jpg') center center/cover no-repeat;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -36,8 +37,8 @@
             background: var(--card-bg);
             border-radius: 0;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            padding: 3.5rem 4rem; 
-            width: 520px; 
+            padding: 3.5rem 4rem;
+            width: 520px;
             max-width: 95%;
             position: relative;
         }
@@ -97,7 +98,7 @@
             padding: 0.9rem 1rem 0.9rem 2.8rem;
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 0; 
+            border-radius: 0;
             font-size: 1rem;
             color: var(--text-main);
             transition: all 0.3s ease;
@@ -144,24 +145,28 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="login-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg/960px-Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg" class="school-logo"> 
-        
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg/960px-Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg"
+            class="school-logo">
+
         <div class="header-text">
             <h1>Đăng nhập hệ thống</h1>
-            <p>Vui lòng nhập email và mật khẩu của bạn</p>
+            <p>Vui lòng nhập username và password của bạn</p>
         </div>
 
         <form action="#" method="POST">
             <div class="input-group">
-                <label for="email">Email</label>
+                <label for="username">Username</label>
                 <div class="input-wrapper">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://w3.org">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                        </path>
                     </svg>
-                    <input type="email" id="email" name="email" placeholder="Nhập địa chỉ email" required>
+                    <input type="text" id="username" name="username" placeholder="Nhập username" required>
                 </div>
             </div>
 
@@ -169,7 +174,9 @@
                 <label for="password">Mật khẩu</label>
                 <div class="input-wrapper">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                        </path>
                     </svg>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
@@ -183,4 +190,5 @@
     </div>
 
 </body>
+
 </html>
