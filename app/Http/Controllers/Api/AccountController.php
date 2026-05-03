@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
+    //Xem danh sách tất cả các tài khoản
+
+    //GET /api/accounts
     public function index()
     {
         $accounts = Account::with('role')->get();
         return response()->json($accounts);
     }
-
+    // Tạo tài khoản
+    //POST /api/accounts
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -27,13 +31,15 @@ class AccountController extends Controller
         $account = Account::create($validated);
         return response()->json($account, 201);
     }
-
+    //Xem chi tiết một tài khoản
+    //GET /api/accounts/{id}
     public function show($id)
     {
         $account = Account::with('role')->findOrFail($id);
         return response()->json($account);
     }
-
+    //Cập nhật tài khoản
+    //PUT /api/accounts/{id}
     public function update(Request $request, $id)
     {
         $account = Account::findOrFail($id);
@@ -50,7 +56,8 @@ class AccountController extends Controller
         $account->update($validated);
         return response()->json($account);
     }
-
+    //Xóa tài khoản
+    //DELETE /api/accounts/{id} 
     public function destroy($id)
     {
         $account = Account::findOrFail($id);
