@@ -143,21 +143,51 @@
         .forgot-pass a:hover {
             text-decoration: underline;
         }
+
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ef4444;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: slideInToast 0.4s forwards, fadeOutToast 0.4s forwards 4s;
+        }
+
+        @keyframes slideInToast {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOutToast {
+            to { opacity: 0; visibility: hidden; }
+        }
     </style>
 </head>
 
 <body>
+    @if(session('error_popup'))
+    <div class="toast-notification">
+        {{ session('error_popup') }}
+    </div>
+    @endif
 
     <div class="login-container">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg/960px-Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg"
             class="school-logo">
 
         <div class="header-text">
-            <h1>Đăng nhập hệ thống</h1>
+            <h1>Cổng Sinh viên & Giảng viên</h1>
             <p>Vui lòng nhập username và password của bạn</p>
         </div>
 
-        <form action="#" method="POST">
+        <form action="{{ route('user.login.post') }}" method="POST">
+            @csrf
             <div class="input-group">
                 <label for="username">Username</label>
                 <div class="input-wrapper">
@@ -166,8 +196,11 @@
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                         </path>
                     </svg>
-                    <input type="text" id="username" name="username" placeholder="Nhập username" required>
+                    <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Nhập username" required>
                 </div>
+                @error('username')
+                    <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem;">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="input-group">

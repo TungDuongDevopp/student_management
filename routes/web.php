@@ -1,23 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-// ==========================================
-// LOGIN
-// ==========================================
 Route::get('/', function () {
-    return view('login');
+    return redirect()->route('user.login');
 });
 Route::get('/setting', function () {
     return view('setting');
 });
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
 
-// ==========================================
-// ADMIN ROUTES
-// ==========================================
+// User Login (Sinh viên, Giảng viên)
+Route::get('/login', function () {
+    return view('user.login');
+})->name('user.login');
+Route::post('/login', [AuthController::class, 'userLogin'])->name('user.login.post');
+
+// Admin Login
+Route::get('/admin/login', function () {
+    return view('admin.login');
+})->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login.post');
+
+
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
@@ -64,9 +69,7 @@ Route::prefix('admin')->group(function () {
     })->name('admin.config');
 });
 
-// ==========================================
-// STUDENT ROUTES
-// ==========================================
+
 Route::prefix('student')->group(function () {
     Route::get('/home', function () {
         return view('user.Student.home');
@@ -109,9 +112,7 @@ Route::prefix('student')->group(function () {
     })->name('student.feedback');
 });
 
-// ==========================================
-// TEACHER ROUTES
-// ==========================================
+
 Route::prefix('teacher')->group(function () {
     Route::get('/home', function () {
         return view('user.Teacher.home');
@@ -145,7 +146,8 @@ Route::prefix('teacher')->group(function () {
         return view('user.Teacher.feedback');
     })->name('teacher.feedback');
 });
+
 // Logout
 Route::get('/logout', function () {
-    return view('login');
+    return redirect()->route('user.login');
 })->name('logout');
