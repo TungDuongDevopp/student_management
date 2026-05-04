@@ -175,6 +175,7 @@ function openAddModal() {
     document.getElementById('entityId').value = '';
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('imageText').style.display = 'block';
+    document.getElementById('accountId').disabled = false;
     loadDropdowns();
     document.getElementById('formModal').classList.add('active');
 }
@@ -182,7 +183,7 @@ function openAddModal() {
 function editEntity(t) {
     document.getElementById('modalTitle').textContent = 'Cập nhật Giảng viên';
     document.getElementById('entityId').value = t.id;
-    loadDropdowns().then(() => { document.getElementById('accountId').value = t.account_id||''; document.getElementById('facultyId').value = t.faculty_id||''; });
+    loadDropdowns().then(() => { document.getElementById('accountId').value = t.account_id||''; document.getElementById('accountId').disabled = true; document.getElementById('facultyId').value = t.faculty_id||''; });
     document.getElementById('teacherCode').value = t.teacher_code||'';
     document.getElementById('teacherName').value = t.name||'';
     document.getElementById('teacherEmail').value = t.email||'';
