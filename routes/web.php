@@ -27,6 +27,10 @@ Route::prefix('admin')->group(function () {
         return view('admin.student_management');
     })->name('admin.students');
 
+    Route::get('/teachers', function () {
+        return view('admin.teacher_management');
+    })->name('admin.teachers');
+
     Route::get('/accounts', function () {
         return view('admin.account_management');
     })->name('admin.accounts');
