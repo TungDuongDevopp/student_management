@@ -216,6 +216,7 @@ function openAddModal() {
     document.getElementById('studentId').value = '';
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('imageText').style.display = 'block';
+    document.getElementById('accountId').disabled = false;
     loadDropdowns();
     document.getElementById('studentModal').classList.add('active');
 }
@@ -225,6 +226,7 @@ function editStudent(s) {
     document.getElementById('studentId').value = s.id;
     loadDropdowns().then(() => {
         document.getElementById('accountId').value = s.account_id || '';
+        document.getElementById('accountId').disabled = true;
         document.getElementById('classroomId').value = s.classroom_id || '';
     });
     document.getElementById('studentCode').value = s.student_code || '';
