@@ -2,7 +2,9 @@
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description VARCHAR(255)
+    description VARCHAR(255),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 );
 
 CREATE TABLE accounts (
@@ -10,6 +12,8 @@ CREATE TABLE accounts (
     role_id INT NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
@@ -17,7 +21,9 @@ CREATE TABLE accounts (
 CREATE TABLE faculties (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(50) UNIQUE,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 );
 
 -- CLASSROOM
@@ -28,6 +34,8 @@ CREATE TABLE classrooms (
     semester_id INT,
     code VARCHAR(50) UNIQUE,
     quantity INT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (faculty_id) REFERENCES faculties(id)
 );
 
@@ -40,6 +48,8 @@ CREATE TABLE students (
     name VARCHAR(100),
     email VARCHAR(255),
     images VARCHAR(255),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     FOREIGN KEY (classroom_id) REFERENCES classrooms(id)
 );
@@ -53,6 +63,8 @@ CREATE TABLE teachers (
     name VARCHAR(100),
     email VARCHAR(255),
     images VARCHAR(255),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     FOREIGN KEY (faculty_id) REFERENCES faculties(id)
 );
@@ -63,20 +75,26 @@ CREATE TABLE subjects (
     faculty_id INT,
     name VARCHAR(100),
     credits INT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (faculty_id) REFERENCES faculties(id)
 );
 
 -- ROOM
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50)
+    name VARCHAR(50),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 );
 
 -- SEMESTER
 CREATE TABLE semesters (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50),
-    academic_year VARCHAR(20)
+    academic_year VARCHAR(20),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 );
 
 -- SCHEDULE
@@ -89,6 +107,8 @@ CREATE TABLE schedules (
     classroom_id INT,
     day_of_week INT,
     shift INT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (subject_id) REFERENCES subjects(id),
     FOREIGN KEY (teacher_id) REFERENCES teachers(id),
     FOREIGN KEY (room_id) REFERENCES rooms(id),
@@ -103,6 +123,8 @@ CREATE TABLE enrollments (
     schedule_id INT NOT NULL,
     final_score FLOAT,
     status TINYINT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (student_id) REFERENCES students(id),
     FOREIGN KEY (schedule_id) REFERENCES schedules(id)
 );
@@ -113,6 +135,8 @@ CREATE TABLE attendances (
     enrollment_id INT,
     attendance_date DATE,
     status TINYINT,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (enrollment_id) REFERENCES enrollments(id)
 );
 
@@ -123,6 +147,8 @@ CREATE TABLE tuitions (
     semester_id INT,
     total_amount DECIMAL(10,2),
     paid_amount DECIMAL(10,2),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (student_id) REFERENCES students(id),
     FOREIGN KEY (semester_id) REFERENCES semesters(id)
 );
@@ -133,6 +159,8 @@ CREATE TABLE payments (
     tuition_id INT,
     amount DECIMAL(10,2),
     payment_date DATETIME,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (tuition_id) REFERENCES tuitions(id)
 );
 
@@ -141,7 +169,8 @@ CREATE TABLE feedbacks (
     id INT AUTO_INCREMENT PRIMARY KEY,
     account_id INT,
     content TEXT,
-    created_at DATETIME,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
     FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 

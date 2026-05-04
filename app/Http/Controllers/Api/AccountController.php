@@ -38,23 +38,17 @@ class AccountController extends Controller
         $account = Account::with('role')->findOrFail($id);
         return response()->json($account);
     }
-    //Cập nhật tài khoản
+    //Cập nhật tài khoản (chỉ cập nhật quyền - role_id, không đổi username/password)
     //PUT /api/accounts/{id}
     public function update(Request $request, $id)
     {
         $account = Account::findOrFail($id);
         $validated = $request->validate([
-            'role_id' => 'sometimes|required|integer|exists:roles,id',
-            'username' => 'sometimes|required|string|max:50|unique:accounts,username,' . $id,
-            'password' => 'sometimes|required|string|max:255',
+            'role_id' => 'required|integer|exists:roles,id',
         ]);
 
-        if (isset($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
         $account->update($validated);
-        return response()->json($account);
+        return response()->json($account->load('role'));
     }
     //Xóa tài khoản
     //DELETE /api/accounts/{id} 
