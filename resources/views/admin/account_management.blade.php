@@ -41,6 +41,15 @@
         .badge-student{background:rgba(34,197,94,0.15);color:#4ade80}
         .badge-teacher{background:rgba(59,130,246,0.15);color:#60a5fa}
         .badge-default{background:rgba(148,163,184,0.15);color:var(--text-muted)}
+
+        /* Role Tabs */
+        .role-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+        .role-tab{padding:0.55rem 1.2rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text-muted);cursor:pointer;font-size:0.85rem;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
+        .role-tab:hover{border-color:var(--accent);color:var(--text)}
+        .role-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .role-tab .count{background:rgba(255,255,255,0.15);padding:0.1rem 0.5rem;border-radius:10px;font-size:0.75rem;font-weight:700}
+        .role-tab.active .count{background:rgba(255,255,255,0.25)}
+
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
         .modal-overlay.active{display:flex}
         .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,0.5)}
@@ -64,6 +73,12 @@
         .search-bar{display:flex;gap:1rem;margin-bottom:1.5rem}
         .search-bar input{flex:1;padding:0.7rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem}
         .search-bar input:focus{outline:none;border-color:var(--accent)}
+        .pagination{display:flex;justify-content:center;align-items:center;gap:0.5rem;padding:1rem;border-top:1px solid var(--border)}
+        .pagination button{padding:0.5rem 0.9rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:0.85rem;transition:all 0.2s}
+        .pagination button:hover:not(:disabled){border-color:var(--accent);color:var(--text)}
+        .pagination button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .pagination button:disabled{opacity:0.4;cursor:not-allowed}
+        .pagination .page-info{color:var(--text-muted);font-size:0.85rem;margin:0 0.5rem}
         @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
         .modal-overlay.active .modal{animation:fadeIn 0.2s ease}
     </style>
@@ -74,8 +89,12 @@
         <h1>Quản lý Tài khoản</h1>
         <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Tài khoản</button>
     </div>
+
+    <!-- Role Tabs -->
+    <div class="role-tabs" id="roleTabs"></div>
+
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Tìm kiếm theo username, quyền..." oninput="filterTable()">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm theo username..." oninput="filterTable()">
     </div>
     <div class="card">
         <div class="table-wrapper">
@@ -84,6 +103,7 @@
                 <tbody id="tableBody"><tr><td colspan="5"><div class="empty-state">Đang tải dữ liệu...</div></td></tr></tbody>
             </table>
         </div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <!-- Add Modal -->
@@ -149,7 +169,8 @@
 
 <script>
 const API = '/api/accounts';
-let allData = [], allRoles = [];
+const PER_PAGE = 10;
+let allData = [], allRoles = [], filteredData = [], currentPage = 1, activeRoleFilter = 'all';
 
 async function fetchRoles() {
     try { allRoles = await fetch('/api/roles').then(r=>r.json()); } catch(e) {}
@@ -165,32 +186,78 @@ function roleBadge(role) {
     return `<span class="badge ${cls}">${role.name}</span>`;
 }
 
+function renderRoleTabs() {
+    const tabs = document.getElementById('roleTabs');
+    const counts = { all: allData.length };
+    allRoles.forEach(r => { counts[r.id] = allData.filter(a => a.role_id === r.id).length; });
+
+    let html = `<div class="role-tab ${activeRoleFilter==='all'?'active':''}" onclick="setRoleFilter('all')">Tất cả <span class="count">${counts.all}</span></div>`;
+    allRoles.forEach(r => {
+        html += `<div class="role-tab ${activeRoleFilter==r.id?'active':''}" onclick="setRoleFilter(${r.id})">${r.name} <span class="count">${counts[r.id]||0}</span></div>`;
+    });
+    tabs.innerHTML = html;
+}
+
+function setRoleFilter(roleId) {
+    activeRoleFilter = roleId;
+    renderRoleTabs();
+    filterTable();
+}
+
 async function fetchData() {
     try {
         await fetchRoles();
-        const r = await fetch(API); allData = await r.json(); renderTable(allData);
+        const r = await fetch(API); allData = await r.json();
+        renderRoleTabs();
+        filterTable();
     } catch(e) { showToast('Lỗi tải dữ liệu','error'); }
-}
-
-function renderTable(data) {
-    const tb = document.getElementById('tableBody');
-    if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state">Chưa có tài khoản nào</div></td></tr>'; return; }
-    tb.innerHTML = data.map(a => `<tr>
-        <td>${a.id}</td>
-        <td><strong>${a.username}</strong></td>
-        <td>${roleBadge(a.role)}</td>
-        <td>${a.created_at ? new Date(a.created_at).toLocaleDateString('vi-VN') : '-'}</td>
-        <td><div class="actions">
-            <button class="btn btn-sm btn-edit" onclick='editAccount(${JSON.stringify(a)})'>Sửa quyền</button>
-            <button class="btn btn-sm btn-delete" onclick="deleteAccount(${a.id})">Xóa</button>
-        </div></td>
-    </tr>`).join('');
 }
 
 function filterTable() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    renderTable(allData.filter(a => a.username.toLowerCase().includes(q) || (a.role?.name||'').toLowerCase().includes(q)));
+    filteredData = allData.filter(a => {
+        const matchSearch = a.username.toLowerCase().includes(q) || (a.role?.name||'').toLowerCase().includes(q);
+        const matchRole = activeRoleFilter === 'all' || a.role_id === activeRoleFilter;
+        return matchSearch && matchRole;
+    });
+    currentPage = 1;
+    renderPage();
 }
+
+function renderPage() {
+    const totalPages = Math.max(1, Math.ceil(filteredData.length / PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * PER_PAGE;
+    const pageData = filteredData.slice(start, start + PER_PAGE);
+
+    const tb = document.getElementById('tableBody');
+    if (!filteredData.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state">Chưa có tài khoản nào</div></td></tr>'; }
+    else {
+        tb.innerHTML = pageData.map(a => `<tr>
+            <td>${a.id}</td>
+            <td><strong>${a.username}</strong></td>
+            <td>${roleBadge(a.role)}</td>
+            <td>${a.created_at ? new Date(a.created_at).toLocaleDateString('vi-VN') : '-'}</td>
+            <td><div class="actions">
+                <button class="btn btn-sm btn-edit" onclick='editAccount(${JSON.stringify(a)})'>Sửa quyền</button>
+                <button class="btn btn-sm btn-delete" onclick="deleteAccount(${a.id})">Xóa</button>
+            </div></td>
+        </tr>`).join('');
+    }
+    renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+    const pg = document.getElementById('pagination');
+    if (totalPages <= 1) { pg.innerHTML = ''; return; }
+    let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+    for (let i = 1; i <= totalPages; i++) html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
+    html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+    pg.innerHTML = html;
+}
+
+function goPage(p) { currentPage = p; renderPage(); }
 
 function populateRoleSelect(selId, selectedVal) {
     const sel = document.getElementById(selId);
