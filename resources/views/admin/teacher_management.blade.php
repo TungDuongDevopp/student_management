@@ -9,8 +9,8 @@
     <style>
         :root {
             --bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-card:#1e293b;--bg-input:#0f172a;
-            --border:#334155;--accent:#3b82f6;--accent-hover:#2563eb;--danger:#ef4444;--danger-hover:#dc2626;
-            --success:#22c55e;--warning:#f59e0b;--text:#f1f5f9;--text-muted:#94a3b8;--shadow:0 4px 24px rgba(0,0,0,0.3);
+            --border:#334155;--accent:#3b82f6;--accent-hover:#2563eb;--danger:#ef4444;
+            --success:#22c55e;--text:#f1f5f9;--text-muted:#94a3b8;--shadow:0 4px 24px rgba(0,0,0,0.3);
         }
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
         body{background:var(--bg-primary);color:var(--text);min-height:100vh;padding:2rem}
@@ -51,6 +51,7 @@
         .form-group label{display:block;margin-bottom:0.4rem;font-size:0.85rem;font-weight:500;color:var(--text-muted)}
         .form-group input,.form-group select{width:100%;padding:0.7rem 1rem;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem;transition:border-color 0.2s}
         .form-group input:focus,.form-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+        .form-group select:disabled{opacity:0.5;cursor:not-allowed}
         .image-upload{border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all 0.2s}
         .image-upload:hover{border-color:var(--accent);background:rgba(59,130,246,0.05)}
         .image-upload img{max-width:120px;max-height:120px;border-radius:8px;margin-bottom:0.5rem}
@@ -63,6 +64,12 @@
         .search-bar{display:flex;gap:1rem;margin-bottom:1.5rem}
         .search-bar input{flex:1;padding:0.7rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem}
         .search-bar input:focus{outline:none;border-color:var(--accent)}
+        .pagination{display:flex;justify-content:center;align-items:center;gap:0.5rem;padding:1rem;border-top:1px solid var(--border)}
+        .pagination button{padding:0.5rem 0.9rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:0.85rem;transition:all 0.2s}
+        .pagination button:hover:not(:disabled){border-color:var(--accent);color:var(--text)}
+        .pagination button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .pagination button:disabled{opacity:0.4;cursor:not-allowed}
+        .pagination .page-info{color:var(--text-muted);font-size:0.85rem;margin:0 0.5rem}
         @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
         .modal-overlay.active .modal{animation:fadeIn 0.2s ease}
     </style>
@@ -83,6 +90,7 @@
                 <tbody id="tableBody"><tr><td colspan="8"><div class="empty-state">Đang tải dữ liệu...</div></td></tr></tbody>
             </table>
         </div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <div class="modal-overlay" id="formModal">
@@ -95,7 +103,7 @@
                 <form id="entityForm" enctype="multipart/form-data">
                     <input type="hidden" id="entityId">
                     <div class="form-group">
-                        <label>Tài khoản (Account ID) *</label>
+                        <label>Tài khoản (Account) *</label>
                         <select id="accountId" required><option value="">-- Chọn tài khoản --</option></select>
                     </div>
                     <div class="form-group">
@@ -134,38 +142,63 @@
 
 <script>
 const API = '/api/teachers';
-let allData = [];
+const PER_PAGE = 10;
+let allData = [], filteredData = [], currentPage = 1;
 
 async function fetchData() {
-    try { const r = await fetch(API); allData = await r.json(); renderTable(allData); } catch(e) { showToast('Lỗi tải dữ liệu','error'); }
-}
-
-function renderTable(data) {
-    const tb = document.getElementById('tableBody');
-    if (!data.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">Chưa có giảng viên nào</div></td></tr>'; return; }
-    tb.innerHTML = data.map(t => `<tr>
-        <td>${t.id}</td>
-        <td>${t.images ? `<img class="avatar" src="/storage/${t.images}">` : `<div class="avatar-placeholder">${(t.name||'?')[0].toUpperCase()}</div>`}</td>
-        <td>${t.teacher_code||'-'}</td>
-        <td><strong>${t.name||'-'}</strong></td>
-        <td>${t.email||'-'}</td>
-        <td>${t.faculty?.name||'-'}</td>
-        <td>${t.account?.username||'-'}</td>
-        <td><div class="actions">
-            <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(t)})'>Sửa</button>
-            <button class="btn btn-sm btn-delete" onclick="deleteEntity(${t.id})">Xóa</button>
-        </div></td>
-    </tr>`).join('');
+    try { const r = await fetch(API); allData = await r.json(); filterTable(); } catch(e) { showToast('Lỗi tải dữ liệu','error'); }
 }
 
 function filterTable() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    renderTable(allData.filter(t => (t.name||'').toLowerCase().includes(q) || (t.teacher_code||'').toLowerCase().includes(q) || (t.email||'').toLowerCase().includes(q)));
+    filteredData = allData.filter(t => (t.name||'').toLowerCase().includes(q) || (t.teacher_code||'').toLowerCase().includes(q) || (t.email||'').toLowerCase().includes(q));
+    currentPage = 1;
+    renderPage();
 }
+
+function renderPage() {
+    const totalPages = Math.max(1, Math.ceil(filteredData.length / PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start = (currentPage - 1) * PER_PAGE;
+    const pageData = filteredData.slice(start, start + PER_PAGE);
+
+    const tb = document.getElementById('tableBody');
+    if (!filteredData.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">Chưa có giảng viên nào</div></td></tr>'; }
+    else {
+        tb.innerHTML = pageData.map(t => `<tr>
+            <td>${t.id}</td>
+            <td>${t.images ? `<img class="avatar" src="/storage/${t.images}">` : `<div class="avatar-placeholder">${(t.name||'?')[0].toUpperCase()}</div>`}</td>
+            <td>${t.teacher_code||'-'}</td>
+            <td><strong>${t.name||'-'}</strong></td>
+            <td>${t.email||'-'}</td>
+            <td>${t.faculty?.name||'-'}</td>
+            <td>${t.account?.username||'-'}</td>
+            <td><div class="actions">
+                <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(t)})'>Sửa</button>
+                <button class="btn btn-sm btn-delete" onclick="deleteEntity(${t.id})">Xóa</button>
+            </div></td>
+        </tr>`).join('');
+    }
+    renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+    const pg = document.getElementById('pagination');
+    if (totalPages <= 1) { pg.innerHTML = ''; return; }
+    let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+    for (let i = 1; i <= totalPages; i++) html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
+    html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+    pg.innerHTML = html;
+}
+
+function goPage(p) { currentPage = p; renderPage(); }
 
 async function loadDropdowns() {
     const [accounts, faculties] = await Promise.all([fetch('/api/accounts').then(r=>r.json()), fetch('/api/faculties').then(r=>r.json())]);
-    document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' + accounts.map(a => `<option value="${a.id}">${a.username} (${a.role?.name||'N/A'})</option>`).join('');
+    // Chỉ hiển thị tài khoản có role Teacher
+    const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher');
+    document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' + teacherAccounts.map(a => `<option value="${a.id}">${a.username}</option>`).join('');
     document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + faculties.map(f => `<option value="${f.id}">${f.name}</option>`).join('');
 }
 
@@ -183,7 +216,11 @@ function openAddModal() {
 function editEntity(t) {
     document.getElementById('modalTitle').textContent = 'Cập nhật Giảng viên';
     document.getElementById('entityId').value = t.id;
-    loadDropdowns().then(() => { document.getElementById('accountId').value = t.account_id||''; document.getElementById('accountId').disabled = true; document.getElementById('facultyId').value = t.faculty_id||''; });
+    loadDropdowns().then(() => {
+        document.getElementById('accountId').value = t.account_id||'';
+        document.getElementById('accountId').disabled = true;
+        document.getElementById('facultyId').value = t.faculty_id||'';
+    });
     document.getElementById('teacherCode').value = t.teacher_code||'';
     document.getElementById('teacherName').value = t.name||'';
     document.getElementById('teacherEmail').value = t.email||'';
@@ -208,7 +245,7 @@ async function saveEntity() {
     const email = document.getElementById('teacherEmail').value; if(email) fd.append('email', email);
     const img = document.getElementById('teacherImage').files[0]; if(img) fd.append('images', img);
     try {
-        let url=API, method='POST';
+        let url=API;
         if(id){url=`${API}/${id}`;fd.append('_method','PUT');}
         const res = await fetch(url,{method:'POST',headers:{'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]')?.content||''},body:fd});
         if(!res.ok){const err=await res.json();throw new Error(err.message||'Lỗi');}
