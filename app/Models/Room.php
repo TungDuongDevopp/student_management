@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     protected $fillable = [
-        'name'
+        'block',
+        'name',
+        'description'
     ];
 
     public function schedules()

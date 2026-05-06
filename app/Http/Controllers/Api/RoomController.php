@@ -17,7 +17,9 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'block' => 'nullable|string|max:10',
             'name' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $room = Room::create($validated);
@@ -34,7 +36,9 @@ class RoomController extends Controller
     {
         $room = Room::findOrFail($id);
         $validated = $request->validate([
+            'block' => 'nullable|string|max:10',
             'name' => 'nullable|string|max:50',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $room->update($validated);
