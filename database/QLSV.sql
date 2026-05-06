@@ -83,7 +83,9 @@ CREATE TABLE subjects (
 -- ROOM
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    block VARCHAR(10),
     name VARCHAR(50),
+    description VARCHAR(255),
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL
 );

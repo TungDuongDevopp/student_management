@@ -72,6 +72,12 @@
         .pagination button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
         .pagination button:disabled { opacity:0.4; cursor:not-allowed; }
         .pagination .page-info { color:var(--text-muted); font-size:0.85rem; margin:0 0.5rem; }
+        .filter-tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+        .filter-tab { padding:0.55rem 1.2rem; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-muted); cursor:pointer; font-size:0.85rem; font-weight:500; transition:all 0.2s; display:flex; align-items:center; gap:0.4rem; }
+        .filter-tab:hover { border-color:var(--accent); color:var(--text); }
+        .filter-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+        .filter-tab .count { background:rgba(255,255,255,0.15); padding:0.1rem 0.5rem; border-radius:10px; font-size:0.75rem; font-weight:700; }
+        .filter-tab.active .count { background:rgba(255,255,255,0.25); }
         @keyframes fadeIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
         .modal-overlay.active .modal { animation:fadeIn 0.2s ease; }
     </style>
@@ -82,6 +88,7 @@
         <h1>Quản lý Sinh viên</h1>
         <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Sinh viên</button>
     </div>
+    <div class="filter-tabs" id="filterTabs"></div>
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên, mã SV, email..." oninput="filterTable()">
     </div>
@@ -146,19 +153,42 @@
 <script>
 const API = '/api/students';
 const PER_PAGE = 10;
-let allStudents = [], filteredData = [], currentPage = 1;
+let allStudents = [], allClassrooms = [], filteredData = [], currentPage = 1, activeFilter = 'all';
 
 async function fetchStudents() {
     try {
-        const res = await fetch(API);
-        allStudents = await res.json();
+        const [studentsRes, classroomsRes] = await Promise.all([fetch(API), fetch('/api/classrooms')]);
+        allStudents = await studentsRes.json();
+        allClassrooms = await classroomsRes.json();
+        renderFilterTabs();
         filterTable();
     } catch(e) { showToast('Lỗi tải dữ liệu', 'error'); }
 }
 
+function renderFilterTabs() {
+    const tabs = document.getElementById('filterTabs');
+    const counts = { all: allStudents.length };
+    allClassrooms.forEach(c => { counts[c.id] = allStudents.filter(s => s.classroom_id === c.id).length; });
+    const noClass = allStudents.filter(s => !s.classroom_id).length;
+    let html = `<div class="filter-tab ${activeFilter==='all'?'active':''}" onclick="setFilter('all')">Tất cả <span class="count">${counts.all}</span></div>`;
+    allClassrooms.forEach(c => {
+        if (counts[c.id] > 0) html += `<div class="filter-tab ${activeFilter==c.id?'active':''}" onclick="setFilter(${c.id})">${c.code} <span class="count">${counts[c.id]}</span></div>`;
+    });
+    if (noClass > 0) html += `<div class="filter-tab ${activeFilter==='none'?'active':''}" onclick="setFilter('none')">Chưa có lớp <span class="count">${noClass}</span></div>`;
+    tabs.innerHTML = html;
+}
+
+function setFilter(val) { activeFilter = val; renderFilterTabs(); filterTable(); }
+
 function filterTable() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    filteredData = allStudents.filter(s => (s.name||'').toLowerCase().includes(q) || (s.student_code||'').toLowerCase().includes(q) || (s.email||'').toLowerCase().includes(q));
+    filteredData = allStudents.filter(s => {
+        const matchSearch = (s.name||'').toLowerCase().includes(q) || (s.student_code||'').toLowerCase().includes(q) || (s.email||'').toLowerCase().includes(q);
+        let matchFilter = true;
+        if (activeFilter === 'none') matchFilter = !s.classroom_id;
+        else if (activeFilter !== 'all') matchFilter = s.classroom_id === activeFilter;
+        return matchSearch && matchFilter;
+    });
     currentPage = 1;
     renderPage();
 }

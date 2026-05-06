@@ -71,6 +71,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/config', function () {
         return view('admin.config');
     })->name('admin.config');
+
+    Route::get('/rooms', function () {
+        return view('admin.room_management');
+    })->name('admin.rooms');
+
+    Route::get('/faculties', function () {
+        return view('admin.faculty_management');
+    })->name('admin.faculties');
 });
 
 
@@ -107,9 +115,6 @@ Route::prefix('student')->group(function () {
         return view('user.Student.payment');
     })->name('student.payment');
 
-    Route::get('/announcements', function () {
-        return view('user.Student.anouncement');
-    })->name('student.announcements');
 
     Route::get('/feedback', function () {
         return view('user.Student.feedback');

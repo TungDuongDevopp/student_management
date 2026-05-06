@@ -70,6 +70,12 @@
         .pagination button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
         .pagination button:disabled{opacity:0.4;cursor:not-allowed}
         .pagination .page-info{color:var(--text-muted);font-size:0.85rem;margin:0 0.5rem}
+        .filter-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+        .filter-tab{padding:0.55rem 1.2rem;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text-muted);cursor:pointer;font-size:0.85rem;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
+        .filter-tab:hover{border-color:var(--accent);color:var(--text)}
+        .filter-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .filter-tab .count{background:rgba(255,255,255,0.15);padding:0.1rem 0.5rem;border-radius:10px;font-size:0.75rem;font-weight:700}
+        .filter-tab.active .count{background:rgba(255,255,255,0.25)}
         @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
         .modal-overlay.active .modal{animation:fadeIn 0.2s ease}
     </style>
@@ -80,6 +86,7 @@
         <h1>Quản lý Giảng viên</h1>
         <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Giảng viên</button>
     </div>
+    <div class="filter-tabs" id="filterTabs"></div>
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên, mã GV, email..." oninput="filterTable()">
     </div>
@@ -143,15 +150,38 @@
 <script>
 const API = '/api/teachers';
 const PER_PAGE = 10;
-let allData = [], filteredData = [], currentPage = 1;
+let allData = [], allFaculties = [], filteredData = [], currentPage = 1, activeFilter = 'all';
 
 async function fetchData() {
-    try { const r = await fetch(API); allData = await r.json(); filterTable(); } catch(e) { showToast('Lỗi tải dữ liệu','error'); }
+    try {
+        const [teachersRes, facultiesRes] = await Promise.all([fetch(API), fetch('/api/faculties')]);
+        allData = await teachersRes.json();
+        allFaculties = await facultiesRes.json();
+        renderFilterTabs();
+        filterTable();
+    } catch(e) { showToast('Lỗi tải dữ liệu','error'); }
 }
+
+function renderFilterTabs() {
+    const tabs = document.getElementById('filterTabs');
+    const counts = { all: allData.length };
+    allFaculties.forEach(f => { counts[f.id] = allData.filter(t => t.faculty_id === f.id).length; });
+    let html = `<div class="filter-tab ${activeFilter==='all'?'active':''}" onclick="setFilter('all')">Tất cả <span class="count">${counts.all}</span></div>`;
+    allFaculties.forEach(f => {
+        if (counts[f.id] > 0) html += `<div class="filter-tab ${activeFilter==f.id?'active':''}" onclick="setFilter(${f.id})">${f.name} <span class="count">${counts[f.id]}</span></div>`;
+    });
+    tabs.innerHTML = html;
+}
+
+function setFilter(val) { activeFilter = val; renderFilterTabs(); filterTable(); }
 
 function filterTable() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    filteredData = allData.filter(t => (t.name||'').toLowerCase().includes(q) || (t.teacher_code||'').toLowerCase().includes(q) || (t.email||'').toLowerCase().includes(q));
+    filteredData = allData.filter(t => {
+        const matchSearch = (t.name||'').toLowerCase().includes(q) || (t.teacher_code||'').toLowerCase().includes(q) || (t.email||'').toLowerCase().includes(q);
+        const matchFilter = activeFilter === 'all' || t.faculty_id === activeFilter;
+        return matchSearch && matchFilter;
+    });
     currentPage = 1;
     renderPage();
 }
