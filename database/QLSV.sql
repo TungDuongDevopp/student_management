@@ -95,6 +95,7 @@ CREATE TABLE semesters (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50),
     academic_year VARCHAR(20),
+    status TINYINT DEFAULT 0,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL
 );
