@@ -8,7 +8,8 @@ class Semester extends Model
 {
     protected $fillable = [
         'name',
-        'academic_year'
+        'academic_year',
+        'status'
     ];
 
     public function schedules()
