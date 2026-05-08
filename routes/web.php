@@ -6,9 +6,6 @@ use App\Http\Controllers\AuthController;
 Route::get('/', function () {
     return redirect()->route('user.login');
 });
-Route::get('/setting', function () {
-    return view('setting');
-});
 
 // User Login (Sinh viên, Giảng viên)
 Route::get('/login', function () {
@@ -79,6 +76,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/faculties', function () {
         return view('admin.faculty_management');
     })->name('admin.faculties');
+
+    Route::get('/semesters', function () {
+        return view('admin.semester_management');
+    })->name('admin.semesters');
 });
 
 
@@ -160,3 +161,8 @@ Route::prefix('teacher')->group(function () {
 Route::get('/logout', function () {
     return redirect()->route('user.login');
 })->name('logout');
+
+//Setting
+Route::get('/setting', function () {
+    return view('setting');
+})->name('setting');

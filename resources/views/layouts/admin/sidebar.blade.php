@@ -13,14 +13,14 @@
     
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-light: #eff6ff;
-            --bg-body: #f8fafc;
-            --bg-sidebar: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --border-color: #e2e8f0;
-            --sidebar-hover: #f1f5f9;
+            --primary: #3b82f6;
+            --primary-light: rgba(59, 130, 246, 0.15);
+            --bg-body: #0f172a;
+            --bg-sidebar: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --sidebar-hover: rgba(59, 130, 246, 0.08);
             --sidebar-width: 280px;
             --sidebar-collapsed-width: 80px;
         }
@@ -38,9 +38,9 @@
         /* Nút Toggle thu gọn */
         .toggle-btn {
             position: absolute; top: 1.5rem; right: -14px; width: 28px; height: 28px;
-            background: #ffffff; color: var(--text-muted); border: 1px solid var(--border-color);
+            background: var(--bg-sidebar); color: var(--text-muted); border: 1px solid var(--border-color);
             border-radius: 4px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.2s;
+            cursor: pointer; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: all 0.2s;
         }
         .toggle-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
@@ -82,8 +82,8 @@
 
         .btn-home { color: var(--text-main); border-color: var(--border-color); }
         .btn-home:hover { background-color: var(--sidebar-hover); }
-        .btn-logout { color: #ef4444; background: #fef2f2; border-color: #fecaca; }
-        .btn-logout:hover { background-color: #fee2e2; }
+        .btn-logout { color: #ef4444; background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); }
+        .btn-logout:hover { background-color: rgba(239,68,68,0.25); }
 
         .main-content { flex: 1; padding: 2rem; width: calc(100% - var(--sidebar-width)); transition: width 0.3s ease; }
 
