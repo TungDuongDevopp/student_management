@@ -10,7 +10,7 @@ class ClassroomController extends Controller
 {
     public function index()
     {
-        $classrooms = Classroom::with(['faculty', 'teacher', 'semester'])->get();
+        $classrooms = Classroom::with(['faculty', 'teacher'])->get();
         return response()->json($classrooms);
     }
 
@@ -19,9 +19,8 @@ class ClassroomController extends Controller
         $validated = $request->validate([
             'faculty_id' => 'required|integer|exists:faculties,id',
             'teacher_id' => 'nullable|integer|exists:teachers,id',
-            'semester_id' => 'nullable|integer|exists:semesters,id',
-            'code' => 'nullable|string|max:50|unique:classrooms,code',
-            'quantity' => 'nullable|integer',
+            'code'       => 'nullable|string|max:50|unique:classrooms,code',
+            'quantity'   => 'nullable|integer',
         ]);
 
         $classroom = Classroom::create($validated);
@@ -30,7 +29,7 @@ class ClassroomController extends Controller
 
     public function show($id)
     {
-        $classroom = Classroom::with(['faculty', 'teacher', 'semester', 'students', 'schedules'])->findOrFail($id);
+        $classroom = Classroom::with(['faculty', 'teacher', 'students', 'schedules'])->findOrFail($id);
         return response()->json($classroom);
     }
 
@@ -40,9 +39,8 @@ class ClassroomController extends Controller
         $validated = $request->validate([
             'faculty_id' => 'sometimes|required|integer|exists:faculties,id',
             'teacher_id' => 'nullable|integer|exists:teachers,id',
-            'semester_id' => 'nullable|integer|exists:semesters,id',
-            'code' => 'sometimes|nullable|string|max:50|unique:classrooms,code,' . $id,
-            'quantity' => 'nullable|integer',
+            'code'       => 'sometimes|nullable|string|max:50|unique:classrooms,code,' . $id,
+            'quantity'   => 'nullable|integer',
         ]);
 
         $classroom->update($validated);
