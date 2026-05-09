@@ -426,13 +426,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.grades') }}" class="nav-link" title="Nhập & Cập nhật điểm">
+                <a href="{{ route('teacher.students') }}" class="nav-link" title="Nhập & Cập nhật điểm">
                     <i class="fa-solid fa-marker"></i>
                     <span>Nhập & Cập nhật điểm</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" title="Điểm danh">
+                <a href="{{ route('teacher.attendences') }}" class="nav-link" title="Điểm danh">
                     <i class="fa-solid fa-user-check"></i>
                     <span>Điểm danh</span>
                 </a>
