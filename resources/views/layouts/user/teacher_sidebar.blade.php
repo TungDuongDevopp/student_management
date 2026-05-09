@@ -396,43 +396,54 @@
 
         <nav class="sidebar-nav" aria-label="Menu Giảng Viên">
             <li class="nav-item">
-                <a href="{{ route('teacher.home') }}" class="nav-link active" title="Trang chủ">
+                <a href="{{ route('teacher.home') }}"
+                    class="nav-link {{ request()->routeIs('teacher.home') ? 'active' : '' }}" title="Trang chủ">
                     <i class="fa-solid fa-house"></i>
                     <span>Trang chủ</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.info') }}" class="nav-link" title="Thông tin cá nhân">
+                <a href="{{ route('teacher.info') }}"
+                    class="nav-link {{ request()->routeIs('teacher.info') ? 'active' : '' }}" title="Thông tin cá nhân">
                     <i class="fa-regular fa-address-card"></i>
                     <span>Thông tin cá nhân</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.schedule') }}" class="nav-link" title="Lịch giảng dạy">
+                <a href="{{ route('teacher.schedule') }}"
+                    class="nav-link {{ request()->routeIs('teacher.schedule') ? 'active' : '' }}"
+                    title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
                     <span>Lịch giảng dạy</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.classes') }}" class="nav-link" title="Danh sách Lớp học">
+                <a href="{{ route('teacher.classes') }}"
+                    class="nav-link {{ request()->routeIs('teacher.classes') ? 'active' : '' }}"
+                    title="Danh sách Lớp học">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>Danh sách Lớp học</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.students') }}" class="nav-link" title="Danh sách Sinh viên">
+                <a href="{{ route('teacher.students') }}"
+                    class="nav-link {{ request()->routeIs('teacher.students') ? 'active' : '' }}"
+                    title="Danh sách Sinh viên">
                     <i class="fa-solid fa-users-viewfinder"></i>
                     <span>Danh sách Sinh viên</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.grades') }}" class="nav-link" title="Nhập & Cập nhật điểm">
+                <a href="{{ route('teacher.students') }}"
+                    class="nav-link {{ request()->routeIs('teacher.students') ? 'active' : '' }}"
+                    title="Nhập & Cập nhật điểm">
                     <i class="fa-solid fa-marker"></i>
                     <span>Nhập & Cập nhật điểm</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" title="Điểm danh">
+                <a href="{{ route('teacher.attendences') }}"
+                    class="nav-link {{ request()->routeIs('teacher.attendences') ? 'active' : '' }}" title="Điểm danh">
                     <i class="fa-solid fa-user-check"></i>
                     <span>Điểm danh</span>
                 </a>

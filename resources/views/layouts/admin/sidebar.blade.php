@@ -292,7 +292,8 @@
         <nav class="sidebar-nav" aria-label="Menu Chính">
             <div class="nav-section">Hệ thống</div>
             <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link active" title="Tổng quan hệ thống">
+                <a href="{{ route('admin.dashboard') }}"
+                    class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-house"></i>
                     <span>Tổng quan</span>
                 </a>
@@ -300,19 +301,24 @@
 
             <div class="nav-section">Nhân sự</div>
             <li class="nav-item">
-                <a href="{{ route('admin.accounts') }}" class="nav-link" title="Quản lý Tài khoản">
+                <a href="{{ route('admin.accounts') }}"
+                    class="nav-link {{ request()->routeIs('admin.accounts') ? 'active' : '' }}"
+                    title="Quản lý Tài khoản">
                     <i class="fa-solid fa-users-gear"></i>
                     <span>Quản lý tài khoản</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.students') }}" class="nav-link" title="Hồ sơ Sinh viên">
+                <a href="{{ route('admin.students') }}"
+                    class="nav-link {{ request()->routeIs('admin.students') ? 'active' : '' }}" title="Hồ sơ Sinh viên">
                     <i class="fa-solid fa-user-graduate"></i>
                     <span>Quản lý Sinh viên</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.teachers') }}" class="nav-link" title="Hồ sơ Giảng viên">
+                <a href="{{ route('admin.teachers') }}"
+                    class="nav-link {{ request()->routeIs('admin.teachers') ? 'active' : '' }}"
+                    title="Hồ sơ Giảng viên">
                     <i class="fa-solid fa-chalkboard-user"></i>
                     <span>Quản lý Giảng viên</span>
                 </a>
@@ -320,26 +326,39 @@
 
             <div class="nav-section">Đào tạo</div>
             <li class="nav-item">
-                <a href="{{ route('admin.classes') }}" class="nav-link" title="Danh sách Lớp">
+                <a href="{{ route('admin.classes') }}"
+                    class="nav-link {{ request()->routeIs('admin.classes') ? 'active' : '' }}" title="Danh sách Lớp">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>Quản lý Lớp học</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.grades') }}" class="nav-link" title="Bảng điểm">
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                    <span>Quản lý Bảng điểm</span>
+                <a href="{{ route('admin.attendences') }}"
+                    class="nav-link {{ request()->routeIs('admin.attendences') ? 'active' : '' }}"
+                    title="Danh sách điểm danh">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Quản lý điểm danh</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.subjects') }}" class="nav-link" title="Danh sách Môn">
+                <a href="{{ route('admin.enrollments') }}"
+                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Bảng điểm">
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                    <span>Quản lý đơn đăng ký</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.subjects') }}"
+                    class="nav-link {{ request()->routeIs('admin.subjects') ? 'active' : '' }}" title="Danh sách Môn">
                     <i class="fa-solid fa-book-open"></i>
                     <span>Quản lý Môn học</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('admin.schedules') }}" class="nav-link" title="Lịch giảng dạy">
+                <a href="{{ route('admin.schedules') }}"
+                    class="nav-link {{ request()->routeIs('admin.schedules') ? 'active' : '' }}"
+                    title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
                     <span>Quản lý Thời khóa biểu</span>
                 </a>
@@ -347,7 +366,9 @@
 
 
             <li class="nav-item">
-                <a href="{{ route('admin.semesters') }}" class="nav-link" title="Quản lý học kỳ">
+                <a href="{{ route('admin.semesters') }}"
+                    class="nav-link {{ request()->routeIs('admin.semesters') ? 'active' : '' }}"
+                    title="Quản lý học kỳ">
                     <i class="fa-solid fa-calendar-check"></i>
                     <span>Quản lý học kỳ</span>
                 </a>
@@ -356,21 +377,18 @@
             <div class="nav-section">Tài chính & Đánh giá</div>
 
             <li class="nav-item">
-                <a href="{{ route('admin.fees') }}" class="nav-link" title="Công nợ học phí">
+                <a href="{{ route('admin.fees') }}"
+                    class="nav-link {{ request()->routeIs('admin.fees') ? 'active' : '' }}" title="Công nợ học phí">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                     <span>Học phí & Công nợ</span>
                 </a>
             </li>
 
             <div class="nav-section">Khác</div>
+
             <li class="nav-item">
-                <a href="{{ route('admin.announcements') }}" class="nav-link" title="Bảng tin">
-                    <i class="fa-solid fa-bullhorn"></i>
-                    <span>Thông báo</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('admin.feedbacks') }}" class="nav-link" title="Góp ý">
+                <a href="{{ route('admin.feedbacks') }}"
+                    class="nav-link {{ request()->routeIs('admin.feedbacks') ? 'active' : '' }}" title="Góp ý">
                     <i class="fa-regular fa-comments"></i>
                     <span>Xem phản hồi</span>
                 </a>
