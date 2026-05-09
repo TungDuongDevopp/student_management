@@ -31,4 +31,9 @@ Route::apiResource('enrollments', EnrollmentController::class);
 Route::apiResource('attendances', AttendanceController::class);
 Route::apiResource('tuitions', TuitionController::class);
 Route::apiResource('payments', PaymentController::class);
+
+// Feedback: custom actions trước resource routes
+Route::post('feedbacks/{id}/reply', [FeedbackController::class, 'reply']);
+Route::patch('feedbacks/{id}/seen',  [FeedbackController::class, 'markAsSeen']);
+// HS/GV dùng POST để tạo feedback; admin chỉ xem & phản hồi qua giao diện
 Route::apiResource('feedbacks', FeedbackController::class);
