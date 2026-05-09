@@ -360,7 +360,7 @@
                     class="nav-link {{ request()->routeIs('admin.schedules') ? 'active' : '' }}"
                     title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
-                    <span>Quản lý Thời khóa biểu</span>
+                    <span>Quản lý Lịch học</span>
                 </a>
             </li>
 

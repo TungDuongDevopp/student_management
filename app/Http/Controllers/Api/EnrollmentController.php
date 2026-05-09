@@ -10,17 +10,22 @@ class EnrollmentController extends Controller
 {
     public function index()
     {
-        $enrollments = Enrollment::with(['student', 'schedule'])->get();
+        $enrollments = Enrollment::with([
+            'student.classroom',
+            'schedule.subject',
+            'schedule.semester',
+            'schedule.teacher',
+        ])->get();
         return response()->json($enrollments);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'student_id' => 'required|integer|exists:students,id',
+            'student_id'  => 'required|integer|exists:students,id',
             'schedule_id' => 'required|integer|exists:schedules,id',
             'final_score' => 'nullable|numeric',
-            'status' => 'nullable|integer',
+            'status'      => 'nullable|integer',
         ]);
 
         $enrollment = Enrollment::create($validated);
@@ -29,22 +34,31 @@ class EnrollmentController extends Controller
 
     public function show($id)
     {
-        $enrollment = Enrollment::with(['student', 'schedule', 'attendances'])->findOrFail($id);
+        $enrollment = Enrollment::with([
+            'student.classroom',
+            'schedule.subject',
+            'schedule.semester',
+            'schedule.teacher',
+            'attendances',
+        ])->findOrFail($id);
         return response()->json($enrollment);
     }
 
     public function update(Request $request, $id)
     {
         $enrollment = Enrollment::findOrFail($id);
-        $validated = $request->validate([
-            'student_id' => 'sometimes|required|integer|exists:students,id',
-            'schedule_id' => 'sometimes|required|integer|exists:schedules,id',
-            'final_score' => 'nullable|numeric',
-            'status' => 'nullable|integer',
+        $validated  = $request->validate([
+            'final_score' => 'nullable|numeric|min:0|max:10',
+            'status'      => 'nullable|integer',
         ]);
 
         $enrollment->update($validated);
-        return response()->json($enrollment);
+        return response()->json($enrollment->fresh([
+            'student.classroom',
+            'schedule.subject',
+            'schedule.semester',
+            'schedule.teacher',
+        ]));
     }
 
     public function destroy($id)

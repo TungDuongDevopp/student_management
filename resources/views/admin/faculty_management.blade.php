@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 
     <div class="content-wrapper">
-        <div class="breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a> / Quản lý Khoa</div>
+
         <div class="page-header">
             <h1>Quản lý Khoa</h1>
             <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Khoa</button>
