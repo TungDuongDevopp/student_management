@@ -163,9 +163,17 @@
             letter-spacing: 0.05em;
         }
 
-        .stat-card.stat-total .stat-value { color: #60a5fa; }
-        .stat-card.stat-unread .stat-value { color: #fbbf24; }
-        .stat-card.stat-read .stat-value { color: #4ade80; }
+        .stat-card.stat-total .stat-value {
+            color: #60a5fa;
+        }
+
+        .stat-card.stat-unread .stat-value {
+            color: #fbbf24;
+        }
+
+        .stat-card.stat-read .stat-value {
+            color: #4ade80;
+        }
     </style>
 
     <div class="content-wrapper">
@@ -199,10 +207,10 @@
                         Tất cả <span class="count" id="cntAll">0</span>
                     </button>
                     <button class="filter-tab" data-status="0" onclick="setStatusFilter('0', this)">
-                        ⏳ Chưa xem <span class="count" id="cntUnread">0</span>
+                        Chưa xem <span class="count" id="cntUnread">0</span>
                     </button>
                     <button class="filter-tab" data-status="1" onclick="setStatusFilter('1', this)">
-                        ✅ Đã xem <span class="count" id="cntRead">0</span>
+                        Đã xem <span class="count" id="cntRead">0</span>
                     </button>
                 </div>
             </div>
@@ -213,10 +221,10 @@
                         Tất cả
                     </button>
                     <button class="filter-tab" data-role="2" onclick="setRoleFilter('2', this)">
-                        👨‍🏫 Giảng viên
+                        Giảng viên
                     </button>
                     <button class="filter-tab" data-role="3" onclick="setRoleFilter('3', this)">
-                        🎓 Sinh viên
+                        Sinh viên
                     </button>
                 </div>
             </div>
@@ -244,7 +252,11 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <tr><td colspan="8"><div class="empty-state">Đang tải dữ liệu...</div></td></tr>
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">Đang tải dữ liệu...</div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -266,8 +278,7 @@
                     </div>
                     <div class="form-group">
                         <label>💬 Phản hồi của Admin</label>
-                        <textarea class="detail-block" id="replyInput" rows="4"
-                            placeholder="Nhập nội dung phản hồi..."
+                        <textarea class="detail-block" id="replyInput" rows="4" placeholder="Nhập nội dung phản hồi..."
                             style="resize:vertical;width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem;padding:0.85rem 1rem;font-family:'Inter',sans-serif;line-height:1.6;"></textarea>
                     </div>
                 </div>
@@ -287,7 +298,8 @@
                     <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p style="color:var(--text-muted)">Bạn có chắc muốn xóa phản hồi này? Hành động này không thể hoàn tác.</p>
+                    <p style="color:var(--text-muted)">Bạn có chắc muốn xóa phản hồi này? Hành động này không thể hoàn tác.
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" onclick="closeDeleteModal()">Hủy</button>
@@ -300,26 +312,38 @@
     </div>
 
     <script>
-        const API        = '/api/feedbacks';
-        const API_REPLY  = (id) => `/api/feedbacks/${id}/reply`;
-        const API_SEEN   = (id) => `/api/feedbacks/${id}/seen`;
-        const PER_PAGE   = 10;
+        const API = '/api/feedbacks';
+        const API_REPLY = (id) => `/api/feedbacks/${id}/reply`;
+        const API_SEEN = (id) => `/api/feedbacks/${id}/seen`;
+        const PER_PAGE = 10;
 
-        let allData      = [];
+        let allData = [];
         let filteredData = [];
-        let currentPage  = 1;
+        let currentPage = 1;
         let statusFilter = 'all';
-        let roleFilter   = 'all';
-        let currentId    = null;
+        let roleFilter = 'all';
+        let currentId = null;
         let deleteTargetId = null;
 
-        const ROLE_MAP = { 1: 'Admin', 2: 'Giảng viên', 3: 'Sinh viên' };
-        const ROLE_BADGE = { 1: 'badge-admin', 2: 'badge-teacher', 3: 'badge-student' };
+        const ROLE_MAP = {
+            1: 'Admin',
+            2: 'Giảng viên',
+            3: 'Sinh viên'
+        };
+        const ROLE_BADGE = {
+            1: 'badge-admin',
+            2: 'badge-teacher',
+            3: 'badge-student'
+        };
 
         // ── FETCH ────────────────────────────────────────────────────────────
         async function fetchData() {
             try {
-                const r = await fetch(API, { headers: { 'Accept': 'application/json' } });
+                const r = await fetch(API, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
                 allData = await r.json();
                 updateStats();
                 applyFilters();
@@ -330,14 +354,14 @@
 
         // ── STATS ────────────────────────────────────────────────────────────
         function updateStats() {
-            document.getElementById('statTotal').textContent  = allData.length;
+            document.getElementById('statTotal').textContent = allData.length;
             document.getElementById('statUnread').textContent = allData.filter(f => f.status == 0).length;
-            document.getElementById('statRead').textContent   = allData.filter(f => f.status == 1).length;
+            document.getElementById('statRead').textContent = allData.filter(f => f.status == 1).length;
 
             // Update tab counts
-            document.getElementById('cntAll').textContent    = allData.length;
+            document.getElementById('cntAll').textContent = allData.length;
             document.getElementById('cntUnread').textContent = allData.filter(f => f.status == 0).length;
-            document.getElementById('cntRead').textContent   = allData.filter(f => f.status == 1).length;
+            document.getElementById('cntRead').textContent = allData.filter(f => f.status == 1).length;
         }
 
         // ── FILTERS ──────────────────────────────────────────────────────────
@@ -361,12 +385,12 @@
             const q = document.getElementById('searchInput').value.toLowerCase();
             filteredData = allData.filter(f => {
                 const matchStatus = statusFilter === 'all' || String(f.status) === statusFilter;
-                const roleId      = f.account?.role_id ?? null;
-                const matchRole   = roleFilter === 'all' || String(roleId) === roleFilter;
-                const matchSearch = !q
-                    || (f.account?.name || '').toLowerCase().includes(q)
-                    || (f.content || '').toLowerCase().includes(q)
-                    || (f.reply  || '').toLowerCase().includes(q);
+                const roleId = f.account?.role_id ?? null;
+                const matchRole = roleFilter === 'all' || String(roleId) === roleFilter;
+                const matchSearch = !q ||
+                    (f.account?.name || '').toLowerCase().includes(q) ||
+                    (f.content || '').toLowerCase().includes(q) ||
+                    (f.reply || '').toLowerCase().includes(q);
                 return matchStatus && matchRole && matchSearch;
             });
             renderPage();
@@ -376,26 +400,26 @@
         function renderPage() {
             const totalPages = Math.max(1, Math.ceil(filteredData.length / PER_PAGE));
             if (currentPage > totalPages) currentPage = totalPages;
-            const start    = (currentPage - 1) * PER_PAGE;
+            const start = (currentPage - 1) * PER_PAGE;
             const pageData = filteredData.slice(start, start + PER_PAGE);
-            const tb       = document.getElementById('tableBody');
+            const tb = document.getElementById('tableBody');
 
             if (!filteredData.length) {
                 tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">Không có phản hồi nào phù hợp</div></td></tr>';
             } else {
                 tb.innerHTML = pageData.map(f => {
-                    const roleId    = f.account?.role_id ?? null;
-                    const roleName  = ROLE_MAP[roleId] || 'Không rõ';
+                    const roleId = f.account?.role_id ?? null;
+                    const roleName = ROLE_MAP[roleId] || 'Không rõ';
                     const roleBadge = ROLE_BADGE[roleId] || 'badge-default';
-                    const statusBadge = f.status == 0
-                        ? '<span class="badge badge-unread">⏳ Chưa xem</span>'
-                        : '<span class="badge badge-read">✅ Đã xem</span>';
-                    const replyCell = f.reply
-                        ? `<span class="reply-preview" title="${escHtml(f.reply)}">${escHtml(f.reply)}</span>`
-                        : `<span class="no-reply">Chưa phản hồi</span>`;
-                    const seenBtn = f.status == 0
-                        ? `<button class="btn btn-sm btn-seen" onclick="quickMarkSeen(${f.id}, event)">✔ Đã xem</button>`
-                        : '';
+                    const statusBadge = f.status == 0 ?
+                        '<span class="badge badge-unread">⏳ Chưa xem</span>' :
+                        '<span class="badge badge-read">✅ Đã xem</span>';
+                    const replyCell = f.reply ?
+                        `<span class="reply-preview" title="${escHtml(f.reply)}">${escHtml(f.reply)}</span>` :
+                        `<span class="no-reply">Chưa phản hồi</span>`;
+                    const seenBtn = f.status == 0 ?
+                        `<button class="btn btn-sm btn-seen" onclick="quickMarkSeen(${f.id}, event)">✔ Đã xem</button>` :
+                        '';
                     return `<tr id="row-${f.id}">
                         <td><strong>#${f.id}</strong></td>
                         <td><strong>${escHtml(f.account?.name || '—')}</strong></td>
@@ -417,21 +441,28 @@
 
         function renderPagination(totalPages) {
             const pg = document.getElementById('pagination');
-            if (totalPages <= 1) { pg.innerHTML = ''; return; }
+            if (totalPages <= 1) {
+                pg.innerHTML = '';
+                return;
+            }
             let html = `<button onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
             for (let i = 1; i <= totalPages; i++)
                 html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
             html += `<span class="page-info">${filteredData.length} phản hồi</span>`;
-            html += `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+            html +=
+                `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
             pg.innerHTML = html;
         }
 
-        function goPage(p) { currentPage = p; renderPage(); }
+        function goPage(p) {
+            currentPage = p;
+            renderPage();
+        }
 
         // ── DETAIL MODAL ─────────────────────────────────────────────────────
         function openDetail(f) {
             currentId = f.id;
-            const roleId   = f.account?.role_id ?? null;
+            const roleId = f.account?.role_id ?? null;
             const roleName = ROLE_MAP[roleId] || 'Không rõ';
             document.getElementById('detailModalTitle').textContent = `Phản hồi #${f.id}`;
             document.getElementById('detailMeta').innerHTML = `
@@ -455,7 +486,10 @@
         async function sendReply() {
             if (!currentId) return;
             const reply = document.getElementById('replyInput').value.trim();
-            if (!reply) { showToast('Vui lòng nhập nội dung phản hồi', 'error'); return; }
+            if (!reply) {
+                showToast('Vui lòng nhập nội dung phản hồi', 'error');
+                return;
+            }
             try {
                 const res = await fetch(API_REPLY(currentId), {
                     method: 'POST',
@@ -464,7 +498,9 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ reply })
+                    body: JSON.stringify({
+                        reply
+                    })
                 });
                 if (!res.ok) throw new Error((await res.json()).message || 'Lỗi');
                 showToast('Phản hồi đã được gửi!', 'success');
@@ -505,8 +541,15 @@
         }
 
         // ── DELETE ───────────────────────────────────────────────────────────
-        function openDelete(id) { deleteTargetId = id; document.getElementById('deleteModal').classList.add('active'); }
-        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); deleteTargetId = null; }
+        function openDelete(id) {
+            deleteTargetId = id;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteTargetId = null;
+        }
 
         async function confirmDelete() {
             if (!deleteTargetId) return;
@@ -529,13 +572,13 @@
 
         // ── UTILS ────────────────────────────────────────────────────────────
         function escHtml(str) {
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         function showToast(msg, type = 'success') {
             const t = document.getElementById('toast');
             t.textContent = msg;
-            t.className   = `toast toast-${type} show`;
+            t.className = `toast toast-${type} show`;
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
