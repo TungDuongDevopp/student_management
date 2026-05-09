@@ -308,13 +308,13 @@
             <li class="nav-item">
                 <a href="{{ route('admin.students') }}" class="nav-link" title="Hồ sơ Sinh viên">
                     <i class="fa-solid fa-user-graduate"></i>
-                    <span>Hồ sơ Sinh viên</span>
+                    <span>Quản lý Sinh viên</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.teachers') }}" class="nav-link" title="Hồ sơ Giảng viên">
                     <i class="fa-solid fa-chalkboard-user"></i>
-                    <span>Hồ sơ Giảng viên</span>
+                    <span>Quản lý Giảng viên</span>
                 </a>
             </li>
 
@@ -328,7 +328,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.grades') }}" class="nav-link" title="Bảng điểm">
                     <i class="fa-solid fa-star-half-stroke"></i>
-                    <span>Bảng điểm</span>
+                    <span>Quản lý Bảng điểm</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -341,7 +341,7 @@
             <li class="nav-item">
                 <a href="{{ route('admin.schedules') }}" class="nav-link" title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
-                    <span>Thời khóa biểu</span>
+                    <span>Quản lý Thời khóa biểu</span>
                 </a>
             </li>
 
