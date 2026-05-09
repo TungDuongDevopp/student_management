@@ -24,14 +24,13 @@
                             <th>Mã lớp</th>
                             <th>Khoa</th>
                             <th>GVCN</th>
-                            <th>Học kỳ</th>
                             <th>Sĩ số</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="7">
+                            <td colspan="6">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -62,12 +61,7 @@
                                 <option value="">-- Chọn GV (tùy chọn) --</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Học kỳ</label>
-                            <select id="semesterId">
-                                <option value="">-- Chọn học kỳ (tùy chọn) --</option>
-                            </select>
-                        </div>
+
                         <div class="form-group">
                             <label>Mã lớp *</label>
                             <input type="text" id="classCode" placeholder="VD: CNTT01-K18" required>
@@ -89,26 +83,19 @@
         <script>
             const API = '/api/classrooms';
             const PER_PAGE = 10;
-            let allData = [],
-                allFaculties = [],
-                allTeachers = [],
-                allSemesters = [];
-            let filteredData = [],
-                currentPage = 1,
-                activeFilter = 'all';
+            let allData = [], allFaculties = [], allTeachers = [];
+            let filteredData = [], currentPage = 1, activeFilter = 'all';
 
             async function fetchData() {
                 try {
-                    const [classRes, facRes, teachRes, semRes] = await Promise.all([
+                    const [classRes, facRes, teachRes] = await Promise.all([
                         fetch(API).then(r => r.json()),
                         fetch('/api/faculties').then(r => r.json()),
-                        fetch('/api/teachers').then(r => r.json()),
-                        fetch('/api/semesters').then(r => r.json())
+                        fetch('/api/teachers').then(r => r.json())
                     ]);
                     allData = classRes;
                     allFaculties = facRes;
                     allTeachers = teachRes;
-                    allSemesters = semRes;
                     renderFilterTabs();
                     filterTable();
                 } catch (e) {
@@ -160,14 +147,13 @@
 
                 const tb = document.getElementById('tableBody');
                 if (!filteredData.length) {
-                    tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">Chưa có lớp nào</div></td></tr>';
+                    tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Chưa có lớp nào</div></td></tr>';
                 } else {
                     tb.innerHTML = pageData.map(c => `<tr>
             <td>${c.id}</td>
             <td><strong>${c.code||'-'}</strong></td>
             <td>${c.faculty ? `<span class="badge badge-faculty">${c.faculty.name}</span>` : '-'}</td>
             <td>${c.teacher?.name||'-'}</td>
-            <td>${c.semester ? `<span class="badge badge-semester">${c.semester.name} - ${c.semester.academic_year||''}</span>` : '-'}</td>
             <td>${c.quantity||'-'}</td>
             <td><div class="actions">
                 <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(c)})'>Sửa</button>
@@ -197,16 +183,12 @@
                 renderPage();
             }
 
-            function populateDropdowns(selectedFac, selectedTeach, selectedSem) {
+            function populateDropdowns(selectedFac, selectedTeach) {
                 document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + allFaculties.map(
                     f => `<option value="${f.id}" ${f.id==selectedFac?'selected':''}>${f.name}</option>`).join('');
                 document.getElementById('teacherId').innerHTML = '<option value="">-- Chọn GV (tùy chọn) --</option>' +
                     allTeachers.map(t =>
                         `<option value="${t.id}" ${t.id==selectedTeach?'selected':''}>${t.name} (${t.teacher_code||'N/A'})</option>`
-                    ).join('');
-                document.getElementById('semesterId').innerHTML = '<option value="">-- Chọn học kỳ (tùy chọn) --</option>' +
-                    allSemesters.map(s =>
-                        `<option value="${s.id}" ${s.id==selectedSem?'selected':''}>${s.name} - ${s.academic_year||''}</option>`
                     ).join('');
             }
 
@@ -214,14 +196,14 @@
                 document.getElementById('modalTitle').textContent = 'Thêm Lớp';
                 document.getElementById('entityForm').reset();
                 document.getElementById('entityId').value = '';
-                populateDropdowns('', '', '');
+                populateDropdowns('', '');
                 document.getElementById('formModal').classList.add('active');
             }
 
             function editEntity(c) {
                 document.getElementById('modalTitle').textContent = 'Cập nhật Lớp';
                 document.getElementById('entityId').value = c.id;
-                populateDropdowns(c.faculty_id, c.teacher_id, c.semester_id);
+                populateDropdowns(c.faculty_id, c.teacher_id);
                 document.getElementById('classCode').value = c.code || '';
                 document.getElementById('classQuantity').value = c.quantity || '';
                 document.getElementById('formModal').classList.add('active');
@@ -240,9 +222,6 @@
                 const teachId = document.getElementById('teacherId').value;
                 if (teachId) body.teacher_id = parseInt(teachId);
                 else body.teacher_id = null;
-                const semId = document.getElementById('semesterId').value;
-                if (semId) body.semester_id = parseInt(semId);
-                else body.semester_id = null;
                 const qty = document.getElementById('classQuantity').value;
                 if (qty) body.quantity = parseInt(qty);
                 else body.quantity = null;

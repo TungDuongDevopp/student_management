@@ -9,7 +9,6 @@ class Classroom extends Model
     protected $fillable = [
         'faculty_id',
         'teacher_id',
-        'semester_id',
         'code',
         'quantity'
     ];
