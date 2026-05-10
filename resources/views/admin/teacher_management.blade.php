@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Giảng viên - Hệ thống Quản lý</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <style>
+@extends('layouts.admin.sidebar')
+@section('title', 'Admin Panel')
+@section('content')
+<style>
         :root {
             --bg-primary:#0f172a;--bg-secondary:#1e293b;--bg-card:#1e293b;--bg-input:#0f172a;
             --border:#334155;--accent:#3b82f6;--accent-hover:#2563eb;--danger:#ef4444;
@@ -79,9 +74,7 @@
         @keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
         .modal-overlay.active .modal{animation:fadeIn 0.2s ease}
     </style>
-</head>
-<body>
-    <div class="breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a> / Quản lý Giảng viên</div>
+<div class="breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a> / Quản lý Giảng viên</div>
     <div class="page-header">
         <h1>Quản lý Giảng viên</h1>
         <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Giảng viên</button>
@@ -295,5 +288,4 @@ async function deleteEntity(id) {
 function showToast(msg,type='success') { const t=document.getElementById('toast');t.textContent=msg;t.className=`toast toast-${type} show`;setTimeout(()=>t.classList.remove('show'),3000); }
 fetchData();
 </script>
-</body>
-</html>
+@endsection

@@ -4,7 +4,7 @@
 
 @section('content')
 <style>
-    .feedback-container { display: flex; flex-direction: column; gap: 1.5rem; max-width: 860px; }
+    .feedback-container { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
 
     .page-header {
         background: #fff; border-radius: 8px; padding: 1.5rem;
@@ -178,11 +178,11 @@
 
             <div class="form-group">
                 <label class="form-label">Đính kèm tài liệu (nếu có)</label>
-                <label class="file-upload" for="feedback-file">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <p>Kéo thả hoặc <strong style="color:#2563eb;">bấm để chọn file</strong></p>
-                    <span>Hỗ trợ: JPG, PNG, PDF — Tối đa 5MB</span>
-                    <input type="file" id="feedback-file" name="attachment" accept=".jpg,.jpeg,.png,.pdf">
+                <label style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; display: block; background: #f8fafc; transition: 0.2s;" onmouseover="this.style.borderColor='#dc2626'; this.style.background='#fef2f2'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='#f8fafc'">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; font-weight: 600; color: #0f172a;">Kéo thả hoặc <strong style="color: #dc2626;">bấm để chọn file</strong></p>
+                    <span style="font-size: 0.8rem; color: #64748b;">Hỗ trợ: JPG, PNG, PDF, DOCX — Tối đa 5MB</span>
+                    <input type="file" id="feedback-file" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" style="display: none;">
                 </label>
             </div>
 
