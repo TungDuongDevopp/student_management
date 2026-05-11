@@ -19,6 +19,7 @@ class SemesterController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string|max:50',
             'academic_year' => 'nullable|string|max:20',
+            'status' => 'nullable|integer|in:0,1',
         ]);
 
         $semester = Semester::create($validated);
@@ -37,6 +38,7 @@ class SemesterController extends Controller
         $validated = $request->validate([
             'name' => 'nullable|string|max:50',
             'academic_year' => 'nullable|string|max:20',
+            'status' => 'nullable|integer|in:0,1',
         ]);
 
         $semester->update($validated);
