@@ -390,8 +390,8 @@
             @else
                 <div class="user-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
             @endif
-            <h3>{{ Auth::check() ? Auth::user()->teacher->name ?? Auth::user()->username : 'Giảng viên' }}</h3>
-            <p>{{ Auth::check() ? Auth::user()->teacher->teacher_code ?? 'Chưa cập nhật' : '' }}</p>
+            <h3>{{ Auth::check() ? Auth::user()->teacher?->name ?? Auth::user()->username : 'Giảng viên' }}</h3>
+            <p>{{ Auth::check() ? Auth::user()->teacher?->teacher_code ?? 'Chưa cập nhật' : '' }}</p>
         </div>
 
         <nav class="sidebar-nav" aria-label="Menu Giảng Viên">
