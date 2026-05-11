@@ -12,7 +12,18 @@ class Teacher extends Model
         'teacher_code',
         'name',
         'email',
-        'images'
+        'images',
+        'date_of_birth',
+        'gender',
+        'phone',
+        'address',
+        'department',
+        'degree',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date:Y-m-d',
+        'gender'        => 'integer',
     ];
 
     public function account()

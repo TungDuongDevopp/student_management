@@ -41,7 +41,7 @@
 
         <!-- Add/Edit Modal -->
         <div class="modal-overlay" id="studentModal">
-            <div class="modal">
+            <div class="modal" style="width:600px">
                 <div class="modal-header">
                     <h2 id="modalTitle">Thêm Sinh viên</h2>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -49,38 +49,64 @@
                 <div class="modal-body">
                     <form id="studentForm" enctype="multipart/form-data">
                         <input type="hidden" id="studentId">
-                        <div class="form-group">
-                            <label>Tài khoản (Account) *</label>
-                            <select id="accountId" required>
-                                <option value="">-- Chọn tài khoản --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Lớp học</label>
-                            <select id="classroomId">
-                                <option value="">-- Chọn lớp --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Mã sinh viên</label>
-                            <input type="text" id="studentCode" placeholder="VD: SV001">
-                        </div>
-                        <div class="form-group">
-                            <label>Họ và tên</label>
-                            <input type="text" id="studentName" placeholder="Nhập họ tên">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="studentEmail" placeholder="email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label>Ảnh đại diện</label>
-                            <div class="image-upload" onclick="document.getElementById('studentImage').click()">
-                                <img id="imagePreview" style="display:none">
-                                <p id="imageText">Nhấn để chọn ảnh (JPG, PNG, GIF - tối đa 2MB)</p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Tài khoản (Account) *</label>
+                                <select id="accountId" required>
+                                    <option value="">-- Chọn tài khoản --</option>
+                                </select>
                             </div>
-                            <input type="file" id="studentImage" accept="image/*" style="display:none"
-                                onchange="previewImage(this)">
+                            <div class="form-group">
+                                <label>Lớp học</label>
+                                <select id="classroomId">
+                                    <option value="">-- Chọn lớp --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mã sinh viên</label>
+                                <input type="text" id="studentCode" placeholder="VD: SV001">
+                            </div>
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" id="studentName" placeholder="Nhập họ tên">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="studentEmail" placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày sinh</label>
+                                <input type="date" id="studentDob">
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <select id="studentGender">
+                                    <option value="">-- Chọn --</option>
+                                    <option value="0">Nam</option>
+                                    <option value="1">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" id="studentPhone" placeholder="VD: 0912345678">
+                            </div>
+                            <div class="form-group">
+                                <label>Chuyên ngành</label>
+                                <input type="text" id="studentSpec" placeholder="VD: Công nghệ phần mềm">
+                            </div>
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Địa chỉ</label>
+                                <input type="text" id="studentAddress" placeholder="Địa chỉ thường trú">
+                            </div>
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Ảnh đại diện</label>
+                                <div class="image-upload" onclick="document.getElementById('studentImage').click()">
+                                    <img id="imagePreview" style="display:none">
+                                    <p id="imageText">Nhấn để chọn ảnh (JPG, PNG, GIF - tối đa 2MB)</p>
+                                </div>
+                                <input type="file" id="studentImage" accept="image/*" style="display:none"
+                                    onchange="previewImage(this)">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -230,9 +256,14 @@
                     document.getElementById('accountId').disabled = true;
                     document.getElementById('classroomId').value = s.classroom_id || '';
                 });
-                document.getElementById('studentCode').value = s.student_code || '';
-                document.getElementById('studentName').value = s.name || '';
-                document.getElementById('studentEmail').value = s.email || '';
+                document.getElementById('studentCode').value    = s.student_code || '';
+                document.getElementById('studentName').value    = s.name || '';
+                document.getElementById('studentEmail').value   = s.email || '';
+                document.getElementById('studentDob').value     = s.date_of_birth || '';
+                document.getElementById('studentGender').value  = s.gender !== null && s.gender !== undefined ? s.gender : '';
+                document.getElementById('studentPhone').value   = s.phone_number || '';
+                document.getElementById('studentSpec').value    = s.specialization || '';
+                document.getElementById('studentAddress').value = s.address || '';
                 if (s.images) {
                     document.getElementById('imagePreview').src = '/storage/' + s.images;
                     document.getElementById('imagePreview').style.display = 'block';
@@ -266,12 +297,15 @@
                 formData.append('account_id', document.getElementById('accountId').value);
                 const clsId = document.getElementById('classroomId').value;
                 if (clsId) formData.append('classroom_id', clsId);
-                const code = document.getElementById('studentCode').value;
-                if (code) formData.append('student_code', code);
-                const name = document.getElementById('studentName').value;
-                if (name) formData.append('name', name);
-                const email = document.getElementById('studentEmail').value;
-                if (email) formData.append('email', email);
+                const g = v => document.getElementById(v).value;
+                if (g('studentCode'))    formData.append('student_code',   g('studentCode'));
+                if (g('studentName'))    formData.append('name',            g('studentName'));
+                if (g('studentEmail'))   formData.append('email',           g('studentEmail'));
+                if (g('studentDob'))     formData.append('date_of_birth',   g('studentDob'));
+                if (g('studentGender') !== '') formData.append('gender',    g('studentGender'));
+                if (g('studentPhone'))   formData.append('phone_number',    g('studentPhone'));
+                if (g('studentSpec'))    formData.append('specialization',  g('studentSpec'));
+                if (g('studentAddress')) formData.append('address',         g('studentAddress'));
                 const imgFile = document.getElementById('studentImage').files[0];
                 if (imgFile) formData.append('images', imgFile);
                 try {

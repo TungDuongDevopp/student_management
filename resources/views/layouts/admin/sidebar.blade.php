@@ -332,14 +332,7 @@
                     <span>Quản lý Lớp học</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('admin.attendences') }}"
-                    class="nav-link {{ request()->routeIs('admin.attendences') ? 'active' : '' }}"
-                    title="Danh sách điểm danh">
-                    <i class="fa-solid fa-user-check"></i>
-                    <span>Quản lý điểm danh</span>
-                </a>
-            </li>
+
             <li class="nav-item">
                 <a href="{{ route('admin.enrollments') }}"
                     class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Bảng điểm">

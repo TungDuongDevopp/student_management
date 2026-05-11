@@ -73,10 +73,6 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     Route::get('/semesters', function () {
         return view('admin.semester_management');
     })->name('admin.semesters');
-
-    Route::get('/attendences', function () {
-        return view('admin.attendence_management');
-    })->name('admin.attendences');
 });
 
 
@@ -144,12 +140,15 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     })->name('teacher.students');
 
     Route::get('/attendances', function () {
-        return view('user.Teacher.attendance_list');
+        return view('user.Teacher.student_list');
     })->name('teacher.attendances');
 
     Route::get('/feedback', function () {
         return view('user.Teacher.feedback');
     })->name('teacher.feedback');
+    Route::get('/grades', function () {
+        return view('user.Teacher.student_list');
+    })->name('teacher.grades');
 });
 
 // Logout
