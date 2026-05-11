@@ -390,8 +390,8 @@
             @else
                 <div class="user-avatar"><i class="fa-solid fa-user-graduate"></i></div>
             @endif
-            <h3>{{ Auth::check() ? Auth::user()->student->name ?? Auth::user()->username : 'Sinh viên' }}</h3>
-            <p>{{ Auth::check() ? Auth::user()->student->student_code ?? 'Chưa cập nhật' : '' }}</p>
+            <h3>{{ Auth::check() ? Auth::user()->student?->name ?? Auth::user()->username : 'Sinh viên' }}</h3>
+            <p>{{ Auth::check() ? Auth::user()->student?->student_code ?? 'Chưa cập nhật' : '' }}</p>
         </div>
 
         <nav class="sidebar-nav" aria-label="Menu Sinh Viên">
