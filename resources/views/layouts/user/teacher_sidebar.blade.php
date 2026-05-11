@@ -434,16 +434,16 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.students') }}"
-                    class="nav-link {{ request()->routeIs('teacher.students') ? 'active' : '' }}"
+                <a href="{{ route('teacher.grades') }}"
+                    class="nav-link {{ request()->routeIs('teacher.grades') ? 'active' : '' }}"
                     title="Nhập & Cập nhật điểm">
                     <i class="fa-solid fa-marker"></i>
                     <span>Nhập & Cập nhật điểm</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('teacher.attendences') }}"
-                    class="nav-link {{ request()->routeIs('teacher.attendences') ? 'active' : '' }}" title="Điểm danh">
+                <a href="{{ route('teacher.attendances') }}"
+                    class="nav-link {{ request()->routeIs('teacher.attendances') ? 'active' : '' }}" title="Điểm danh">
                     <i class="fa-solid fa-user-check"></i>
                     <span>Điểm danh</span>
                 </a>
