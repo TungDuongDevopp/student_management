@@ -188,7 +188,7 @@
     }
     .time-col {
         background: #f8fafc;
-        width: 100px;
+        width: 110px;
         text-align: center !important;
         vertical-align: middle !important;
         font-weight: 700;

@@ -564,7 +564,7 @@
             <table class="schedule-table">
                 <thead>
                     <tr>
-                        <th scope="col">Ca / Tiết</th>
+                        <th scope="col">Thời gian</th>
                         <th scope="col">Thứ 2</th>
                         <th scope="col">Thứ 3</th>
                         <th scope="col">Thứ 4</th>
@@ -772,5 +772,4 @@
 
 </main>
 </div>
-
 @endsection

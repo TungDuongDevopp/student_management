@@ -96,7 +96,7 @@
                 <div class="info-item"><p class="info-label">Họ và tên</p><p class="info-value">{{ $teacher?->name ?? 'Ngô Ngọc Anh' }}</p></div>
                 <div class="info-item"><p class="info-label">Mã giảng viên</p><p class="info-value">{{ $teacher?->teacher_code ?? 'GV0123' }}</p></div>
                 <div class="info-item"><p class="info-label">Ngày sinh</p><p class="info-value">{{ $teacher?->date_of_birth ? \Carbon\Carbon::parse($teacher->date_of_birth)->format('d/m/Y') : '11/09/1985' }}</p></div>
-                <div class="info-item"><p class="info-label">Giới tính</p><p class="info-value">{{ $teacher?->gender ?? 'Nam' }}</p></div>
+                <div class="info-item"><p class="info-label">Giới tính</p><p class="info-value">{{ $teacher?->gender ?? 'Nữ' }}</p></div>
                 <div class="info-item"><p class="info-label">Email</p><p class="info-value">{{ $teacher?->email ?? auth()->user()->email ?? 'ngongocanh@humg.edu.vn' }}</p></div>
                 <div class="info-item"><p class="info-label">Số điện thoại</p><p class="info-value">{{ $teacher?->phone ?? '0971117492' }}</p></div>
                 <div class="info-item"><p class="info-label">Địa chỉ</p><p class="info-value">{{ $teacher?->address ?? 'Hà Nội' }}</p></div>

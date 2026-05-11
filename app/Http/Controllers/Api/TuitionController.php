@@ -10,17 +10,17 @@ class TuitionController extends Controller
 {
     public function index()
     {
-        $tuitions = Tuition::with(['student', 'semester'])->get();
+        $tuitions = Tuition::with(['student.classroom', 'semester', 'payments'])->get();
         return response()->json($tuitions);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'student_id' => 'nullable|integer|exists:students,id',
-            'semester_id' => 'nullable|integer|exists:semesters,id',
+            'student_id'   => 'nullable|integer|exists:students,id',
+            'semester_id'  => 'nullable|integer|exists:semesters,id',
             'total_amount' => 'nullable|numeric',
-            'paid_amount' => 'nullable|numeric',
+            'paid_amount'  => 'nullable|numeric',
         ]);
 
         $tuition = Tuition::create($validated);
@@ -29,22 +29,20 @@ class TuitionController extends Controller
 
     public function show($id)
     {
-        $tuition = Tuition::with(['student', 'semester', 'payments'])->findOrFail($id);
+        $tuition = Tuition::with(['student.classroom', 'semester', 'payments'])->findOrFail($id);
         return response()->json($tuition);
     }
 
     public function update(Request $request, $id)
     {
-        $tuition = Tuition::findOrFail($id);
+        $tuition   = Tuition::findOrFail($id);
         $validated = $request->validate([
-            'student_id' => 'nullable|integer|exists:students,id',
-            'semester_id' => 'nullable|integer|exists:semesters,id',
-            'total_amount' => 'nullable|numeric',
-            'paid_amount' => 'nullable|numeric',
+            'total_amount' => 'nullable|numeric|min:0',
+            'paid_amount'  => 'nullable|numeric|min:0',
         ]);
 
         $tuition->update($validated);
-        return response()->json($tuition);
+        return response()->json($tuition->fresh(['student.classroom', 'semester', 'payments']));
     }
 
     public function destroy($id)
