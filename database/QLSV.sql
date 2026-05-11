@@ -205,3 +205,10 @@ CREATE TABLE sessions (
     INDEX sessions_user_id_index (user_id),
     INDEX sessions_last_activity_index (last_activity)
 );
+ALTER TABLE \subjects\ 
+ADD COLUMN \subject_code\ VARCHAR(20) NULL AFTER \id\;
+
+-- Thêm chỉ mục UNIQUE để đảm bảo không có 2 môn nào trùng mã nhau
+ALTER TABLE \subjects\ 
+ADD UNIQUE(\subject_code\);
+
