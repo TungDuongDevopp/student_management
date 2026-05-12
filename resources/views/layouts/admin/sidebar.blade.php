@@ -399,11 +399,16 @@
                 <i class="fa-solid fa-building-columns"></i>
                 <span>Trang chủ Website</span>
             </a>
-
-            <a href="{{ route('logout') }}" class="footer-btn btn-logout" title="Đăng xuất khỏi hệ thống">
-                <i class="fa-solid fa-power-off"></i>
+            <a href="{{ route('logout') }}" class="footer-btn btn-logout" title="Đăng xuất"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Đăng xuất</span>
             </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+
         </div>
     </aside>
 
