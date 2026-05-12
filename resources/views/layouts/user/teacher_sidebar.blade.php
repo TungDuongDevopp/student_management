@@ -463,10 +463,15 @@
                 <i class="fa-solid fa-moon" id="theme-icon"></i>
                 <span id="theme-text">Chế độ Tối</span>
             </a>
-            <a href="{{ route('logout') }}" class="logout-btn" title="Đăng xuất">
+            <a href="{{ route('logout') }}" class="logout-btn" title="Đăng xuất"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Đăng xuất</span>
             </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </aside>
 

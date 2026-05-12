@@ -3,9 +3,6 @@
 @section('title', 'Thông tin Giảng viên')
 
 @section('content')
-    @php
-        $teacher = auth()->user()->teacher;
-    @endphp
     <style>
         .info-container {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -262,16 +259,14 @@
 
     <main class="info-container">
         <section class="profile-header">
-            <img src="{{ $teacher?->avatar ? asset('storage/' . $teacher->avatar) : asset('images/default-avatar.png') }}"
+            <img src="{{ $teacher?->images ? asset('storage/' . $teacher->images) : asset('images/default-avatar.png') }}"
                 alt="Avatar" class="profile-avatar">
             <div class="profile-main">
-                <h1>{{ $teacher?->name ?? (auth()->user()->username ?? 'Ngô Ngọc Anh') }}</h1>
-                <p>{{ $teacher?->degree ?? 'Thạc sĩ' }} @if (!empty($teacher?->position))
-                        · {{ $teacher?->position }}
-                    @endif
+                <h1>{{ $teacher?->name ?? (auth()->user()->username ?? 'N/A') }}</h1>
+                <p>{{ $teacher?->degree ?? 'N/A' }}{{ !empty($teacher?->department) ? ' · ' . $teacher->department : '' }}
                 </p>
-                <p>Mã giảng viên: {{ $teacher?->teacher_code ?? 'GV0123' }} · Khoa:
-                    {{ $teacher?->faculty->name ?? 'Công nghệ Thông tin' }}</p>
+                <p>Mã giảng viên: {{ $teacher?->teacher_code ?? 'N/A' }} · Khoa:
+                    {{ $teacher?->faculty?->name ?? 'N/A' }}</p>
                 <span class="badge badge-active">Đang công tác</span>
             </div>
         </section>
@@ -308,46 +303,47 @@
                 <div class="info-list">
                     <div class="info-item">
                         <p class="info-label">Họ và tên</p>
-                        <p class="info-value">{{ $teacher?->name ?? 'Ngô Ngọc Anh' }}</p>
+                        <p class="info-value">{{ $teacher?->name ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Mã giảng viên</p>
-                        <p class="info-value">{{ $teacher?->teacher_code ?? 'GV0123' }}</p>
+                        <p class="info-value">{{ $teacher?->teacher_code ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Ngày sinh</p>
                         <p class="info-value">
-                            {{ $teacher?->date_of_birth ? \Carbon\Carbon::parse($teacher->date_of_birth)->format('d/m/Y') : '11/09/1985' }}
+                            {{ $teacher?->date_of_birth ? \Carbon\Carbon::parse($teacher->date_of_birth)->format('d/m/Y') : 'N/A' }}
                         </p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Giới tính</p>
-                        <p class="info-value">{{ $teacher?->gender ?? 'Nam' }}</p>
+                        <p class="info-value">
+                            {{ $teacher?->gender == 1 ? 'Nữ' : ($teacher?->gender == 0 ? 'Nam' : 'N/A') }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Email</p>
-                        <p class="info-value">{{ $teacher?->email ?? (auth()->user()->email ?? 'ngongocanh@humg.edu.vn') }}
+                        <p class="info-value">{{ $teacher?->email ?? (auth()->user()->username ?? 'N/A') }}
                         </p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Số điện thoại</p>
-                        <p class="info-value">{{ $teacher?->phone ?? '0971117492' }}</p>
+                        <p class="info-value">{{ $teacher?->phone ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Địa chỉ</p>
-                        <p class="info-value">{{ $teacher?->address ?? 'Hà Nội' }}</p>
+                        <p class="info-value">{{ $teacher?->address ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Khoa</p>
-                        <p class="info-value">{{ $teacher?->faculty->name ?? 'Công nghệ Thông tin' }}</p>
+                        <p class="info-value">{{ $teacher?->faculty?->name ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Bộ môn</p>
-                        <p class="info-value">{{ $teacher?->department->name ?? 'Kỹ thuật phần mềm' }}</p>
+                        <p class="info-value">{{ $teacher?->department ?? 'N/A' }}</p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Học vị</p>
-                        <p class="info-value">{{ $teacher?->degree ?? 'Thạc sĩ' }}</p>
+                        <p class="info-value">{{ $teacher?->degree ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
