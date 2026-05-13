@@ -260,14 +260,14 @@
                     document.getElementById('accountId').disabled = true;
                     document.getElementById('facultyId').value = t.faculty_id || '';
                 });
-                document.getElementById('teacherCode').value    = t.teacher_code || '';
-                document.getElementById('teacherName').value    = t.name || '';
-                document.getElementById('teacherEmail').value   = t.email || '';
-                document.getElementById('teacherDob').value     = t.date_of_birth || '';
-                document.getElementById('teacherGender').value  = t.gender !== null && t.gender !== undefined ? t.gender : '';
-                document.getElementById('teacherPhone').value   = t.phone || '';
-                document.getElementById('teacherDept').value    = t.department || '';
-                document.getElementById('teacherDegree').value  = t.degree || '';
+                document.getElementById('teacherCode').value = t.teacher_code || '';
+                document.getElementById('teacherName').value = t.name || '';
+                document.getElementById('teacherEmail').value = t.email || '';
+                document.getElementById('teacherDob').value = t.date_of_birth || '';
+                document.getElementById('teacherGender').value = t.gender !== null && t.gender !== undefined ? t.gender : '';
+                document.getElementById('teacherPhone').value = t.phone || '';
+                document.getElementById('teacherDept').value = t.department || '';
+                document.getElementById('teacherDegree').value = t.degree || '';
                 document.getElementById('teacherAddress').value = t.address || '';
                 if (t.images) {
                     document.getElementById('imagePreview').src = '/storage/' + t.images;
@@ -302,15 +302,15 @@
                 fd.append('account_id', document.getElementById('accountId').value);
                 fd.append('faculty_id', document.getElementById('facultyId').value);
                 const g = v => document.getElementById(v).value;
-                if (g('teacherCode'))    fd.append('teacher_code', g('teacherCode'));
-                if (g('teacherName'))    fd.append('name',         g('teacherName'));
-                if (g('teacherEmail'))   fd.append('email',        g('teacherEmail'));
-                if (g('teacherDob'))     fd.append('date_of_birth',g('teacherDob'));
+                if (g('teacherCode')) fd.append('teacher_code', g('teacherCode'));
+                if (g('teacherName')) fd.append('name', g('teacherName'));
+                if (g('teacherEmail')) fd.append('email', g('teacherEmail'));
+                if (g('teacherDob')) fd.append('date_of_birth', g('teacherDob'));
                 if (g('teacherGender') !== '') fd.append('gender', g('teacherGender'));
-                if (g('teacherPhone'))   fd.append('phone',        g('teacherPhone'));
-                if (g('teacherDept'))    fd.append('department',   g('teacherDept'));
-                if (g('teacherDegree'))  fd.append('degree',       g('teacherDegree'));
-                if (g('teacherAddress')) fd.append('address',      g('teacherAddress'));
+                if (g('teacherPhone')) fd.append('phone', g('teacherPhone'));
+                if (g('teacherDept')) fd.append('department', g('teacherDept'));
+                if (g('teacherDegree')) fd.append('degree', g('teacherDegree'));
+                if (g('teacherAddress')) fd.append('address', g('teacherAddress'));
                 const img = document.getElementById('teacherImage').files[0];
                 if (img) fd.append('images', img);
                 try {
