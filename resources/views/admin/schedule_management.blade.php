@@ -11,11 +11,13 @@
             margin-bottom: 1.5rem;
             align-items: flex-end;
         }
+
         .filter-group {
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
         }
+
         .filter-label {
             font-size: 0.75rem;
             font-weight: 600;
@@ -23,6 +25,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
         .filter-select {
             padding: 0.6rem 1rem;
             background: var(--bg-card);
@@ -33,6 +36,7 @@
             min-width: 180px;
             cursor: pointer;
         }
+
         .filter-select:focus {
             outline: none;
             border-color: var(--accent);
@@ -44,6 +48,7 @@
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
+
         .stat-card {
             flex: 1;
             min-width: 130px;
@@ -55,28 +60,45 @@
             flex-direction: column;
             gap: 0.25rem;
         }
+
         .stat-card .stat-value {
             font-size: 1.6rem;
             font-weight: 700;
         }
+
         .stat-card .stat-label {
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
-        .stat-total   .stat-value { color: #60a5fa; }
-        .stat-enroll  .stat-value { color: #4ade80; }
-        .stat-empty   .stat-value { color: #f87171; }
 
-        .subject-cell { font-weight: 600; }
-        .muted { color: var(--text-muted); font-size: 0.8rem; }
+        .stat-total .stat-value {
+            color: #60a5fa;
+        }
+
+        .stat-enroll .stat-value {
+            color: #4ade80;
+        }
+
+        .stat-empty .stat-value {
+            color: #f87171;
+        }
+
+        .subject-cell {
+            font-weight: 600;
+        }
+
+        .muted {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
 
         .enroll-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            background: rgba(96,165,250,0.15);
+            background: rgba(96, 165, 250, 0.15);
             color: #60a5fa;
             border-radius: 999px;
             padding: 0.2rem 0.65rem;
@@ -85,15 +107,16 @@
         }
 
         .day-badge {
-            background: rgba(167,139,250,0.15);
+            background: rgba(167, 139, 250, 0.15);
             color: #a78bfa;
             border-radius: 6px;
             padding: 0.15rem 0.55rem;
             font-size: 0.8rem;
             font-weight: 600;
         }
+
         .shift-badge {
-            background: rgba(251,191,36,0.12);
+            background: rgba(251, 191, 36, 0.12);
             color: #fbbf24;
             border-radius: 6px;
             padding: 0.15rem 0.55rem;
@@ -140,9 +163,8 @@
             </div>
             <div class="filter-group">
                 <span class="filter-label">Tìm kiếm</span>
-                <input type="text" class="filter-select" id="searchInput"
-                    placeholder="Môn học, GV, phòng, lớp..." oninput="applyFilters()"
-                    style="min-width:220px">
+                <input type="text" class="filter-select" id="searchInput" placeholder="Môn học, GV, phòng, lớp..."
+                    oninput="applyFilters()" style="min-width:220px">
             </div>
         </div>
 
@@ -155,7 +177,6 @@
                             <th>ID</th>
                             <th>Môn học</th>
                             <th>Giảng viên</th>
-                            <th>Lớp HC</th>
                             <th>Phòng</th>
                             <th>Học kỳ</th>
                             <th>Thứ</th>
@@ -166,7 +187,7 @@
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="10">
+                            <td colspan="9">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -201,12 +222,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Lớp hành chính</label>
-                                <select id="fClassroom">
-                                    <option value="">-- Chọn lớp HC --</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label>Phòng học</label>
                                 <select id="fRoom">
                                     <option value="">-- Chọn phòng --</option>
@@ -228,18 +243,26 @@
                                     <option value="5">Thứ 5</option>
                                     <option value="6">Thứ 6</option>
                                     <option value="7">Thứ 7</option>
-                                    <option value="8">Chủ nhật</option>
+
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Ca học</label>
                                 <select id="fShift">
                                     <option value="">-- Chọn ca --</option>
-                                    <option value="1">Ca 1 (07:00 – 09:30)</option>
-                                    <option value="2">Ca 2 (09:45 – 12:15)</option>
-                                    <option value="3">Ca 3 (13:00 – 15:30)</option>
-                                    <option value="4">Ca 4 (15:45 – 18:15)</option>
-                                    <option value="5">Ca 5 (18:30 – 21:00)</option>
+                                    <option value="1">Ca 1 (06:45 – 07:30)</option>
+                                    <option value="2">Ca 2 (07:45 – 08:30)</option>
+                                    <option value="3">Ca 3 (08:45 – 09:30)</option>
+                                    <option value="4">Ca 4 (09:45 – 10:30)</option>
+                                    <option value="5">Ca 5 (10:45 – 11:30)</option>
+                                    <option value="6">Ca 6 (12:30 – 13:20)</option>
+                                    <option value="7">Ca 7 (13:30 – 14:20)</option>
+                                    <option value="8">Ca 8 (14:30 – 15:20)</option>
+                                    <option value="9">Ca 9 (15:30 – 16:20)</option>
+                                    <option value="10">Ca 10 (16:30 – 17:20)</option>
+                                    <option value="11">Ca 11 (17:30 – 18:20)</option>
+                                    <option value="12">Ca 12 (18:30 – 19:20)</option>
+                                    <option value="13">Ca 13 (19:30 – 20:20)</option>
                                 </select>
                             </div>
                         </div>
@@ -261,7 +284,8 @@
                 </div>
                 <div class="modal-body">
                     <p style="color:var(--text-muted)">
-                        Xóa lớp học phần này sẽ ảnh hưởng tới tất cả SV đã đăng ký và điểm danh liên quan. Bạn có chắc không?
+                        Xóa lớp học phần này sẽ ảnh hưởng tới tất cả SV đã đăng ký và điểm danh liên quan. Bạn có chắc
+                        không?
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -275,45 +299,62 @@
     </div>
 
     <script>
-        const API     = '/api/schedules';
+        const API = '/api/schedules';
         const PER_PAGE = 15;
 
         // lookup tables
-        let allData      = [];
+        let allData = [];
         let allSemesters = [];
-        let allSubjects  = [];
-        let allTeachers  = [];
-        let allRooms     = [];
-        let allClassrooms = [];
-        let allFaculties  = [];
+        let allSubjects = [];
+        let allTeachers = [];
+        let allRooms = [];
+        let allFaculties = [];
 
         let filteredData = [];
-        let currentPage  = 1;
-        let deleteId     = null;
+        let currentPage = 1;
+        let deleteId = null;
 
-        const DAY_MAP   = { 2:'Thứ 2', 3:'Thứ 3', 4:'Thứ 4', 5:'Thứ 5', 6:'Thứ 6', 7:'Thứ 7', 8:'CN' };
-        const SHIFT_MAP = { 1:'Ca 1', 2:'Ca 2', 3:'Ca 3', 4:'Ca 4', 5:'Ca 5' };
-        const SHIFT_TIME= { 1:'07:00–09:30', 2:'09:45–12:15', 3:'13:00–15:30', 4:'15:45–18:15', 5:'18:30–21:00' };
+        const DAY_MAP = {
+            2: 'Thứ 2',
+            3: 'Thứ 3',
+            4: 'Thứ 4',
+            5: 'Thứ 5',
+            6: 'Thứ 6',
+            7: 'Thứ 7',
+            8: 'CN'
+        };
+        const SHIFT_MAP = {
+            1: 'Ca 1',
+            2: 'Ca 2',
+            3: 'Ca 3',
+            4: 'Ca 4',
+            5: 'Ca 5'
+        };
+        const SHIFT_TIME = {
+            1: '07:00–09:30',
+            2: '09:45–12:15',
+            3: '13:00–15:30',
+            4: '15:45–18:15',
+            5: '18:30–21:00'
+        };
 
         // ── BOOT ─────────────────────────────────────────────────────────────
         async function fetchData() {
             try {
-                const [schRes, semRes, subRes, teaRes, romRes, clsRes, facRes] = await Promise.all([
+                const [schRes, semRes, subRes, teaRes, romRes, facRes] = await Promise.all([
                     fetch(API).then(r => r.json()),
                     fetch('/api/semesters').then(r => r.json()),
                     fetch('/api/subjects').then(r => r.json()),
                     fetch('/api/teachers').then(r => r.json()),
                     fetch('/api/rooms').then(r => r.json()),
-                    fetch('/api/classrooms').then(r => r.json()),
                     fetch('/api/faculties').then(r => r.json()),
                 ]);
-                allData       = schRes;
-                allSemesters  = semRes;
-                allSubjects   = subRes;
-                allTeachers   = teaRes;
-                allRooms      = romRes;
-                allClassrooms = clsRes;
-                allFaculties  = facRes;
+                allData = schRes;
+                allSemesters = semRes;
+                allSubjects = subRes;
+                allTeachers = teaRes;
+                allRooms = romRes;
+                allFaculties = facRes;
                 buildFilters();
                 applyFilters();
             } catch (e) {
@@ -336,26 +377,25 @@
 
         // ── STATS ─────────────────────────────────────────────────────────────
         function updateStats(data) {
-            document.getElementById('statTotal').textContent    = data.length;
+            document.getElementById('statTotal').textContent = data.length;
             document.getElementById('statEnrolled').textContent = data.filter(s => (s.enrollments_count || 0) > 0).length;
-            document.getElementById('statEmpty').textContent    = data.filter(s => (s.enrollments_count || 0) === 0).length;
+            document.getElementById('statEmpty').textContent = data.filter(s => (s.enrollments_count || 0) === 0).length;
         }
 
         // ── APPLY FILTERS ─────────────────────────────────────────────────────
         function applyFilters() {
             const semId = document.getElementById('semFilter').value;
             const facId = document.getElementById('facFilter').value;
-            const q     = document.getElementById('searchInput').value.toLowerCase();
+            const q = document.getElementById('searchInput').value.toLowerCase();
 
             filteredData = allData.filter(s => {
                 const matchSem = semId === 'all' || String(s.semester_id) === semId;
                 const subFacId = s.subject?.faculty_id;
                 const matchFac = facId === 'all' || String(subFacId) === facId;
-                const matchQ   = !q
-                    || (s.subject?.name   || '').toLowerCase().includes(q)
-                    || (s.teacher?.name   || '').toLowerCase().includes(q)
-                    || (s.room?.name      || '').toLowerCase().includes(q)
-                    || (s.classroom?.code || '').toLowerCase().includes(q);
+                const matchQ = !q ||
+                    (s.subject?.name || '').toLowerCase().includes(q) ||
+                    (s.teacher?.name || '').toLowerCase().includes(q) ||
+                    (s.room?.name || '').toLowerCase().includes(q);
                 return matchSem && matchFac && matchQ;
             });
 
@@ -368,28 +408,30 @@
         function renderPage() {
             const totalPages = Math.max(1, Math.ceil(filteredData.length / PER_PAGE));
             if (currentPage > totalPages) currentPage = totalPages;
-            const start    = (currentPage - 1) * PER_PAGE;
+            const start = (currentPage - 1) * PER_PAGE;
             const pageData = filteredData.slice(start, start + PER_PAGE);
-            const tb       = document.getElementById('tableBody');
+            const tb = document.getElementById('tableBody');
 
             if (!filteredData.length) {
-                tb.innerHTML = '<tr><td colspan="10"><div class="empty-state">Không có lớp học phần nào phù hợp</div></td></tr>';
+                tb.innerHTML =
+                    '<tr><td colspan="9"><div class="empty-state">Không có lớp học phần nào phù hợp</div></td></tr>';
                 renderPagination(1);
                 return;
             }
 
             tb.innerHTML = pageData.map(s => {
-                const semName = s.semester
-                    ? `${s.semester.name}${s.semester.academic_year ? ' – ' + s.semester.academic_year : ''}`
-                    : '—';
-                const room = s.room
-                    ? `${s.room.block ? s.room.block + '.' : ''}${s.room.name}`
-                    : '—';
-                const day   = s.day_of_week ? `<span class="day-badge">${DAY_MAP[s.day_of_week] || s.day_of_week}</span>` : '—';
-                const shift = s.shift
-                    ? `<span class="shift-badge">${SHIFT_MAP[s.shift] || s.shift}<br><span style="font-size:0.7rem;opacity:0.8">${SHIFT_TIME[s.shift] || ''}</span></span>`
-                    : '—';
-                const cnt   = s.enrollments_count || 0;
+                const semName = s.semester ?
+                    `${s.semester.name}${s.semester.academic_year ? ' – ' + s.semester.academic_year : ''}` :
+                    '—';
+                const room = s.room ?
+                    `${s.room.block ? s.room.block + '.' : ''}${s.room.name}` :
+                    '—';
+                const day = s.day_of_week ?
+                    `<span class="day-badge">${DAY_MAP[s.day_of_week] || s.day_of_week}</span>` : '—';
+                const shift = s.shift ?
+                    `<span class="shift-badge">${SHIFT_MAP[s.shift] || s.shift}<br><span style="font-size:0.7rem;opacity:0.8">${SHIFT_TIME[s.shift] || ''}</span></span>` :
+                    '—';
+                const cnt = s.enrollments_count || 0;
 
                 return `<tr>
                     <td><strong>#${s.id}</strong></td>
@@ -398,7 +440,6 @@
                         <div class="muted">${escHtml(s.subject?.credits ? s.subject.credits + ' tín chỉ' : '')}</div>
                     </td>
                     <td>${escHtml(s.teacher?.name || '—')}</td>
-                    <td><span class="badge badge-faculty">${escHtml(s.classroom?.code || '—')}</span></td>
                     <td>${escHtml(room)}</td>
                     <td><span class="badge badge-semester">${escHtml(semName)}</span></td>
                     <td>${day}</td>
@@ -416,40 +457,51 @@
 
         function renderPagination(totalPages) {
             const pg = document.getElementById('pagination');
-            if (totalPages <= 1) { pg.innerHTML = ''; return; }
+            if (totalPages <= 1) {
+                pg.innerHTML = '';
+                return;
+            }
             let html = `<button onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
             for (let i = 1; i <= totalPages; i++)
                 html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
             html += `<span class="page-info">${filteredData.length} lớp học phần</span>`;
-            html += `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+            html +=
+                `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
             pg.innerHTML = html;
         }
 
-        function goPage(p) { currentPage = p; renderPage(); }
+        function goPage(p) {
+            currentPage = p;
+            renderPage();
+        }
 
         // ── POPULATE MODAL DROPDOWNS ──────────────────────────────────────────
         function populateDropdowns(s = {}) {
             document.getElementById('fSubject').innerHTML =
                 '<option value="">-- Chọn môn học --</option>' +
-                allSubjects.map(x => `<option value="${x.id}" ${x.id == s.subject_id ? 'selected' : ''}>${x.name}${x.credits ? ' (' + x.credits + ' TC)' : ''}</option>`).join('');
+                allSubjects.map(x =>
+                    `<option value="${x.id}" ${x.id == s.subject_id ? 'selected' : ''}>${x.name}${x.credits ? ' (' + x.credits + ' TC)' : ''}</option>`
+                ).join('');
 
             document.getElementById('fTeacher').innerHTML =
                 '<option value="">-- Chọn GV --</option>' +
-                allTeachers.map(x => `<option value="${x.id}" ${x.id == s.teacher_id ? 'selected' : ''}>${x.name}${x.teacher_code ? ' (' + x.teacher_code + ')' : ''}</option>`).join('');
-
-            document.getElementById('fClassroom').innerHTML =
-                '<option value="">-- Chọn lớp HC --</option>' +
-                allClassrooms.map(x => `<option value="${x.id}" ${x.id == s.classroom_id ? 'selected' : ''}>${x.code || 'Lớp #' + x.id}</option>`).join('');
+                allTeachers.map(x =>
+                    `<option value="${x.id}" ${x.id == s.teacher_id ? 'selected' : ''}>${x.name}${x.teacher_code ? ' (' + x.teacher_code + ')' : ''}</option>`
+                ).join('');
 
             document.getElementById('fRoom').innerHTML =
                 '<option value="">-- Chọn phòng --</option>' +
-                allRooms.map(x => `<option value="${x.id}" ${x.id == s.room_id ? 'selected' : ''}>${x.block ? x.block + '.' : ''}${x.name}</option>`).join('');
+                allRooms.map(x =>
+                    `<option value="${x.id}" ${x.id == s.room_id ? 'selected' : ''}>${x.block ? x.block + '.' : ''}${x.name}</option>`
+                ).join('');
 
             document.getElementById('fSemester').innerHTML =
                 '<option value="">-- Chọn học kỳ --</option>' +
-                allSemesters.map(x => `<option value="${x.id}" ${x.id == s.semester_id ? 'selected' : ''}>${x.name}${x.academic_year ? ' – ' + x.academic_year : ''}</option>`).join('');
+                allSemesters.map(x =>
+                    `<option value="${x.id}" ${x.id == s.semester_id ? 'selected' : ''}>${x.name}${x.academic_year ? ' – ' + x.academic_year : ''}</option>`
+                ).join('');
 
-            document.getElementById('fDay').value   = s.day_of_week || '';
+            document.getElementById('fDay').value = s.day_of_week || '';
             document.getElementById('fShift').value = s.shift || '';
         }
 
@@ -474,17 +526,16 @@
         }
 
         async function saveEntity() {
-            const id  = document.getElementById('entityId').value;
+            const id = document.getElementById('entityId').value;
             const get = id => document.getElementById(id).value;
 
             const body = {
-                subject_id:   parseInt(get('fSubject'))   || null,
-                teacher_id:   parseInt(get('fTeacher'))   || null,
-                classroom_id: parseInt(get('fClassroom')) || null,
-                room_id:      parseInt(get('fRoom'))      || null,
-                semester_id:  parseInt(get('fSemester'))  || null,
-                day_of_week:  parseInt(get('fDay'))       || null,
-                shift:        parseInt(get('fShift'))     || null,
+                subject_id: parseInt(get('fSubject')) || null,
+                teacher_id: parseInt(get('fTeacher')) || null,
+                room_id: parseInt(get('fRoom')) || null,
+                semester_id: parseInt(get('fSemester')) || null,
+                day_of_week: parseInt(get('fDay')) || null,
+                shift: parseInt(get('fShift')) || null,
             };
 
             if (!body.subject_id || !body.semester_id) {
@@ -512,8 +563,15 @@
         }
 
         // ── DELETE ────────────────────────────────────────────────────────────
-        function openDelete(id)  { deleteId = id; document.getElementById('deleteModal').classList.add('active'); }
-        function closeDelete()   { document.getElementById('deleteModal').classList.remove('active'); deleteId = null; }
+        function openDelete(id) {
+            deleteId = id;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDelete() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteId = null;
+        }
 
         async function confirmDelete() {
             if (!deleteId) return;
@@ -536,18 +594,22 @@
 
         // ── UTILS ─────────────────────────────────────────────────────────────
         function escHtml(str) {
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         function showToast(msg, type = 'success') {
             const t = document.getElementById('toast');
             t.textContent = msg;
-            t.className   = `toast toast-${type} show`;
+            t.className = `toast toast-${type} show`;
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        document.getElementById('formModal').addEventListener('click', e => { if (e.target === document.getElementById('formModal')) closeModal(); });
-        document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === document.getElementById('deleteModal')) closeDelete(); });
+        document.getElementById('formModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('formModal')) closeModal();
+        });
+        document.getElementById('deleteModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('deleteModal')) closeDelete();
+        });
 
         fetchData();
     </script>

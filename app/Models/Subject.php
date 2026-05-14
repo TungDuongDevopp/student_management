@@ -8,6 +8,7 @@ class Subject extends Model
 {
     protected $fillable = [
         'faculty_id',
+        'code',
         'name',
         'credits'
     ];
