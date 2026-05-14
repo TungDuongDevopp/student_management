@@ -11,7 +11,6 @@ class Schedule extends Model
         'teacher_id',
         'room_id',
         'semester_id',
-        'classroom_id',
         'day_of_week',
         'shift'
     ];
@@ -36,10 +35,6 @@ class Schedule extends Model
         return $this->belongsTo(Semester::class);
     }
 
-    public function classroom()
-    {
-        return $this->belongsTo(Classroom::class);
-    }
 
     public function enrollments()
     {

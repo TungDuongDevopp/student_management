@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-    private array $relations = ['subject', 'teacher', 'room', 'semester', 'classroom'];
+    private array $relations = ['subject', 'teacher', 'room', 'semester'];
 
     public function index()
     {
@@ -25,7 +25,6 @@ class ScheduleController extends Controller
             'teacher_id'   => 'nullable|integer|exists:teachers,id',
             'room_id'      => 'nullable|integer|exists:rooms,id',
             'semester_id'  => 'nullable|integer|exists:semesters,id',
-            'classroom_id' => 'nullable|integer|exists:classrooms,id',
             'day_of_week'  => 'nullable|integer|min:2|max:8',
             'shift'        => 'nullable|integer|min:1',
         ]);
@@ -52,7 +51,6 @@ class ScheduleController extends Controller
             'teacher_id'   => 'nullable|integer|exists:teachers,id',
             'room_id'      => 'nullable|integer|exists:rooms,id',
             'semester_id'  => 'nullable|integer|exists:semesters,id',
-            'classroom_id' => 'nullable|integer|exists:classrooms,id',
             'day_of_week'  => 'nullable|integer|min:2|max:8',
             'shift'        => 'nullable|integer|min:1',
         ]);
