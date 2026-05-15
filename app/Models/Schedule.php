@@ -11,8 +11,8 @@ class Schedule extends Model
         'teacher_id',
         'room_id',
         'semester_id',
-        'day_of_week',
-        'shift'
+        'group_code',
+        'max_capacity'
     ];
 
     public function subject()
@@ -35,6 +35,11 @@ class Schedule extends Model
         return $this->belongsTo(Semester::class);
     }
 
+
+    public function sessions()
+    {
+        return $this->hasMany(ScheduleSession::class)->orderBy('day_of_week')->orderBy('start_time');
+    }
 
     public function enrollments()
     {
