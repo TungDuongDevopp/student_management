@@ -17,13 +17,12 @@ use App\Http\Controllers\Api\TuitionController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\SystemConfigController;
-use App\Http\Controllers\Api\FacultyConfigController;
+use App\Http\Controllers\Api\FacultyGeneralController;
 
 Route::get('system-configs', [SystemConfigController::class, 'index']);
 Route::put('system-configs', [SystemConfigController::class, 'updateConfigs']);
 
-Route::get('faculty-configs', [FacultyConfigController::class, 'index']);
-Route::put('faculty-configs', [FacultyConfigController::class, 'updateConfigs']);
+Route::apiResource('faculty-generals', FacultyGeneralController::class);
 
 Route::apiResource('roles', RoleController::class);
 Route::apiResource('accounts', AccountController::class);

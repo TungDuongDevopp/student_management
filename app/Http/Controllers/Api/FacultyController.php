@@ -10,13 +10,14 @@ class FacultyController extends Controller
 {
     public function index()
     {
-        $faculties = Faculty::all();
+        $faculties = Faculty::with('facultyGeneral')->get();
         return response()->json($faculties);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'faculty_general_id' => 'nullable|integer|exists:faculty_generals,id',
             'code' => 'nullable|string|max:50|unique:faculties,code',
             'name' => 'required|string|max:100',
         ]);
@@ -27,7 +28,7 @@ class FacultyController extends Controller
 
     public function show($id)
     {
-        $faculty = Faculty::with(['classrooms', 'teachers', 'subjects'])->findOrFail($id);
+        $faculty = Faculty::with(['facultyGeneral', 'classrooms', 'teachers', 'subjects'])->findOrFail($id);
         return response()->json($faculty);
     }
 
@@ -35,6 +36,7 @@ class FacultyController extends Controller
     {
         $faculty = Faculty::findOrFail($id);
         $validated = $request->validate([
+            'faculty_general_id' => 'nullable|integer|exists:faculty_generals,id',
             'code' => 'sometimes|nullable|string|max:50|unique:faculties,code,' . $id,
             'name' => 'sometimes|required|string|max:100',
         ]);
