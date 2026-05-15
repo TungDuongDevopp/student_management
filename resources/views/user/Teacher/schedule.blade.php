@@ -1,4 +1,4 @@
-@extends('layouts.user.teacher_sidebar')
+﻿@extends('layouts.user.teacher_sidebar')
 
 @section('title', 'Lịch Giảng Dạy')
 
@@ -554,201 +554,209 @@
                 </thead>
 
                 <tbody>
+                    <!-- Tiết 1 -->
                     <tr>
-                        <td class="time-col">
-                            Tiết 1-3
-                            <small>07:00 - 09:15</small>
-                        </td>
-
-                        <td>
+                        <td class="time-col">Tiết 1<small>07:00 - 07:45</small></td>
+                        <td rowspan="3">
                             <article class="teacher-card" aria-label="Lớp Lập trình Web nâng cao">
-                                <span class="class-code">DCCTPM70A</span>
+                                <span class="class-code">DCCTTPM70A</span>
                                 <div class="subject-title">Lập trình Web nâng cao</div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-users"></i>
-                                    Sĩ số: 65 sinh viên
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    Phòng: C301
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-regular fa-clock"></i>
-                                    07:00 - 09:15
-                                </div>
-
+                                <div class="meta-info"><i class="fa-solid fa-users"></i> Sĩ số: 65</div>
+                                <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: C301</div>
+                                <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết 1-3</div>
                                 <div class="status-row">
                                     <span class="status-badge status-normal">Đúng lịch</span>
                                     <span class="status-badge status-warning">Chưa chốt điểm</span>
                                 </div>
-
                                 <div class="action-btns">
                                     <a href="#" class="btn-action btn-view">Danh sách</a>
                                     <a href="#" class="btn-action btn-score">Vào điểm</a>
                                 </div>
                             </article>
                         </td>
-
-                        <td>
-                            <div class="empty-slot">Không có lịch</div>
-                        </td>
-
-                        <td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td rowspan="3">
                             <article class="teacher-card" aria-label="Lớp Phân tích hệ thống">
-                                <span class="class-code">DCCTPM70B</span>
+                                <span class="class-code">DCCTTPM70B</span>
                                 <div class="subject-title">Phân tích & thiết kế hệ thống</div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-users"></i>
-                                    Sĩ số: 58 sinh viên
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    Phòng: B202
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-regular fa-clock"></i>
-                                    07:00 - 09:15
-                                </div>
-
+                                <div class="meta-info"><i class="fa-solid fa-users"></i> Sĩ số: 58</div>
+                                <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: B202</div>
+                                <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết 1-3</div>
                                 <div class="status-row">
                                     <span class="status-badge status-normal">Đúng lịch</span>
                                 </div>
-
                                 <div class="action-btns">
                                     <a href="#" class="btn-action btn-view">Danh sách</a>
                                     <a href="#" class="btn-action btn-score">Vào điểm</a>
                                 </div>
                             </article>
                         </td>
-
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
                     </tr>
 
+                    <!-- Tiết 2 -->
                     <tr>
-                        <td class="time-col">
-                            Tiết 4-6
-                            <small>09:30 - 11:45</small>
-                        </td>
+                        <td class="time-col">Tiết 2<small>07:50 - 08:35</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
 
-                        <td><div class="empty-slot">Không có lịch</div></td>
+                    <!-- Tiết 3 -->
+                    <tr>
+                        <td class="time-col">Tiết 3<small>08:40 - 09:25</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
 
-                        <td>
+                    <!-- Tiết 4 -->
+                    <tr>
+                        <td class="time-col">Tiết 4<small>09:35 - 10:20</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td rowspan="3">
                             <article class="teacher-card" aria-label="Lớp Cơ sở dữ liệu">
                                 <span class="class-code">DCCNTT69C</span>
                                 <div class="subject-title">Cơ sở dữ liệu</div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-users"></i>
-                                    Sĩ số: 62 sinh viên
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    Phòng: A402
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-regular fa-clock"></i>
-                                    09:30 - 11:45
-                                </div>
-
+                                <div class="meta-info"><i class="fa-solid fa-users"></i> Sĩ số: 62</div>
+                                <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: A402</div>
+                                <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết 4-6</div>
                                 <div class="status-row">
                                     <span class="status-badge status-normal">Đúng lịch</span>
                                 </div>
-
                                 <div class="action-btns">
                                     <a href="#" class="btn-action btn-view">Danh sách</a>
                                     <a href="#" class="btn-action btn-score">Vào điểm</a>
                                 </div>
                             </article>
                         </td>
-
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
                     </tr>
 
+                    <!-- Tiết 5 -->
                     <tr>
-                        <td class="time-col">
-                            Tiết 7-9
-                            <small>13:00 - 15:15</small>
+                        <td class="time-col">Tiết 5<small>10:25 - 11:10</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
+
+                    <!-- Tiết 6 -->
+                    <tr>
+                        <td class="time-col">Tiết 6<small>11:15 - 12:00</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
+
+                    <!-- NGHỈ TRƯA -->
+                    <tr class="break-row">
+                        <td colspan="7" style="text-align:center; padding:0.5rem; background:rgba(59,130,246,0.05); color:var(--text-muted); font-size:0.8rem; font-style:italic;">
+                            <i class="fa-solid fa-mug-hot"></i> Nghỉ trưa (12:00 - 13:00)
                         </td>
+                    </tr>
 
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-
-                        <td>
+                    <!-- Tiết 7 -->
+                    <tr>
+                        <td class="time-col">Tiết 7<small>13:00 - 13:45</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td rowspan="3">
                             <article class="teacher-card" aria-label="Lớp Lập trình PHP Laravel">
-                                <span class="class-code">DCCTPM71A</span>
+                                <span class="class-code">DCCTTPM71A</span>
                                 <div class="subject-title">Lập trình PHP Laravel</div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-users"></i>
-                                    Sĩ số: 61 sinh viên
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    Phòng: LAB-03
-                                </div>
-
-                                <div class="meta-info">
-                                    <i class="fa-regular fa-clock"></i>
-                                    13:00 - 15:15
-                                </div>
-
+                                <div class="meta-info"><i class="fa-solid fa-users"></i> Sĩ số: 61</div>
+                                <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: LAB-03</div>
+                                <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết 7-9</div>
                                 <div class="status-row">
                                     <span class="status-badge status-normal">Thực hành</span>
                                     <span class="status-badge status-warning">Cần điểm danh</span>
                                 </div>
-
                                 <div class="action-btns">
                                     <a href="#" class="btn-action btn-view">Danh sách</a>
                                     <a href="#" class="btn-action btn-score">Vào điểm</a>
                                 </div>
                             </article>
                         </td>
-
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
                     </tr>
 
+                    <!-- Tiết 8 -->
                     <tr>
-                        <td class="time-col">
-                            Tiết 10-12
-                            <small>15:30 - 17:45</small>
-                        </td>
+                        <td class="time-col">Tiết 8<small>13:50 - 14:35</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
 
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
-                        <td><div class="empty-slot">Không có lịch</div></td>
+                    <!-- Tiết 9 -->
+                    <tr>
+                        <td class="time-col">Tiết 9<small>14:40 - 15:25</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
+
+                    <!-- Tiết 10 -->
+                    <tr>
+                        <td class="time-col">Tiết 10<small>15:35 - 16:20</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
+
+                    <!-- Tiết 11 -->
+                    <tr>
+                        <td class="time-col">Tiết 11<small>16:25 - 17:10</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                    </tr>
+
+                    <!-- Tiết 12 -->
+                    <tr>
+                        <td class="time-col">Tiết 12<small>17:15 - 18:00</small></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
+                        <td><div class="empty-slot">—</div></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <aside class="note-box" aria-label="Ghi chú logic phát triển">
-        <strong>Ghi chú logic:</strong>
-        Giao diện hiện đang dùng dữ liệu mẫu để kiểm tra UI. Khi kết nối database, phần lịch nên được render bằng vòng lặp theo
-        <strong>ca học</strong> và <strong>thứ trong tuần</strong>. Mỗi ô lịch kiểm tra xem có lớp học phần hay không; nếu có thì render card,
-        nếu không thì hiển thị trạng thái “Không có lịch”. Các nút “Danh sách” và “Vào điểm” sau này cần đổi từ
-        <code>href="#"</code> sang route thật.
+    <aside class="note-box" aria-label="Ghi chu">
+        <strong>Ghi chu logic:</strong>
+        Giao dien dung du lieu mau. Khi ket noi database, phan lich nen duoc render theo <strong>tiet hoc</strong> va <strong>thu trong tuan</strong>.
     </aside>
 
 </main>
 </div>
 @endsection
+
