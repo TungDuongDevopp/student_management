@@ -26,7 +26,7 @@
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -54,6 +54,7 @@
                             <label>Tên khoa *</label>
                             <input type="text" id="facultyName" placeholder="VD: Công nghệ thông tin" required>
                         </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -98,12 +99,13 @@
 
             const tb = document.getElementById('tableBody');
             if (!filteredData.length) {
-                tb.innerHTML = '<tr><td colspan="5"><div class="empty-state">Chưa có khoa nào</div></td></tr>';
+                tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Chưa có khoa nào</div></td></tr>';
             } else {
                 tb.innerHTML = pageData.map(f => `<tr>
             <td>${f.id}</td>
             <td><span class="badge">${f.code||'-'}</span></td>
             <td><strong>${f.name||'-'}</strong></td>
+           
             <td>${f.created_at ? new Date(f.created_at).toLocaleDateString('vi-VN') : '-'}</td>
             <td><div class="actions">
                 <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(f)})'>Sửa</button>
@@ -156,7 +158,7 @@
             const id = document.getElementById('entityId').value;
             const body = {
                 code: document.getElementById('facultyCode').value,
-                name: document.getElementById('facultyName').value
+                name: document.getElementById('facultyName').value,
             };
             try {
                 const url = id ? `${API}/${id}` : API;

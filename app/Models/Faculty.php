@@ -11,6 +11,11 @@ class Faculty extends Model
         'name'
     ];
 
+    public function config()
+    {
+        return $this->hasOne(FacultyConfig::class);
+    }
+
     public function classrooms()
     {
         return $this->hasMany(Classroom::class);
