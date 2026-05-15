@@ -179,9 +179,9 @@
                             <th>Giảng viên</th>
                             <th>Phòng</th>
                             <th>Học kỳ</th>
-                            <th>Thứ</th>
-                            <th>Ca</th>
-                            <th>SV đăng ký</th>
+                            <th>Lịch học</th>
+                            <th>Nhóm</th>
+                            <th>Sĩ số</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -234,37 +234,25 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Thứ trong tuần</label>
-                                <select id="fDay">
-                                    <option value="">-- Chọn thứ --</option>
-                                    <option value="2">Thứ 2</option>
-                                    <option value="3">Thứ 3</option>
-                                    <option value="4">Thứ 4</option>
-                                    <option value="5">Thứ 5</option>
-                                    <option value="6">Thứ 6</option>
-                                    <option value="7">Thứ 7</option>
-
-                                </select>
+                                <label>Mã nhóm</label>
+                                <input type="text" id="fGroupCode" placeholder="VD: N01, Nhóm 1" maxlength="20">
                             </div>
                             <div class="form-group">
-                                <label>Ca học</label>
-                                <select id="fShift">
-                                    <option value="">-- Chọn ca --</option>
-                                    <option value="1">Ca 1 (06:45 – 07:30)</option>
-                                    <option value="2">Ca 2 (07:45 – 08:30)</option>
-                                    <option value="3">Ca 3 (08:45 – 09:30)</option>
-                                    <option value="4">Ca 4 (09:45 – 10:30)</option>
-                                    <option value="5">Ca 5 (10:45 – 11:30)</option>
-                                    <option value="6">Ca 6 (12:30 – 13:20)</option>
-                                    <option value="7">Ca 7 (13:30 – 14:20)</option>
-                                    <option value="8">Ca 8 (14:30 – 15:20)</option>
-                                    <option value="9">Ca 9 (15:30 – 16:20)</option>
-                                    <option value="10">Ca 10 (16:30 – 17:20)</option>
-                                    <option value="11">Ca 11 (17:30 – 18:20)</option>
-                                    <option value="12">Ca 12 (18:30 – 19:20)</option>
-                                    <option value="13">Ca 13 (19:30 – 20:20)</option>
-                                </select>
+                                <label>Sĩ số tối đa</label>
+                                <input type="number" id="fMaxCapacity" value="40" min="1" max="500">
                             </div>
+                        </div>
+
+                        {{-- Danh sách buổi học --}}
+                        <div style="margin-top:1rem">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                                <label style="font-weight:600;font-size:0.85rem">Lịch các buổi trong tuần</label>
+                                <button type="button" class="btn btn-sm" onclick="addSession()"
+                                    style="background:var(--accent);color:#fff;border:none;padding:0.3rem 0.75rem;border-radius:6px;cursor:pointer;font-size:0.8rem">
+                                    + Thêm buổi
+                                </button>
+                            </div>
+                            <div id="sessionList"></div>
                         </div>
                     </form>
                 </div>
@@ -323,20 +311,11 @@
             7: 'Thứ 7',
             8: 'CN'
         };
-        const SHIFT_MAP = {
-            1: 'Ca 1',
-            2: 'Ca 2',
-            3: 'Ca 3',
-            4: 'Ca 4',
-            5: 'Ca 5'
-        };
-        const SHIFT_TIME = {
-            1: '07:00–09:30',
-            2: '09:45–12:15',
-            3: '13:00–15:30',
-            4: '15:45–18:15',
-            5: '18:30–21:00'
-        };
+        // Hàm format giờ từ "HH:MM:SS" hoặc "HH:MM" → "HH:MM"
+        function fmtTime(t) {
+            if (!t) return '';
+            return t.substring(0, 5);
+        }
 
         // ── BOOT ─────────────────────────────────────────────────────────────
         async function fetchData() {
@@ -426,11 +405,20 @@
                 const room = s.room ?
                     `${s.room.block ? s.room.block + '.' : ''}${s.room.name}` :
                     '—';
-                const day = s.day_of_week ?
-                    `<span class="day-badge">${DAY_MAP[s.day_of_week] || s.day_of_week}</span>` : '—';
-                const shift = s.shift ?
-                    `<span class="shift-badge">${SHIFT_MAP[s.shift] || s.shift}<br><span style="font-size:0.7rem;opacity:0.8">${SHIFT_TIME[s.shift] || ''}</span></span>` :
-                    '—';
+
+                // Hiển thị tất cả buổi học
+                const sessionsHtml = (s.sessions && s.sessions.length)
+                    ? s.sessions.map(ss =>
+                        `<span class="day-badge" style="display:block;margin-bottom:2px">`
+                        + `${DAY_MAP[ss.day_of_week] || ''} `
+                        + `<span class="shift-badge">${fmtTime(ss.start_time)}–${fmtTime(ss.end_time)}</span>`
+                        + `</span>`
+                      ).join('')
+                    : '—';
+
+                const group = s.group_code
+                    ? `<span class="badge badge-credits">${escHtml(s.group_code)}</span>`
+                    : '—';
                 const cnt = s.enrollments_count || 0;
 
                 return `<tr>
@@ -442,9 +430,13 @@
                     <td>${escHtml(s.teacher?.name || '—')}</td>
                     <td>${escHtml(room)}</td>
                     <td><span class="badge badge-semester">${escHtml(semName)}</span></td>
-                    <td>${day}</td>
-                    <td>${shift}</td>
-                    <td><span class="enroll-badge">👥 ${cnt}</span></td>
+                    <td>${sessionsHtml}</td>
+                    <td>${group}</td>
+                    <td>
+                        <span class="enroll-badge" style="${cnt >= (s.max_capacity || 40) ? 'background:#fee2e2;color:#991b1b' : ''}">
+                            👥 ${cnt} / ${s.max_capacity || 40}
+                        </span>
+                    </td>
                     <td><div class="actions">
                         <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(s)})'>Sửa</button>
                         <button class="btn btn-sm btn-delete" onclick="openDelete(${s.id})">🗑</button>
@@ -495,14 +487,68 @@
                     `<option value="${x.id}" ${x.id == s.room_id ? 'selected' : ''}>${x.block ? x.block + '.' : ''}${x.name}</option>`
                 ).join('');
 
+            // Chỉ hiển thị HK đang hoạt động (status=1), nhưng giữ HK hiện tại nếu đang sửa
+            const activeSemesters = allSemesters.filter(x => x.status == 1 || x.id == s.semester_id);
             document.getElementById('fSemester').innerHTML =
                 '<option value="">-- Chọn học kỳ --</option>' +
-                allSemesters.map(x =>
-                    `<option value="${x.id}" ${x.id == s.semester_id ? 'selected' : ''}>${x.name}${x.academic_year ? ' – ' + x.academic_year : ''}</option>`
+                activeSemesters.map(x =>
+                    `<option value="${x.id}" ${x.id == s.semester_id ? 'selected' : ''}>${x.name}${x.academic_year ? ' – ' + x.academic_year : ''}${x.status != 1 ? ' (đã kết thúc)' : ''}</option>`
                 ).join('');
 
-            document.getElementById('fDay').value = s.day_of_week || '';
-            document.getElementById('fShift').value = s.shift || '';
+            document.getElementById('fGroupCode').value = s.group_code || '';
+            document.getElementById('fMaxCapacity').value = s.max_capacity || 40;
+
+            // Render danh sách buổi học
+            renderSessionList(s.sessions || []);
+        }
+
+        // ── SESSION LIST ──────────────────────────────────────────────────────
+        const DAY_OPTIONS = [2,3,4,5,6,7,8].map(d =>
+            `<option value="${d}">${DAY_MAP[d]}</option>`
+        ).join('');
+
+        function renderSessionList(sessions) {
+            const list = document.getElementById('sessionList');
+            list.innerHTML = '';
+            if (sessions.length === 0) {
+                addSession();
+            } else {
+                sessions.forEach(ss => addSession(ss));
+            }
+        }
+
+        function addSession(data = {}) {
+            const list = document.getElementById('sessionList');
+            const idx  = list.children.length;
+            const row  = document.createElement('div');
+            row.className = 'session-row';
+            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px';
+            row.innerHTML = `
+                <select class="sess-day" style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
+                    <option value="">-- Thứ --</option>
+                    ${DAY_OPTIONS}
+                </select>
+                <input type="time" class="sess-start" step="300"
+                    style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
+                <input type="time" class="sess-end" step="300"
+                    style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
+                <button type="button" onclick="this.closest('.session-row').remove()"
+                    style="padding:0.35rem 0.6rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem"
+                    title="Xóa buổi">✕</button>
+            `;
+            // Điền dữ liệu nếu có
+            if (data.day_of_week) row.querySelector('.sess-day').value   = data.day_of_week;
+            if (data.start_time)  row.querySelector('.sess-start').value = fmtTime(data.start_time);
+            if (data.end_time)    row.querySelector('.sess-end').value   = fmtTime(data.end_time);
+            list.appendChild(row);
+        }
+
+        function collectSessions() {
+            return [...document.querySelectorAll('#sessionList .session-row')].map(row => ({
+                day_of_week: parseInt(row.querySelector('.sess-day').value) || null,
+                start_time:  row.querySelector('.sess-start').value || null,
+                end_time:    row.querySelector('.sess-end').value || null,
+            })).filter(ss => ss.day_of_week || ss.start_time);
         }
 
         // ── ADD / EDIT ────────────────────────────────────────────────────────
@@ -511,6 +557,7 @@
             document.getElementById('entityId').value = '';
             document.getElementById('entityForm').reset();
             populateDropdowns();
+            renderSessionList([]);
             document.getElementById('formModal').classList.add('active');
         }
 
@@ -530,12 +577,13 @@
             const get = id => document.getElementById(id).value;
 
             const body = {
-                subject_id: parseInt(get('fSubject')) || null,
-                teacher_id: parseInt(get('fTeacher')) || null,
-                room_id: parseInt(get('fRoom')) || null,
+                subject_id:  parseInt(get('fSubject'))  || null,
+                teacher_id:  parseInt(get('fTeacher'))  || null,
+                room_id:     parseInt(get('fRoom'))      || null,
                 semester_id: parseInt(get('fSemester')) || null,
-                day_of_week: parseInt(get('fDay')) || null,
-                shift: parseInt(get('fShift')) || null,
+                group_code:  get('fGroupCode').trim()   || null,
+                max_capacity: parseInt(get('fMaxCapacity')) || 40,
+                sessions:    collectSessions(),
             };
 
             if (!body.subject_id || !body.semester_id) {

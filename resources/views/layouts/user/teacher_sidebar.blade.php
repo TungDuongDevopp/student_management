@@ -386,7 +386,7 @@
 
         <div class="user-profile">
             @if (Auth::check() && Auth::user()->teacher && Auth::user()->teacher->images)
-                <img src="{{ Auth::user()->teacher->images }}" alt="Avatar" class="user-avatar">
+                <img src="{{ asset('storage/' . Auth::user()->teacher->images) }}" alt="Avatar" class="user-avatar">
             @else
                 <div class="user-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
             @endif
