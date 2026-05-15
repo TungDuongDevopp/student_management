@@ -1,4 +1,4 @@
-@extends('layouts.user.student_sidebar')
+﻿@extends('layouts.user.student_sidebar')
 
 @section('title', 'Thời Khóa Biểu Sinh Viên')
 
@@ -340,8 +340,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="time-col">Tiết 1-3<br><small>07:00 - 09:25</small></td>
-                        <td>
+                        <td class="time-col">Tiết 1<br><small>07:00 - 07:45</small></td>
+                        <td rowspan="3">
                             <div class="course-card">
                                 <span class="course-code">#MH1024</span>
                                 <div class="course-name">Phát triển ứng dụng Web</div>
@@ -350,7 +350,7 @@
                             </div>
                         </td>
                         <td></td>
-                        <td>
+                        <td rowspan="3">
                             <div class="course-card" style="border-left-color: #10b981; background: #ecfdf5;">
                                 <span class="course-code" style="color:#059669">#MH2055</span>
                                 <div class="course-name" style="color:#065f46">Cơ sở dữ liệu nâng cao</div>
@@ -363,9 +363,23 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="time-col">Tiết 4-6<br><small>09:35 - 12:00</small></td>
+                        <td class="time-col">Tiết 2<br><small>07:50 - 08:35</small></td>
                         <td></td>
-                        <td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 3<br><small>08:40 - 09:25</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 4<br><small>09:35 - 10:20</small></td>
+                        <td></td>
+                        <td rowspan="3">
                             <div class="course-card" style="border-left-color: #f59e0b; background: #fffbeb;">
                                 <span class="course-code" style="color:#d97706">#MH3011</span>
                                 <div class="course-name" style="color:#92400e">Kiến trúc máy tính</div>
@@ -378,9 +392,25 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr><td colspan="7" class="lunch-break">NGHỈ TRƯA</td></tr>
                     <tr>
-                        <td class="time-col">Tiết 7-9<br><small>12:30 - 14:55</small></td>
+                        <td class="time-col">Tiết 5<br><small>10:25 - 11:10</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 6<br><small>11:15 - 12:00</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr><td colspan="7" class="lunch-break"><i class="fa-solid fa-mug-hot"></i> NGHỈ TRƯA (12:00 - 13:00)</td></tr>
+                    <tr>
+                        <td class="time-col">Tiết 7<br><small>13:00 - 13:45</small></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -389,7 +419,43 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="time-col">Tiết 10-12<br><small>15:05 - 17:30</small></td>
+                        <td class="time-col">Tiết 8<br><small>13:50 - 14:35</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 9<br><small>14:40 - 15:25</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 10<br><small>15:35 - 16:20</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 11<br><small>16:25 - 17:10</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="time-col">Tiết 12<br><small>17:15 - 18:00</small></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -398,8 +464,12 @@
                         <td></td>
                     </tr>
                 </tbody>
+                        <td>
+                            <div class="course-card">
+                                <span class="course-code">#MH1024</span>
             </table>
         </div>
     </div>
 </div>
 @endsection
+
