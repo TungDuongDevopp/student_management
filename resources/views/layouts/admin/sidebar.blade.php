@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/topbar.css') }}">
 
     <script>
         const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -272,10 +273,6 @@
 <body>
 
     <aside class="admin-sidebar" id="sidebar">
-        <!-- Nút Toggle -->
-        <div class="toggle-btn" onclick="toggleSidebar()" title="Thu gọn/Phóng to Sidebar">
-            <i class="fa-solid fa-chevron-left"></i>
-        </div>
 
         <div class="sidebar-brand">
             <img src="https://lic.humg.edu.vn/App_Themes/humg/images/humg-logo.png" alt="Logo Trường"
@@ -393,67 +390,63 @@
                     <span>Xem phản hồi</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.info') }}"
+                    class="nav-link {{ request()->routeIs('admin.info') ? 'active' : '' }}" title="Thông tin cá nhân">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span>Thông tin cá nhân</span>
+                </a>
+            </li>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="#" class="footer-btn btn-theme" onclick="toggleTheme(); return false;"
-                title="Chế độ Giao diện">
-                <i class="fa-solid fa-moon" id="theme-icon"></i>
-                <span id="theme-text">Chế độ Tối</span>
-            </a>
-
             <a href="{{ url('/') }}" class="footer-btn btn-home" title="Về trang chủ hệ thống">
                 <i class="fa-solid fa-building-columns"></i>
                 <span>Trang chủ Website</span>
             </a>
-
-            <a href="{{ route('logout') }}" class="footer-btn btn-logout" title="Đăng xuất khỏi hệ thống">
-                <i class="fa-solid fa-power-off"></i>
-                <span>Đăng xuất</span>
-            </a>
         </div>
     </aside>
 
-    <main class="main-content" role="main">
-        @yield('content')
-    </main>
+    <div class="main-content" style="display: flex; flex-direction: column; margin: 0; padding: 0;">
+        @include('layouts.admin.topbar')
+        <main role="main" style="flex: 1; padding: 1.5rem;">
+            @yield('content')
+        </main>
+    </div>
 
     <script>
+        // --- SIDEBAR LOGIC ---
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
-
-            localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' :
-                'expanded');
+            localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
         }
         if (localStorage.getItem('sidebarState') === 'collapsed') {
             document.body.classList.add('sidebar-collapsed');
         }
 
+        // --- THEME LOGIC (Sáng/Tối) ---
         function toggleTheme() {
             const html = document.documentElement;
-            const isLight = html.getAttribute('data-theme') === 'light';
-            const newTheme = isLight ? 'dark' : 'light';
+            const currentTheme = html.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
         }
 
         function updateThemeIcon(theme) {
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
-            if (icon && text) {
-                if (theme === 'light') {
-                    icon.className = 'fa-solid fa-sun';
-                    text.textContent = 'Chế độ Sáng';
-                } else {
-                    icon.className = 'fa-solid fa-moon';
-                    text.textContent = 'Chế độ Tối';
-                }
+            const topIcon = document.getElementById('topbar-theme-icon');
+            if (topIcon) {
+                topIcon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
             }
         }
 
+        // --- INITIALIZE ---
         document.addEventListener('DOMContentLoaded', () => {
-            updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
         });
     </script>
 </body>
