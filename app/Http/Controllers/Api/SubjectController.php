@@ -18,8 +18,9 @@ class SubjectController extends Controller
     {
         $validated = $request->validate([
             'faculty_id' => 'nullable|integer|exists:faculties,id',
-            'name' => 'nullable|string|max:100',
-            'credits' => 'nullable|integer',
+            'code'       => 'nullable|string|max:20|unique:subjects,code',
+            'name'       => 'nullable|string|max:100',
+            'credits'    => 'nullable|integer',
         ]);
 
         $subject = Subject::create($validated);
@@ -37,8 +38,9 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $validated = $request->validate([
             'faculty_id' => 'nullable|integer|exists:faculties,id',
-            'name' => 'nullable|string|max:100',
-            'credits' => 'nullable|integer',
+            'code'       => 'nullable|string|max:20|unique:subjects,code,' . $id,
+            'name'       => 'nullable|string|max:100',
+            'credits'    => 'nullable|integer',
         ]);
 
         $subject->update($validated);

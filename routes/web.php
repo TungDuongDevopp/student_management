@@ -77,10 +77,6 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     Route::get('/semesters', function () {
         return view('admin.semester_management');
     })->name('admin.semesters');
-
-    Route::get('/attendences', function () {
-        return view('admin.attendence_management');
-    })->name('admin.attendences');
 });
 
 
@@ -92,7 +88,11 @@ Route::prefix('student')->middleware('role:3')->group(function () {
 
 
     Route::get('/info', function () {
-        return view('user.Student.info');
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('student.classroom.faculty');
+        $student = $account->student;
+        return view('user.Student.info', compact('student'));
     })->name('student.info');
 
     Route::get('/schedule', function () {
@@ -132,7 +132,11 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     })->name('teacher.home');
 
     Route::get('/info', function () {
-        return view('user.Teacher.info');
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('teacher.faculty');
+        $teacher = $account->teacher;
+        return view('user.Teacher.info', compact('teacher'));
     })->name('teacher.info');
 
     Route::get('/schedule', function () {
@@ -148,7 +152,7 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     })->name('teacher.students');
 
     Route::get('/attendances', function () {
-        return view('user.Teacher.attendance_list');
+        return view('user.Teacher.student_list');
     })->name('teacher.attendances');
 
     Route::get('/grades', function () {
@@ -158,6 +162,9 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     Route::get('/feedback', function () {
         return view('user.Teacher.feedback');
     })->name('teacher.feedback');
+    Route::get('/grades', function () {
+        return view('user.Teacher.student_list');
+    })->name('teacher.grades');
 });
 
 // Logout
@@ -168,7 +175,7 @@ Route::post('/logout', function () {
     return redirect()->route('user.login');
 })->name('logout');
 
-Route::get('/admin/logout', function () {
+Route::post('/admin/logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();

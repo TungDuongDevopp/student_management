@@ -378,49 +378,61 @@
 
         <nav class="sidebar-nav" aria-label="Menu Sinh Viên">
             <li class="nav-item">
-                <a href="{{ route('student.home') }}" class="nav-link {{ request()->routeIs('student.home') ? 'active' : '' }}" title="Trang chủ">
+                <a href="{{ route('student.home') }}"
+                    class="nav-link {{ request()->routeIs('student.home') ? 'active' : '' }}" title="Trang chủ">
                     <i class="fa-solid fa-house"></i>
                     <span>Trang chủ</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.info') }}" class="nav-link {{ request()->routeIs('student.info') ? 'active' : '' }}" title="Thông tin cá nhân">
+                <a href="{{ route('student.info') }}"
+                    class="nav-link {{ request()->routeIs('student.info') ? 'active' : '' }}" title="Thông tin cá nhân">
                     <i class="fa-regular fa-address-card"></i>
                     <span>Thông tin cá nhân</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.schedule') }}" class="nav-link {{ request()->routeIs('student.schedule') ? 'active' : '' }}" title="Thời khóa biểu">
+                <a href="{{ route('student.schedule') }}"
+                    class="nav-link {{ request()->routeIs('student.schedule') ? 'active' : '' }}"
+                    title="Thời khóa biểu">
                     <i class="fa-regular fa-calendar-check"></i>
                     <span>Thời khóa biểu</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.enrollment') }}" class="nav-link {{ request()->routeIs('student.enrollment') ? 'active' : '' }}" title="Đăng ký môn học">
+                <a href="{{ route('student.enrollment') }}"
+                    class="nav-link {{ request()->routeIs('student.enrollment') ? 'active' : '' }}"
+                    title="Đăng ký môn học">
                     <i class="fa-solid fa-laptop-file"></i>
                     <span>Đăng ký môn học</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.grades') }}" class="nav-link {{ request()->routeIs('student.grades') ? 'active' : '' }}" title="Tra cứu điểm">
+                <a href="{{ route('student.grades') }}"
+                    class="nav-link {{ request()->routeIs('student.grades') ? 'active' : '' }}" title="Tra cứu điểm">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Tra cứu điểm</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.attendance') }}" class="nav-link {{ request()->routeIs('student.attendance') ? 'active' : '' }}" title="Kết quả điểm danh">
+                <a href="{{ route('student.attendance') }}"
+                    class="nav-link {{ request()->routeIs('student.attendance') ? 'active' : '' }}"
+                    title="Kết quả điểm danh">
                     <i class="fa-solid fa-clipboard-user"></i>
                     <span>Kết quả điểm danh</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.tuition') }}" class="nav-link {{ request()->routeIs('student.tuition') ? 'active' : '' }}" title="Đóng học phí">
+                <a href="{{ route('student.tuition') }}"
+                    class="nav-link {{ request()->routeIs('student.tuition') ? 'active' : '' }}" title="Đóng học phí">
                     <i class="fa-solid fa-money-check-dollar"></i>
                     <span>Đóng học phí</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('student.feedback') }}" class="nav-link {{ request()->routeIs('student.feedback') ? 'active' : '' }}" title="Góp ý & Phản hồi">
+                <a href="{{ route('student.feedback') }}"
+                    class="nav-link {{ request()->routeIs('student.feedback') ? 'active' : '' }}"
+                    title="Góp ý & Phản hồi">
                     <i class="fa-regular fa-comment-dots"></i>
                     <span>Gửi phản hồi</span>
                 </a>

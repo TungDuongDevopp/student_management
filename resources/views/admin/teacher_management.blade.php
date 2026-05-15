@@ -40,7 +40,7 @@
         </div>
 
         <div class="modal-overlay" id="formModal">
-            <div class="modal">
+            <div class="modal" style="width:620px">
                 <div class="modal-header">
                     <h2 id="modalTitle">Thêm Giảng viên</h2>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -48,38 +48,75 @@
                 <div class="modal-body">
                     <form id="entityForm" enctype="multipart/form-data">
                         <input type="hidden" id="entityId">
-                        <div class="form-group">
-                            <label>Tài khoản (Account) *</label>
-                            <select id="accountId" required>
-                                <option value="">-- Chọn tài khoản --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Khoa *</label>
-                            <select id="facultyId" required>
-                                <option value="">-- Chọn khoa --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Mã giảng viên</label>
-                            <input type="text" id="teacherCode" placeholder="VD: GV001">
-                        </div>
-                        <div class="form-group">
-                            <label>Họ và tên</label>
-                            <input type="text" id="teacherName" placeholder="Nhập họ tên">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="teacherEmail" placeholder="email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label>Ảnh đại diện</label>
-                            <div class="image-upload" onclick="document.getElementById('teacherImage').click()">
-                                <img id="imagePreview" style="display:none">
-                                <p id="imageText">Nhấn để chọn ảnh (JPG, PNG, GIF - tối đa 2MB)</p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Tài khoản (Account) *</label>
+                                <select id="accountId" required>
+                                    <option value="">-- Chọn tài khoản --</option>
+                                </select>
                             </div>
-                            <input type="file" id="teacherImage" accept="image/*" style="display:none"
-                                onchange="previewImg(this)">
+                            <div class="form-group">
+                                <label>Khoa *</label>
+                                <select id="facultyId" required>
+                                    <option value="">-- Chọn khoa --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mã giảng viên</label>
+                                <input type="text" id="teacherCode" placeholder="VD: GV001">
+                            </div>
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" id="teacherName" placeholder="Nhập họ tên">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="teacherEmail" placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày sinh</label>
+                                <input type="date" id="teacherDob">
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <select id="teacherGender">
+                                    <option value="">-- Chọn --</option>
+                                    <option value="0">Nam</option>
+                                    <option value="1">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" id="teacherPhone" placeholder="VD: 0912345678">
+                            </div>
+                            <div class="form-group">
+                                <label>Bộ môn</label>
+                                <input type="text" id="teacherDept" placeholder="VD: Kỹ thuật phần mềm">
+                            </div>
+                            <div class="form-group">
+                                <label>Học vị</label>
+                                <select id="teacherDegree">
+                                    <option value="">-- Chọn --</option>
+                                    <option value="Cử nhân">Cử nhân (CN)</option>
+                                    <option value="Thạc sĩ">Thạc sĩ (Thạc sĩ)</option>
+                                    <option value="Tiến sĩ">Tiến sĩ (TS)</option>
+                                    <option value="Phó giáo sư">Phó Giáo sư (PGS)</option>
+                                    <option value="Giáo sư">Giáo sư (GS)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Địa chỉ</label>
+                                <input type="text" id="teacherAddress" placeholder="Địa chỉ thường trú">
+                            </div>
+                            <div class="form-group" style="grid-column:span 2">
+                                <label>Ảnh đại diện</label>
+                                <div class="image-upload" onclick="document.getElementById('teacherImage').click()">
+                                    <img id="imagePreview" style="display:none">
+                                    <p id="imageText">Nhấn để chọn ảnh (JPG, PNG, GIF - tối đa 2MB)</p>
+                                </div>
+                                <input type="file" id="teacherImage" accept="image/*" style="display:none"
+                                    onchange="previewImg(this)">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -226,6 +263,12 @@
                 document.getElementById('teacherCode').value = t.teacher_code || '';
                 document.getElementById('teacherName').value = t.name || '';
                 document.getElementById('teacherEmail').value = t.email || '';
+                document.getElementById('teacherDob').value = t.date_of_birth || '';
+                document.getElementById('teacherGender').value = t.gender !== null && t.gender !== undefined ? t.gender : '';
+                document.getElementById('teacherPhone').value = t.phone || '';
+                document.getElementById('teacherDept').value = t.department || '';
+                document.getElementById('teacherDegree').value = t.degree || '';
+                document.getElementById('teacherAddress').value = t.address || '';
                 if (t.images) {
                     document.getElementById('imagePreview').src = '/storage/' + t.images;
                     document.getElementById('imagePreview').style.display = 'block';
@@ -258,12 +301,16 @@
                 const fd = new FormData();
                 fd.append('account_id', document.getElementById('accountId').value);
                 fd.append('faculty_id', document.getElementById('facultyId').value);
-                const code = document.getElementById('teacherCode').value;
-                if (code) fd.append('teacher_code', code);
-                const name = document.getElementById('teacherName').value;
-                if (name) fd.append('name', name);
-                const email = document.getElementById('teacherEmail').value;
-                if (email) fd.append('email', email);
+                const g = v => document.getElementById(v).value;
+                if (g('teacherCode')) fd.append('teacher_code', g('teacherCode'));
+                if (g('teacherName')) fd.append('name', g('teacherName'));
+                if (g('teacherEmail')) fd.append('email', g('teacherEmail'));
+                if (g('teacherDob')) fd.append('date_of_birth', g('teacherDob'));
+                if (g('teacherGender') !== '') fd.append('gender', g('teacherGender'));
+                if (g('teacherPhone')) fd.append('phone', g('teacherPhone'));
+                if (g('teacherDept')) fd.append('department', g('teacherDept'));
+                if (g('teacherDegree')) fd.append('degree', g('teacherDegree'));
+                if (g('teacherAddress')) fd.append('address', g('teacherAddress'));
                 const img = document.getElementById('teacherImage').files[0];
                 if (img) fd.append('images', img);
                 try {

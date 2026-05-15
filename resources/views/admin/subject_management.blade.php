@@ -23,6 +23,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Mã môn</th>
                             <th>Tên môn học</th>
                             <th>Khoa</th>
                             <th>Số tín chỉ</th>
@@ -31,7 +32,7 @@
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -56,6 +57,10 @@
                             <select id="facultyId" required>
                                 <option value="">-- Chọn khoa --</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mã môn học</label>
+                            <input type="text" id="subjectCode" placeholder="VD: CS101" maxlength="20">
                         </div>
                         <div class="form-group">
                             <label>Tên môn học *</label>
@@ -143,10 +148,11 @@
 
                 const tb = document.getElementById('tableBody');
                 if (!filteredData.length) {
-                    tb.innerHTML = '<tr><td colspan="5"><div class="empty-state">Chưa có môn học nào</div></td></tr>';
+                    tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Chưa có môn học nào</div></td></tr>';
                 } else {
                     tb.innerHTML = pageData.map(s => `<tr>
             <td>${s.id}</td>
+            <td><span class="badge badge-code">${s.code || '-'}</span></td>
             <td><strong>${s.name||'-'}</strong></td>
             <td>${s.faculty ? `<span class="badge badge-faculty">${s.faculty.name}</span>` : '-'}</td>
             <td>${s.credits ? `<span class="badge badge-credits">${s.credits} TC</span>` : '-'}</td>
@@ -195,6 +201,7 @@
                 document.getElementById('modalTitle').textContent = 'Cập nhật Môn học';
                 document.getElementById('entityId').value = s.id;
                 populateFacultySelect(s.faculty_id);
+                document.getElementById('subjectCode').value = s.code || '';
                 document.getElementById('subjectName').value = s.name || '';
                 document.getElementById('subjectCredits').value = s.credits || '';
                 document.getElementById('formModal').classList.add('active');
@@ -208,6 +215,7 @@
                 const id = document.getElementById('entityId').value;
                 const body = {
                     faculty_id: parseInt(document.getElementById('facultyId').value) || null,
+                    code: document.getElementById('subjectCode').value.trim() || null,
                     name: document.getElementById('subjectName').value
                 };
                 const credits = document.getElementById('subjectCredits').value;

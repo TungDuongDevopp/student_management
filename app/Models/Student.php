@@ -12,7 +12,17 @@ class Student extends Model
         'student_code',
         'name',
         'email',
-        'images'
+        'images',
+        'date_of_birth',
+        'gender',
+        'phone_number',
+        'specialization',
+        'address',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date:Y-m-d',
+        'gender'        => 'integer',
     ];
 
     public function account()

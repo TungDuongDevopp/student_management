@@ -326,17 +326,10 @@
                 <a href="{{ route('admin.classes') }}"
                     class="nav-link {{ request()->routeIs('admin.classes') ? 'active' : '' }}" title="Danh sách Lớp">
                     <i class="fa-solid fa-layer-group"></i>
-                    <span>Quản lý Lớp học</span>
+                    <span>Quản lý Lớp học hành chính</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('admin.attendences') }}"
-                    class="nav-link {{ request()->routeIs('admin.attendences') ? 'active' : '' }}"
-                    title="Danh sách điểm danh">
-                    <i class="fa-solid fa-user-check"></i>
-                    <span>Quản lý điểm danh</span>
-                </a>
-            </li>
+
             <li class="nav-item">
                 <a href="{{ route('admin.enrollments') }}"
                     class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Bảng điểm">
@@ -357,7 +350,7 @@
                     class="nav-link {{ request()->routeIs('admin.schedules') ? 'active' : '' }}"
                     title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
-                    <span>Quản lý Lịch học</span>
+                    <span>Quản lý Lớp học học phần</span>
                 </a>
             </li>
 

@@ -18,12 +18,18 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'account_id' => 'required|integer|exists:accounts,id',
-            'faculty_id' => 'required|integer|exists:faculties,id',
+            'account_id'   => 'required|integer|exists:accounts,id',
+            'faculty_id'   => 'required|integer|exists:faculties,id',
             'teacher_code' => 'nullable|string|max:50|unique:teachers,teacher_code',
-            'name' => 'nullable|string|max:100',
-            'email' => 'nullable|string|email|max:255',
-            'images' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'name'         => 'nullable|string|max:100',
+            'email'        => 'nullable|string|email|max:255',
+            'images'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'date_of_birth'=> 'nullable|date',
+            'gender'       => 'nullable|integer|in:0,1',
+            'phone'        => 'nullable|string|max:20',
+            'address'      => 'nullable|string',
+            'department'   => 'nullable|string|max:100',
+            'degree'       => 'nullable|string|max:50',
         ]);
 
         if ($request->hasFile('images')) {
@@ -44,12 +50,18 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $validated = $request->validate([
-            'account_id' => 'sometimes|required|integer|exists:accounts,id',
-            'faculty_id' => 'sometimes|required|integer|exists:faculties,id',
+            'account_id'   => 'sometimes|required|integer|exists:accounts,id',
+            'faculty_id'   => 'sometimes|required|integer|exists:faculties,id',
             'teacher_code' => 'sometimes|nullable|string|max:50|unique:teachers,teacher_code,' . $id,
-            'name' => 'nullable|string|max:100',
-            'email' => 'nullable|string|email|max:255',
-            'images' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'name'         => 'nullable|string|max:100',
+            'email'        => 'nullable|string|email|max:255',
+            'images'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'date_of_birth'=> 'nullable|date',
+            'gender'       => 'nullable|integer|in:0,1',
+            'phone'        => 'nullable|string|max:20',
+            'address'      => 'nullable|string',
+            'department'   => 'nullable|string|max:100',
+            'degree'       => 'nullable|string|max:50',
         ]);
 
         if ($request->hasFile('images')) {
