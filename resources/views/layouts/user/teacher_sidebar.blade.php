@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/topbar.css') }}">
 
     <style>
         :root {
@@ -110,45 +111,30 @@
             border-color: var(--primary);
         }
 
-        .user-profile {
-            padding: 1.25rem 1rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
+        .sidebar-brand {
+            padding: 1.1rem 1rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
             overflow: hidden;
             white-space: nowrap;
         }
 
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 6px;
-            background-color: var(--primary-light);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            margin-bottom: 0.6rem;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-            object-fit: cover;
-        }
-
-        .user-profile h3 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.15rem;
+        .brand-text h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-main);
+            margin: 0;
+            line-height: 1.2;
         }
 
-        .user-profile p {
-            font-size: 0.8rem;
+        .brand-text span {
+            font-size: 0.7rem;
             color: var(--text-muted);
-            font-weight: 400;
+            font-weight: 500;
         }
+
 
         .sidebar-nav {
             flex: 1;
@@ -380,18 +366,14 @@
     <div class="sidebar-backdrop" onclick="toggleMobile()"></div>
 
     <aside class="user-sidebar" id="sidebar">
-        <div class="toggle-btn" onclick="toggleSidebar()" title="Thu gọn/Phóng to Sidebar">
-            <i class="fa-solid fa-chevron-left"></i>
-        </div>
 
-        <div class="user-profile">
-            @if (Auth::check() && Auth::user()->teacher && Auth::user()->teacher->images)
-                <img src="{{ Auth::user()->teacher->images }}" alt="Avatar" class="user-avatar">
-            @else
-                <div class="user-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
-            @endif
-            <h3>{{ Auth::check() ? Auth::user()->teacher?->name ?? Auth::user()->username : 'Giảng viên' }}</h3>
-            <p>{{ Auth::check() ? Auth::user()->teacher?->teacher_code ?? 'Chưa cập nhật' : '' }}</p>
+        <div class="sidebar-brand">
+            <img src="https://lic.humg.edu.vn/App_Themes/humg/images/humg-logo.png" alt="Logo Trường"
+                style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0;">
+            <div class="brand-text">
+                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin: 0; line-height: 1.2;">Cổng Giảng Viên</h3>
+                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">HUMG Portal</span>
+            </div>
         </div>
 
         <nav class="sidebar-nav" aria-label="Menu Giảng Viên">
@@ -456,36 +438,21 @@
                 </a>
             </li>
         </nav>
-
-        <div class="sidebar-footer">
-            <a href="#" class="logout-btn" onclick="toggleTheme(); return false;" title="Chế độ Giao diện"
-                style="margin-bottom: 8px; background-color: transparent; border-color: transparent; color: var(--text-muted);">
-                <i class="fa-solid fa-moon" id="theme-icon"></i>
-                <span id="theme-text">Chế độ Tối</span>
-            </a>
-            <a href="{{ route('logout') }}" class="logout-btn" title="Đăng xuất"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Đăng xuất</span>
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
     </aside>
 
-    <main class="main-content" role="main">
-        @yield('content')
-    </main>
+    <div class="main-content" style="display: flex; flex-direction: column; margin: 0; padding: 0;">
+        @include('layouts.user.topbar')
+        <main role="main" style="flex: 1; padding: 1.5rem;">
+            @yield('content')
+        </main>
+    </div>
 
     <script>
+        // --- SIDEBAR LOGIC ---
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
-            localStorage.setItem('userSidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' :
-                'expanded');
+            localStorage.setItem('userSidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
         }
-
         function toggleMobile() {
             document.body.classList.toggle('mobile-open');
         }
@@ -493,31 +460,29 @@
             document.body.classList.add('sidebar-collapsed');
         }
 
+        // --- THEME LOGIC (Sáng/Tối) ---
         function toggleTheme() {
             const html = document.documentElement;
-            const isLight = html.getAttribute('data-theme') === 'light';
-            const newTheme = isLight ? 'dark' : 'light';
+            const currentTheme = html.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
         }
 
         function updateThemeIcon(theme) {
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
-            if (icon && text) {
-                if (theme === 'light') {
-                    icon.className = 'fa-solid fa-sun';
-                    text.textContent = 'Chế độ Sáng';
-                } else {
-                    icon.className = 'fa-solid fa-moon';
-                    text.textContent = 'Chế độ Tối';
-                }
+            const topIcon = document.getElementById('topbar-theme-icon');
+            if (topIcon) {
+                topIcon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
             }
         }
 
+        // --- INITIALIZE ---
         document.addEventListener('DOMContentLoaded', () => {
-            updateThemeIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
         });
     </script>
 </body>

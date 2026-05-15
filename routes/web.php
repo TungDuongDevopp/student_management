@@ -26,6 +26,10 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
+    Route::get('/info', function () {
+        return view('admin.info');
+    })->name('admin.info');
+
     Route::get('/students', function () {
         return view('admin.student_management');
     })->name('admin.students');
@@ -150,6 +154,10 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     Route::get('/attendances', function () {
         return view('user.Teacher.student_list');
     })->name('teacher.attendances');
+
+    Route::get('/grades', function () {
+        return view('user.Teacher.grade_list');
+    })->name('teacher.grades');
 
     Route::get('/feedback', function () {
         return view('user.Teacher.feedback');
