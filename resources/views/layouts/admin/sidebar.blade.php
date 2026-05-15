@@ -321,6 +321,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{{ route('admin.faculties') }}"
+                    class="nav-link {{ request()->routeIs('admin.faculties') ? 'active' : '' }}" title="Hồ sơ Khoa">
+                    <i class="fa-solid fa-church"></i>
+                    <span>Quản lý Khoa</span>
+                </a>
+            </li>
             <div class="nav-section">Đào tạo</div>
             <li class="nav-item">
                 <a href="{{ route('admin.classes') }}"
@@ -363,7 +370,23 @@
                     <span>Quản lý học kỳ</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.faculty-configs') }}"
+                    class="nav-link {{ request()->routeIs('admin.faculty-configs') ? 'active' : '' }}"
+                    title="Cấu hình Đào tạo & Tài chính">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Cấu hình Đào tạo</span>
+                </a>
+            </li>
 
+            <li class="nav-item">
+                <a href="{{ route('admin.system-configs') }}"
+                    class="nav-link {{ request()->routeIs('admin.system-configs') ? 'active' : '' }}"
+                    title="Cấu hình chung hệ thống">
+                    <i class="fa-solid fa-gears"></i>
+                    <span>Cấu hình hệ thống</span>
+                </a>
+            </li>
             <div class="nav-section">Tài chính & Đánh giá</div>
 
             <li class="nav-item">
@@ -376,6 +399,8 @@
 
             <div class="nav-section">Khác</div>
 
+
+
             <li class="nav-item">
                 <a href="{{ route('admin.feedbacks') }}"
                     class="nav-link {{ request()->routeIs('admin.feedbacks') ? 'active' : '' }}" title="Góp ý">
@@ -385,7 +410,8 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.info') }}"
-                    class="nav-link {{ request()->routeIs('admin.info') ? 'active' : '' }}" title="Thông tin cá nhân">
+                    class="nav-link {{ request()->routeIs('admin.info') ? 'active' : '' }}"
+                    title="Thông tin cá nhân">
                     <i class="fa-regular fa-circle-user"></i>
                     <span>Thông tin cá nhân</span>
                 </a>
@@ -411,7 +437,8 @@
         // --- SIDEBAR LOGIC ---
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
-            localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+            localStorage.setItem('sidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' :
+                'expanded');
         }
         if (localStorage.getItem('sidebarState') === 'collapsed') {
             document.body.classList.add('sidebar-collapsed');
@@ -422,7 +449,7 @@
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);

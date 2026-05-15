@@ -77,6 +77,14 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     Route::get('/semesters', function () {
         return view('admin.semester_management');
     })->name('admin.semesters');
+
+    Route::get('/faculty-configs', function () {
+        return view('admin.faculty_configs');
+    })->name('admin.faculty-configs');
+
+    Route::get('/system-configs', function () {
+        return view('admin.system_configs');
+    })->name('admin.system-configs');
 });
 
 

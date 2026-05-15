@@ -366,7 +366,20 @@
     <div class="sidebar-backdrop" onclick="toggleMobile()"></div>
 
     <aside class="user-sidebar" id="sidebar">
+        <div class="toggle-btn" onclick="toggleSidebar()" title="Thu gọn/Phóng to Sidebar">
+            <i class="fa-solid fa-chevron-left"></i>
+        </div>
 
+<<<<<<< HEAD
+        <div class="user-profile">
+            @if (Auth::check() && Auth::user()->teacher && Auth::user()->teacher->images)
+                <img src="{{ Auth::user()->teacher->images }}" alt="Avatar" class="user-avatar">
+            @else
+                <div class="user-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            @endif
+            <h3>{{ Auth::check() ? Auth::user()->teacher?->name ?? Auth::user()->username : 'Giảng viên' }}</h3>
+            <p>{{ Auth::check() ? Auth::user()->teacher?->teacher_code ?? 'Chưa cập nhật' : '' }}</p>
+=======
         <div class="sidebar-brand">
             <img src="https://lic.humg.edu.vn/App_Themes/humg/images/humg-logo.png" alt="Logo Trường"
                 style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0;">
@@ -374,6 +387,7 @@
                 <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin: 0; line-height: 1.2;">Cổng Giảng Viên</h3>
                 <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">HUMG Portal</span>
             </div>
+>>>>>>> 2817735def1f6e8554291ab317119f32160ca2dc
         </div>
 
         <nav class="sidebar-nav" aria-label="Menu Giảng Viên">
@@ -451,8 +465,10 @@
         // --- SIDEBAR LOGIC ---
         function toggleSidebar() {
             document.body.classList.toggle('sidebar-collapsed');
-            localStorage.setItem('userSidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+            localStorage.setItem('userSidebarState', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' :
+                'expanded');
         }
+
         function toggleMobile() {
             document.body.classList.toggle('mobile-open');
         }
@@ -465,7 +481,7 @@
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme') || 'light';
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
