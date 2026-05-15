@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FacultyConfig extends Model
+class FacultyGeneral extends Model
 {
     protected $fillable = [
-        'faculty_id',
+        'name',
         'max_credits',
         'tuition_fee_per_credit'
     ];
 
-    public function faculty()
+    public function faculties()
     {
-        return $this->belongsTo(Faculty::class);
+        return $this->hasMany(Faculty::class, 'faculty_general_id');
     }
 }

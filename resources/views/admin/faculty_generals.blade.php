@@ -1,33 +1,33 @@
 @extends('layouts.admin.sidebar')
-@section('title', 'Quản lý Khoa')
+@section('title', 'Quản lý Nhóm Khoa')
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 
     <div class="content-wrapper">
-
         <div class="page-header">
-            <h1>Quản lý Khoa</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Khoa</button>
+            <h1>Cấu hình Đào tạo (Nhóm Khoa)</h1>
+            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Nhóm Khoa</button>
         </div>
+        
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Tìm kiếm theo mã khoa, tên khoa..." oninput="filterTable()">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên nhóm..." oninput="filterTable()">
         </div>
+
         <div class="card">
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Mã khoa</th>
-                            <th>Tên khoa</th>
-                            <th>Nhóm Khoa (Khối)</th>
-                            <th>Ngày tạo</th>
-                            <th>Thao tác</th>
+                            <th style="width: 80px">ID</th>
+                            <th>Tên Nhóm Khoa</th>
+                            <th>Học phí 1 tín chỉ (VNĐ)</th>
+                            <th>Số tín chỉ tối đa</th>
+                            <th style="width: 150px">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="6">
+                            <td colspan="5">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -41,27 +41,27 @@
         <div class="modal-overlay" id="formModal">
             <div class="modal">
                 <div class="modal-header">
-                    <h2 id="modalTitle">Thêm Khoa</h2>
+                    <h2 id="modalTitle">Thêm Nhóm Khoa</h2>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
                 </div>
                 <div class="modal-body">
                     <form id="entityForm">
                         <input type="hidden" id="entityId">
+                        
                         <div class="form-group">
-                            <label>Mã khoa *</label>
-                            <input type="text" id="facultyCode" placeholder="VD: CNTT, KT, NN" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Tên khoa *</label>
-                            <input type="text" id="facultyName" placeholder="VD: Công nghệ thông tin" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nhóm Khoa (Khối)</label>
-                            <select id="facultyGeneralId">
-                                <option value="">-- Chọn Nhóm Khoa --</option>
-                            </select>
+                            <label>Tên Nhóm (Khối) *</label>
+                            <input type="text" id="gName" placeholder="VD: Khối Kỹ thuật" required>
                         </div>
 
+                        <div class="form-group">
+                            <label>Học phí 1 tín chỉ (VNĐ) *</label>
+                            <input type="number" id="gTuition" placeholder="VD: 500000" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số tín chỉ tối đa (Tích lũy) *</label>
+                            <input type="number" id="gCredits" placeholder="VD: 150" min="1" required>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -70,43 +70,28 @@
                 </div>
             </div>
         </div>
+
         <div class="toast" id="toast"></div>
     </div>
 
     <script>
-        const API = '/api/faculties';
-        const GENERAL_API = '/api/faculty-generals';
+        const API = '/api/faculty-generals';
         const PER_PAGE = 10;
-        let allData = [],
-            filteredData = [],
-            generalsData = [],
-            currentPage = 1;
+        let allData = [], filteredData = [], currentPage = 1;
 
         async function fetchData() {
             try {
-                const [r, g] = await Promise.all([
-                    fetch(API),
-                    fetch(GENERAL_API)
-                ]);
+                const r = await fetch(API);
                 allData = await r.json();
-                generalsData = await g.json();
-                populateGeneralsDropdown();
                 filterTable();
             } catch (e) {
                 showToast('Lỗi tải dữ liệu', 'error');
             }
         }
 
-        function populateGeneralsDropdown() {
-            const sel = document.getElementById('facultyGeneralId');
-            sel.innerHTML = '<option value="">-- Không thuộc nhóm nào --</option>' +
-                generalsData.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
-        }
-
         function filterTable() {
             const q = document.getElementById('searchInput').value.toLowerCase();
-            filteredData = allData.filter(f => (f.code || '').toLowerCase().includes(q) || (f.name || '').toLowerCase()
-                .includes(q));
+            filteredData = allData.filter(f => (f.name || '').toLowerCase().includes(q));
             currentPage = 1;
             renderPage();
         }
@@ -119,19 +104,18 @@
 
             const tb = document.getElementById('tableBody');
             if (!filteredData.length) {
-                tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Chưa có khoa nào</div></td></tr>';
+                tb.innerHTML = '<tr><td colspan="5"><div class="empty-state">Chưa có nhóm khoa nào</div></td></tr>';
             } else {
                 tb.innerHTML = pageData.map(f => `<tr>
-            <td>${f.id}</td>
-            <td><span class="badge">${f.code||'-'}</span></td>
-            <td><strong>${f.name||'-'}</strong></td>
-            <td><span class="badge" style="background:#e0f2fe;color:#0369a1">${f.faculty_general ? f.faculty_general.name : 'chưa gán nhóm'}</span></td>
-            <td>${f.created_at ? new Date(f.created_at).toLocaleDateString('vi-VN') : '-'}</td>
-            <td><div class="actions">
-                <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(f)})'>Sửa</button>
-                <button class="btn btn-sm btn-delete" onclick="deleteEntity(${f.id})">Xóa</button>
-            </div></td>
-        </tr>`).join('');
+                    <td>${f.id}</td>
+                    <td><strong>${f.name}</strong></td>
+                    <td>${new Intl.NumberFormat('vi-VN').format(f.tuition_fee_per_credit)} đ</td>
+                    <td>${f.max_credits}</td>
+                    <td><div class="actions">
+                        <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(f).replace(/'/g, "&#39;")})'>Sửa</button>
+                        <button class="btn btn-sm btn-delete" onclick="deleteEntity(${f.id})">Xóa</button>
+                    </div></td>
+                </tr>`).join('');
             }
             renderPagination(totalPages);
         }
@@ -143,8 +127,7 @@
                 return;
             }
             let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-            for (let i = 1; i <= totalPages; i++) html +=
-                `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+            for (let i = 1; i <= totalPages; i++) html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
             html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
             html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
             pg.innerHTML = html;
@@ -156,18 +139,18 @@
         }
 
         function openAddModal() {
-            document.getElementById('modalTitle').textContent = 'Thêm Khoa';
+            document.getElementById('modalTitle').textContent = 'Thêm Nhóm Khoa';
             document.getElementById('entityForm').reset();
             document.getElementById('entityId').value = '';
             document.getElementById('formModal').classList.add('active');
         }
 
         function editEntity(f) {
-            document.getElementById('modalTitle').textContent = 'Cập nhật Khoa';
+            document.getElementById('modalTitle').textContent = 'Sửa Nhóm Khoa';
             document.getElementById('entityId').value = f.id;
-            document.getElementById('facultyCode').value = f.code || '';
-            document.getElementById('facultyName').value = f.name || '';
-            document.getElementById('facultyGeneralId').value = f.faculty_general_id || '';
+            document.getElementById('gName').value = f.name || '';
+            document.getElementById('gTuition').value = f.tuition_fee_per_credit || '';
+            document.getElementById('gCredits').value = f.max_credits || '';
             document.getElementById('formModal').classList.add('active');
         }
 
@@ -178,10 +161,11 @@
         async function saveEntity() {
             const id = document.getElementById('entityId').value;
             const body = {
-                faculty_general_id: document.getElementById('facultyGeneralId').value || null,
-                code: document.getElementById('facultyCode').value,
-                name: document.getElementById('facultyName').value,
+                name: document.getElementById('gName').value,
+                tuition_fee_per_credit: document.getElementById('gTuition').value,
+                max_credits: document.getElementById('gCredits').value,
             };
+
             try {
                 const url = id ? `${API}/${id}` : API;
                 const method = id ? 'PUT' : 'POST';
@@ -194,10 +178,12 @@
                     },
                     body: JSON.stringify(body)
                 });
+                
                 if (!res.ok) {
                     const err = await res.json();
-                    throw new Error(err.message || 'Lỗi');
+                    throw new Error(err.message || 'Lỗi lưu dữ liệu');
                 }
+                
                 showToast(id ? 'Cập nhật thành công!' : 'Thêm thành công!', 'success');
                 closeModal();
                 fetchData();
@@ -207,7 +193,7 @@
         }
 
         async function deleteEntity(id) {
-            if (!confirm('Bạn có chắc muốn xóa khoa này?')) return;
+            if (!confirm('Bạn có chắc muốn xóa nhóm khoa này?')) return;
             try {
                 const r = await fetch(`${API}/${id}`, {
                     method: 'DELETE',
@@ -230,6 +216,7 @@
             t.className = `toast toast-${type} show`;
             setTimeout(() => t.classList.remove('show'), 3000);
         }
+
         fetchData();
     </script>
 @endsection

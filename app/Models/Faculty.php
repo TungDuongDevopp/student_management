@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Faculty extends Model
 {
     protected $fillable = [
+        'faculty_general_id',
         'code',
         'name'
     ];
 
-    public function config()
+    public function facultyGeneral()
     {
-        return $this->hasOne(FacultyConfig::class);
+        return $this->belongsTo(FacultyGeneral::class, 'faculty_general_id');
     }
 
     public function classrooms()

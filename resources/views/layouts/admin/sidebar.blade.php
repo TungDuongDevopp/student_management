@@ -371,9 +371,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.faculty-configs') }}"
-                    class="nav-link {{ request()->routeIs('admin.faculty-configs') ? 'active' : '' }}"
-                    title="Cấu hình Đào tạo & Tài chính">
+                <a href="{{ route('admin.faculty-generals') }}"
+                    class="nav-link {{ request()->routeIs('admin.faculty-generals') ? 'active' : '' }}"
+                    title="Quản lý Nhóm Khoa">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Cấu hình Đào tạo</span>
                 </a>
