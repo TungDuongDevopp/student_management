@@ -263,23 +263,25 @@
         <section class="stats-grid">
             <article class="stat-card">
                 <p class="stat-label">Số tín chỉ tích lũy</p>
-                <p class="stat-value">85/135</p>
-                <p class="stat-sub">Hoàn thành 63%</p>
+                <p class="stat-value">{{ $earned_credits ?? 0 }}/{{ $max_credits ?? 150 }}</p>
+                <p class="stat-sub">Hoàn thành
+                    {{ ($max_credits ?? 150) > 0 ? round((($earned_credits ?? 0) / ($max_credits ?? 150)) * 100) : 0 }}%</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Điểm trung bình (CPA)</p>
-                <p class="stat-value">3.24</p>
-                <p class="stat-sub">Xếp loại Khá</p>
+                <p class="stat-value">{{ $gpa ?? '0.00' }}</p>
+                <p class="stat-sub">Xếp loại {{ $ranking ?? 'Chưa xác định' }}</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Số môn học kỳ này</p>
-                <p class="stat-value">6</p>
-                <p class="stat-sub">18 tín chỉ</p>
+                <p class="stat-value">{{ $current_subjects_count ?? 0 }}</p>
+                <p class="stat-sub">Kỳ học hiện tại</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Công nợ học phí</p>
-                <p class="stat-value" style="color: #ef4444;">0đ</p>
-                <p class="stat-sub">Đã nộp đủ</p>
+                <p class="stat-value" style="color: {{ ($debt ?? 0) > 0 ? '#ef4444' : '#10b981' }};">
+                    {{ number_format($debt ?? 0, 0, ',', '.') }}đ</p>
+                <p class="stat-sub">{{ ($debt ?? 0) > 0 ? 'Cần thanh toán' : 'Đã nộp đủ' }}</p>
             </article>
         </section>
 
@@ -305,7 +307,8 @@
                     </div>
                     <div class="info-item">
                         <p class="info-label">Giới tính</p>
-                        <p class="info-value">{{ $student?->gender == 0 ? 'Nam' : ($student?->gender == 1 ? 'Nữ' : 'N/A') }}
+                        <p class="info-value">
+                            {{ $student?->gender == 0 ? 'Nam' : ($student?->gender == 1 ? 'Nữ' : 'N/A') }}
                         </p>
                     </div>
                     <div class="info-item">

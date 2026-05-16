@@ -302,14 +302,14 @@
         <section class="stats-grid" aria-label="Chỉ số tổng quan">
             <article class="stat-card">
                 <h2 class="stat-label">Điểm trung bình (GPA)</h2>
-                <p class="stat-value">{{ $gpa ?? '3.45' }}</p>
-                <p class="stat-sub">Xếp loại: {{ $ranking ?? 'Giỏi' }}</p>
+                <p class="stat-value">{{ $gpa ?? 'N/A' }}</p>
+                <p class="stat-sub">Xếp loại: {{ $ranking ?? 'N/A' }}</p>
             </article>
             <article class="stat-card">
                 <h2 class="stat-label">Tín chỉ tích lũy</h2>
-                <p class="stat-value">{{ $earned_credits ?? '95' }} <span
-                        style="font-size:0.85rem; font-weight:400; color:#94a3b8">/ 130</span></p>
-                <p class="stat-sub">Còn thiếu {{ 130 - ($earned_credits ?? 95) }} tín chỉ</p>
+                <p class="stat-value">{{ $earned_credits ?? '0' }} <span
+                        style="font-size:0.85rem; font-weight:400; color:#94a3b8">/ {{ $max_credits ?? 150 }}</span></p>
+                <p class="stat-sub">Còn thiếu {{ ($max_credits ?? 150) - ($earned_credits ?? 0) }} tín chỉ</p>
             </article>
             <article class="stat-card">
                 <h2 class="stat-label">Môn đang học</h2>
