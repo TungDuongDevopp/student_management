@@ -6,7 +6,7 @@
         </button>
 
         <div class="topbar-breadcrumb">
-            @if(Auth::check() && Auth::user()->student)
+            @if (Auth::check() && Auth::user()->student)
                 <a href="{{ route('student.home') }}"><i class="fa-solid fa-house"></i></a>
             @elseif(Auth::check() && Auth::user()->teacher)
                 <a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i></a>
@@ -26,7 +26,7 @@
         {{-- User Dropdown --}}
         <div class="topbar-user" id="topbar-user-dropdown">
             <div class="topbar-user-info">
-                @if(Auth::check() && Auth::user()->student)
+                @if (Auth::check() && Auth::user()->student)
                     <span class="topbar-user-name">{{ Auth::user()->student?->name ?? Auth::user()->username }}</span>
                     <span class="topbar-user-role">Sinh viên</span>
                 @elseif(Auth::check() && Auth::user()->teacher)
@@ -38,8 +38,9 @@
                 @endif
             </div>
             <div class="topbar-avatar">
-                @if(Auth::check() && (Auth::user()->student?->images || Auth::user()->teacher?->images))
-                    <img src="{{ Auth::user()->student?->images ?? Auth::user()->teacher?->images }}" alt="Avatar">
+                @if (Auth::check() && (Auth::user()->student?->images || Auth::user()->teacher?->images))
+                    <img src="{{ asset('storage/' . (Auth::user()->student?->images ?? Auth::user()->teacher?->images)) }}"
+                        alt="Avatar">
                 @else
                     <i class="fa-solid fa-user"></i>
                 @endif
@@ -47,7 +48,7 @@
 
             {{-- Dropdown Menu --}}
             <div class="topbar-dropdown">
-                @if(Auth::check() && Auth::user()->student)
+                @if (Auth::check() && Auth::user()->student)
                     <a href="{{ route('student.info') }}">
                         <i class="fa-regular fa-circle-user"></i> Thông tin cá nhân
                     </a>
@@ -60,15 +61,17 @@
                         <i class="fa-regular fa-circle-user"></i> Thông tin cá nhân
                     </a>
                 @endif
-                
+
                 <a href="#">
                     <i class="fa-solid fa-key"></i> Đổi mật khẩu
                 </a>
                 <div class="topbar-dropdown-divider"></div>
-                <a href="#" class="topbar-logout-link" onclick="event.preventDefault(); document.getElementById('topbar-logout-form').submit();">
+                <a href="#" class="topbar-logout-link"
+                    onclick="event.preventDefault(); document.getElementById('topbar-logout-form').submit();">
                     <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
                 </a>
-                <form id="topbar-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
+                <form id="topbar-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf
+                </form>
             </div>
         </div>
     </div>
@@ -79,7 +82,7 @@
     document.addEventListener('click', function(event) {
         const dropdown = document.querySelector('.topbar-dropdown');
         const userBtn = document.getElementById('topbar-user-dropdown');
-        
+
         if (!userBtn || !dropdown) return;
 
         // 1. Nếu click trúng Link (Thông tin cá nhân, Đăng xuất...) -> CHUYỂN HƯỚNG NGAY
