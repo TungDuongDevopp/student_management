@@ -286,22 +286,15 @@
     <main class="home-container">
 
         <section class="welcome-banner" aria-label="Lời chào">
-            <h1>Xin chào Giảng viên, {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Ngô Ngọc Anh') }}!</h1>
-            <p>Hôm nay bạn có {{ $classes_today_count ?? 2 }} ca dạy. Chúc bạn một ngày làm việc hiệu quả tại khoa CNTT.</p>
-        </section>
-
-        <section class="stats-grid" aria-label="Chỉ số tổng quan">
-            <article class="stat-card">
-                <h2 class="stat-label">Lớp đang phụ trách</h2>
-                <p class="stat-value">{{ $assigned_classes ?? '4' }}</p>
-                <p class="stat-sub">Học kỳ hiện tại</p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label">Tổng sinh viên</h2>
-                <p class="stat-value">{{ $total_students ?? '245' }}</p>
-                <p class="stat-sub">Đang theo học</p>
-            </article>
-
+            <h1>Xin chào Giảng viên, {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Giảng viên') }}!</h1>
+            <p>
+                @if (count($todaySchedules) > 0)
+                    Hôm nay bạn có <strong>{{ count($todaySchedules) }} lớp</strong> cần giảng dạy. Chúc bạn một buổi lên
+                    lớp hiệu quả!
+                @else
+                    Hôm nay bạn không có lớp dạy nào. Chúc bạn nghỉ ngơi vui vẻ!
+                @endif
+            </p>
         </section>
 
         <section class="news-section" aria-labelledby="news-heading">
@@ -360,22 +353,24 @@
             <div class="section-header">
                 <h2 id="schedule-heading"><i class="fa-solid fa-chalkboard-user"
                         style="margin-right:8px; color:#10b981;"></i>Lịch giảng dạy hôm nay</h2>
-                <a href="{{ route('teacher.schedule') }}">Xem lịch giảng dạy →</a>
+                <a href="{{ route('teacher.schedule') }}">Xem toàn bộ lịch →</a>
             </div>
-            <div class="schedule-item">
-                <span class="schedule-time">07:30</span>
-                <div class="schedule-info">
-                    <h4>Phát triển phần mềm hướng dịch vụ (SOA) - Lớp DCCTPM70A</h4>
-                    <p>Phòng C1-305 · Sĩ số: 65 · Loại: Lý thuyết</p>
+            @forelse($todaySchedules as $item)
+                <div class="schedule-item">
+                    <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
+                    <div class="schedule-info">
+                        <h4>{{ $item['subject_name'] }}{{ $item['group_code'] ? ' - Nhóm ' . $item['group_code'] : '' }}
+                        </h4>
+                        <p>Phòng {{ $item['room'] }} &middot; Sĩ số: {{ $item['current_capacity'] }} SV &middot;
+                            {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-time">13:30</span>
-                <div class="schedule-info">
-                    <h4>Đồ án Cơ sở Ngành - Nhóm 04</h4>
-                    <p>Phòng LAB A2-202 · Sĩ số: 25 · Loại: Thực hành</p>
+            @empty
+                <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
+                    Không có lớp dạy hôm nay
                 </div>
-            </div>
+            @endforelse
         </section>
 
     </main>
