@@ -88,20 +88,14 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
 });
 
 
+use App\Http\Controllers\StudentHomeController;
+
 //route for student
 Route::prefix('student')->middleware('role:3')->group(function () {
-    Route::get('/home', function () {
-        return view('user.Student.home');
-    })->name('student.home');
+    Route::get('/home', [StudentHomeController::class, 'index'])->name('student.home');
 
 
-    Route::get('/info', function () {
-        /** @var \App\Models\Account $account */
-        $account = Auth::user();
-        $account->load('student.classroom.faculty');
-        $student = $account->student;
-        return view('user.Student.info', compact('student'));
-    })->name('student.info');
+    Route::get('/info', [StudentHomeController::class, 'info'])->name('student.info');
 
     Route::get('/schedule', function () {
         return view('user.Student.schedule');
