@@ -293,7 +293,13 @@
 
     <section class="welcome-banner" aria-label="Lời chào">
         <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
-        <p>Chúc bạn học tập tốt!.</p>
+        <p>
+            @if(count($todaySchedules) > 0)
+                Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
+            @else
+                Hôm nay bạn không có lớt học nào. Chúc bạn nghỉ ngơi vui vẻ!
+            @endif
+        </p>
     </section>
 
     <section class="news-section" aria-labelledby="news-heading">
@@ -359,22 +365,22 @@
         <div class="section-header">
             <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
                 học hôm nay</h2>
-            <a href="{{ route('student.schedule') }}">Xem chi tiết →</a>
+            <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
         </div>
-        <div class="schedule-item">
-            <span class="schedule-time">07:30</span>
-            <div class="schedule-info">
-                <h4>Lập trình Web</h4>
-                <p>Phòng A3-302 · Thầy Nguyễn Anh Tuấn</p>
+        @forelse($todaySchedules as $item)
+            <div class="schedule-item">
+                <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
+                <div class="schedule-info">
+                    <h4>{{ $item['subject_name'] }}</h4>
+                    <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
+                </div>
             </div>
-        </div>
-        <div class="schedule-item">
-            <span class="schedule-time">09:30</span>
-            <div class="schedule-info">
-                <h4>Cơ sở dữ liệu</h4>
-                <p>Phòng B2-201 · Cô Trần Thị Thu Hà</p>
+        @empty
+            <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
+                <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
+                Không có môn học nào hôm nay
             </div>
-        </div>
+        @endforelse
     </section>
 
     </main>

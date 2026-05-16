@@ -111,10 +111,40 @@ class StudentHomeController extends Controller
         /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        
-        $stats = $this->getStudentStats($account->student);
-        
-        return view('user.Student.home', $stats);
+        $student = $account->student;
+
+        $stats = $this->getStudentStats($student);
+
+        $todaySchedules = [];
+        if ($student) {
+            $todayDow = (int) now()->format('N') + 1;
+            if (now()->dayOfWeek === 0) $todayDow = 8;
+
+            $todaySchedules = Enrollment::with([
+                'schedule.subject', 'schedule.room', 'schedule.teacher', 'schedule.sessions'
+            ])
+            ->where('student_id', $student->id)
+            ->whereHas('schedule.sessions', fn($q) => $q->where('day_of_week', $todayDow))
+            ->get()
+            ->map(function ($enrollment) use ($todayDow) {
+                $s = $enrollment->schedule;
+                if (!$s) return null;
+                $session = $s->sessions->firstWhere('day_of_week', $todayDow);
+                return [
+                    'subject_name' => $s->subject?->name ?? '—',
+                    'teacher_name' => $s->teacher?->name ?? '—',
+                    'room'         => $s->room ? (($s->room->block ? $s->room->block.'.' : '').$s->room->name) : '—',
+                    'start_time'   => substr($session?->start_time ?? '', 0, 5),
+                    'end_time'     => substr($session?->end_time ?? '', 0, 5),
+                ];
+            })
+            ->filter()
+            ->sortBy('start_time')
+            ->values()
+            ->toArray();
+        }
+
+        return view('user.Student.home', array_merge($stats, ['todaySchedules' => $todaySchedules]));
     }
 
     public function info()
