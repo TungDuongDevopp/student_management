@@ -127,7 +127,7 @@
 
     <div class="content-wrapper">
         <div class="page-header">
-            <h1>Quản lý Lịch học</h1>
+            <h1>Quản lý Lớp học phần</h1>
             <button class="btn btn-primary" onclick="openAdd()">+ Thêm lớp học phần</button>
         </div>
 
@@ -240,6 +240,14 @@
                             <div class="form-group">
                                 <label>Sĩ số tối đa</label>
                                 <input type="number" id="fMaxCapacity" value="40" min="1" max="500">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày bắt đầu</label>
+                                <input type="date" id="fStartDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày kết thúc</label>
+                                <input type="date" id="fEndDate">
                             </div>
                         </div>
 
@@ -357,8 +365,8 @@
         // ── STATS ─────────────────────────────────────────────────────────────
         function updateStats(data) {
             document.getElementById('statTotal').textContent = data.length;
-            document.getElementById('statEnrolled').textContent = data.filter(s => (s.enrollments_count || 0) > 0).length;
-            document.getElementById('statEmpty').textContent = data.filter(s => (s.enrollments_count || 0) === 0).length;
+            document.getElementById('statEnrolled').textContent = data.filter(s => (s.current_capacity || 0) > 0).length;
+            document.getElementById('statEmpty').textContent = data.filter(s => (s.current_capacity || 0) === 0).length;
         }
 
         // ── APPLY FILTERS ─────────────────────────────────────────────────────
@@ -402,30 +410,38 @@
                 const semName = s.semester ?
                     `${s.semester.name}${s.semester.academic_year ? ' – ' + s.semester.academic_year : ''}` :
                     '—';
+
+                let subjectInfo = `<div class="subject-cell">${escHtml(s.subject?.name || '—')}</div>`;
+                subjectInfo +=
+                    `<div class="muted">${escHtml(s.subject?.credits ? s.subject.credits + ' tín chỉ' : '')}</div>`;
+                if (s.start_date && s.end_date) {
+                    subjectInfo +=
+                        `<div style="font-size:0.75rem;color:#64748b;margin-top:4px;">📅 ${new Date(s.start_date).toLocaleDateString('vi-VN')} - ${new Date(s.end_date).toLocaleDateString('vi-VN')}</div>`;
+                }
+
                 const room = s.room ?
                     `${s.room.block ? s.room.block + '.' : ''}${s.room.name}` :
                     '—';
 
                 // Hiển thị tất cả buổi học
-                const sessionsHtml = (s.sessions && s.sessions.length)
-                    ? s.sessions.map(ss =>
-                        `<span class="day-badge" style="display:block;margin-bottom:2px">`
-                        + `${DAY_MAP[ss.day_of_week] || ''} `
-                        + `<span class="shift-badge">${fmtTime(ss.start_time)}–${fmtTime(ss.end_time)}</span>`
-                        + `</span>`
-                      ).join('')
-                    : '—';
+                const sessionsHtml = (s.sessions && s.sessions.length) ?
+                    s.sessions.map(ss => {
+                        return `<div class="day-badge" style="display:block;margin-bottom:4px;padding:4px;border:1px solid #e2e8f0;">` +
+                            `${DAY_MAP[ss.day_of_week] || ''} ` +
+                            `<span class="shift-badge">${fmtTime(ss.start_time)}–${fmtTime(ss.end_time)}</span>` +
+                            `</div>`;
+                    }).join('') :
+                    '—';
 
-                const group = s.group_code
-                    ? `<span class="badge badge-credits">${escHtml(s.group_code)}</span>`
-                    : '—';
-                const cnt = s.enrollments_count || 0;
+                const group = s.group_code ?
+                    `<span class="badge badge-credits">${escHtml(s.group_code)}</span>` :
+                    '—';
+                const cnt = s.current_capacity || 0;
 
                 return `<tr>
                     <td><strong>#${s.id}</strong></td>
                     <td>
-                        <div class="subject-cell">${escHtml(s.subject?.name || '—')}</div>
-                        <div class="muted">${escHtml(s.subject?.credits ? s.subject.credits + ' tín chỉ' : '')}</div>
+                        ${subjectInfo}
                     </td>
                     <td>${escHtml(s.teacher?.name || '—')}</td>
                     <td>${escHtml(room)}</td>
@@ -436,6 +452,7 @@
                         <span class="enroll-badge" style="${cnt >= (s.max_capacity || 40) ? 'background:#fee2e2;color:#991b1b' : ''}">
                             👥 ${cnt} / ${s.max_capacity || 40}
                         </span>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:3px; font-weight:600;">Còn ${Math.max(0, (s.max_capacity || 40) - cnt)} chỗ</div>
                     </td>
                     <td><div class="actions">
                         <button class="btn btn-sm btn-edit" onclick='editEntity(${JSON.stringify(s)})'>Sửa</button>
@@ -497,13 +514,15 @@
 
             document.getElementById('fGroupCode').value = s.group_code || '';
             document.getElementById('fMaxCapacity').value = s.max_capacity || 40;
+            document.getElementById('fStartDate').value = s.start_date || '';
+            document.getElementById('fEndDate').value = s.end_date || '';
 
             // Render danh sách buổi học
             renderSessionList(s.sessions || []);
         }
 
         // ── SESSION LIST ──────────────────────────────────────────────────────
-        const DAY_OPTIONS = [2,3,4,5,6,7,8].map(d =>
+        const DAY_OPTIONS = [2, 3, 4, 5, 6, 7, 8].map(d =>
             `<option value="${d}">${DAY_MAP[d]}</option>`
         ).join('');
 
@@ -519,35 +538,36 @@
 
         function addSession(data = {}) {
             const list = document.getElementById('sessionList');
-            const idx  = list.children.length;
-            const row  = document.createElement('div');
+            const idx = list.children.length;
+            const row = document.createElement('div');
             row.className = 'session-row';
-            row.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px';
+            row.style.cssText =
+                'display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px';
             row.innerHTML = `
-                <select class="sess-day" style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
+                <select class="sess-day" style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)" title="Thứ">
                     <option value="">-- Thứ --</option>
                     ${DAY_OPTIONS}
                 </select>
-                <input type="time" class="sess-start" step="300"
+                <input type="time" class="sess-start" step="300" title="Giờ bắt đầu"
                     style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
-                <input type="time" class="sess-end" step="300"
+                <input type="time" class="sess-end" step="300" title="Giờ kết thúc"
                     style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
                 <button type="button" onclick="this.closest('.session-row').remove()"
                     style="padding:0.35rem 0.6rem;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem"
                     title="Xóa buổi">✕</button>
             `;
             // Điền dữ liệu nếu có
-            if (data.day_of_week) row.querySelector('.sess-day').value   = data.day_of_week;
-            if (data.start_time)  row.querySelector('.sess-start').value = fmtTime(data.start_time);
-            if (data.end_time)    row.querySelector('.sess-end').value   = fmtTime(data.end_time);
+            if (data.day_of_week) row.querySelector('.sess-day').value = data.day_of_week;
+            if (data.start_time) row.querySelector('.sess-start').value = fmtTime(data.start_time);
+            if (data.end_time) row.querySelector('.sess-end').value = fmtTime(data.end_time);
             list.appendChild(row);
         }
 
         function collectSessions() {
             return [...document.querySelectorAll('#sessionList .session-row')].map(row => ({
                 day_of_week: parseInt(row.querySelector('.sess-day').value) || null,
-                start_time:  row.querySelector('.sess-start').value || null,
-                end_time:    row.querySelector('.sess-end').value || null,
+                start_time: row.querySelector('.sess-start').value || null,
+                end_time: row.querySelector('.sess-end').value || null,
             })).filter(ss => ss.day_of_week || ss.start_time);
         }
 
@@ -577,13 +597,15 @@
             const get = id => document.getElementById(id).value;
 
             const body = {
-                subject_id:  parseInt(get('fSubject'))  || null,
-                teacher_id:  parseInt(get('fTeacher'))  || null,
-                room_id:     parseInt(get('fRoom'))      || null,
+                subject_id: parseInt(get('fSubject')) || null,
+                teacher_id: parseInt(get('fTeacher')) || null,
+                room_id: parseInt(get('fRoom')) || null,
                 semester_id: parseInt(get('fSemester')) || null,
-                group_code:  get('fGroupCode').trim()   || null,
+                group_code: get('fGroupCode').trim() || null,
                 max_capacity: parseInt(get('fMaxCapacity')) || 40,
-                sessions:    collectSessions(),
+                start_date: get('fStartDate') || null,
+                end_date: get('fEndDate') || null,
+                sessions: collectSessions(),
             };
 
             if (!body.subject_id || !body.semester_id) {

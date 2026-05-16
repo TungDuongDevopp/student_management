@@ -333,7 +333,7 @@
                 <a href="{{ route('admin.classes') }}"
                     class="nav-link {{ request()->routeIs('admin.classes') ? 'active' : '' }}" title="Danh sách Lớp">
                     <i class="fa-solid fa-layer-group"></i>
-                    <span>Quản lý Lớp học hành chính</span>
+                    <span>Quản lý Lớp hành chính</span>
                 </a>
             </li>
 
@@ -357,7 +357,7 @@
                     class="nav-link {{ request()->routeIs('admin.schedules') ? 'active' : '' }}"
                     title="Lịch giảng dạy">
                     <i class="fa-regular fa-calendar-days"></i>
-                    <span>Quản lý Lớp học học phần</span>
+                    <span>Quản lý Lớp học phần</span>
                 </a>
             </li>
 

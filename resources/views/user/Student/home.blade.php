@@ -290,116 +290,93 @@
             }
         }
     </style>
+    'N/A' }}</p>
+    <p class="stat-sub">Kỳ học hiện tại</p>
+    </article>
 
-    <main class="home-container">
-
-        <section class="welcome-banner" aria-label="Lời chào">
-            <h1>Xin chào, {{ Auth::user()->student->name ?? (Auth::user()->username ?? 'Sinh viên') }}!</h1>
-            <p>Chào mừng bạn quay trở lại hệ thống. Hãy kiểm tra tiến độ học tập và các thông báo mới nhất từ nhà trường.
-            </p>
-        </section>
-
-        <section class="stats-grid" aria-label="Chỉ số tổng quan">
-            <article class="stat-card">
-                <h2 class="stat-label">Điểm trung bình (GPA)</h2>
-                <p class="stat-value">{{ $gpa ?? 'N/A' }}</p>
-                <p class="stat-sub">Xếp loại: {{ $ranking ?? 'N/A' }}</p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label">Tín chỉ tích lũy</h2>
-                <p class="stat-value">{{ $earned_credits ?? '0' }} <span
-                        style="font-size:0.85rem; font-weight:400; color:#94a3b8">/ {{ $max_credits ?? 150 }}</span></p>
-                <p class="stat-sub">Còn thiếu {{ ($max_credits ?? 150) - ($earned_credits ?? 0) }} tín chỉ</p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label">Môn đang học</h2>
-                <p class="stat-value">{{ $current_subjects_count ?? '6' }}</p>
-                <p class="stat-sub">Kỳ học hiện tại</p>
-            </article>
-
-        </section>
+    </section>
 
 
-        <section class="news-section" aria-labelledby="news-heading">
-            <div class="section-header">
-                <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
-                    tức & Thông báo</h2>
-                <a href="#">Xem tất cả →</a>
-            </div>
+    <section class="news-section" aria-labelledby="news-heading">
+        <div class="section-header">
+            <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
+                tức & Thông báo</h2>
+            <a href="#">Xem tất cả →</a>
+        </div>
 
-            <div class="news-list">
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Thông báo lịch thi" class="news-thumb"
-                        loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Đào tạo</span>
-                            <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                07/05/2026</time>
-                        </div>
-                        <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
-                                tết</a></h3>
-                        <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
-                            tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
+        <div class="news-list">
+            <article class="news-item">
+                <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Thông báo lịch thi" class="news-thumb"
+                    loading="lazy">
+                <div class="news-body">
+                    <div class="news-meta">
+                        <span class="news-tag">Đào tạo</span>
+                        <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                            07/05/2026</time>
                     </div>
-                </article>
-
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
-                        loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Học bổng</span>
-                            <time datetime="2026-05-05"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                05/05/2026</time>
-                        </div>
-                        <h3><a href="#">Công bố danh sách sinh viên nhận học bổng khuyến khích học tập HK1 năm học
-                                2025-2026</a></h3>
-                        <p class="news-desc">Chúc mừng 120 sinh viên khoa CNTT đã đạt thành tích xuất sắc. Chi tiết mức
-                            hưởng và thời gian nhận tiền vui lòng xem trong file đính kèm.</p>
-                    </div>
-                </article>
-
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/dang-ky-tin-chi.png') }}" alt="Hướng dẫn đăng ký"
-                        class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Đào tạo</span>
-                            <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                01/05/2026</time>
-                        </div>
-                        <h3><a href="#">Hướng dẫn chi tiết quy trình đăng ký môn học qua hệ thống trực tuyến – Kỳ Hè
-                                2026</a></h3>
-                        <p class="news-desc">Cổng đăng ký tín chỉ kỳ Hè sẽ chính thức mở vào lúc 08:00 sáng ngày 10/05. Các
-                            bạn sinh viên chuẩn bị sẵn danh sách mã môn.</p>
-                    </div>
-                </article>
-                {{-- @endforeach --}}
-            </div>
-        </section>
-
-        <section class="schedule-today" aria-labelledby="schedule-heading">
-            <div class="section-header">
-                <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
-                    học hôm nay</h2>
-                <a href="{{ route('student.schedule') }}">Xem chi tiết →</a>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-time">07:30</span>
-                <div class="schedule-info">
-                    <h4>Lập trình Web</h4>
-                    <p>Phòng A3-302 · Thầy Nguyễn Anh Tuấn</p>
+                    <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
+                            tết</a></h3>
+                    <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
+                        tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
                 </div>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-time">09:30</span>
-                <div class="schedule-info">
-                    <h4>Cơ sở dữ liệu</h4>
-                    <p>Phòng B2-201 · Cô Trần Thị Thu Hà</p>
+            </article>
+
+            <article class="news-item">
+                <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
+                    loading="lazy">
+                <div class="news-body">
+                    <div class="news-meta">
+                        <span class="news-tag">Học bổng</span>
+                        <time datetime="2026-05-05"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                            05/05/2026</time>
+                    </div>
+                    <h3><a href="#">Công bố danh sách sinh viên nhận học bổng khuyến khích học tập HK1 năm học
+                            2025-2026</a></h3>
+                    <p class="news-desc">Chúc mừng 120 sinh viên khoa CNTT đã đạt thành tích xuất sắc. Chi tiết mức
+                        hưởng và thời gian nhận tiền vui lòng xem trong file đính kèm.</p>
                 </div>
+            </article>
+
+            <article class="news-item">
+                <img src="{{ asset('storage/images/news/dang-ky-tin-chi.png') }}" alt="Hướng dẫn đăng ký" class="news-thumb"
+                    loading="lazy">
+                <div class="news-body">
+                    <div class="news-meta">
+                        <span class="news-tag">Đào tạo</span>
+                        <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                            01/05/2026</time>
+                    </div>
+                    <h3><a href="#">Hướng dẫn chi tiết quy trình đăng ký môn học qua hệ thống trực tuyến – Kỳ Hè
+                            2026</a></h3>
+                    <p class="news-desc">Cổng đăng ký tín chỉ kỳ Hè sẽ chính thức mở vào lúc 08:00 sáng ngày 10/05. Các
+                        bạn sinh viên chuẩn bị sẵn danh sách mã môn.</p>
+                </div>
+            </article>
+            {{-- @endforeach --}}
+        </div>
+    </section>
+
+    <section class="schedule-today" aria-labelledby="schedule-heading">
+        <div class="section-header">
+            <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
+                học hôm nay</h2>
+            <a href="{{ route('student.schedule') }}">Xem chi tiết →</a>
+        </div>
+        <div class="schedule-item">
+            <span class="schedule-time">07:30</span>
+            <div class="schedule-info">
+                <h4>Lập trình Web</h4>
+                <p>Phòng A3-302 · Thầy Nguyễn Anh Tuấn</p>
             </div>
-        </section>
+        </div>
+        <div class="schedule-item">
+            <span class="schedule-time">09:30</span>
+            <div class="schedule-info">
+                <h4>Cơ sở dữ liệu</h4>
+                <p>Phòng B2-201 · Cô Trần Thị Thu Hà</p>
+            </div>
+        </div>
+    </section>
 
     </main>
 @endsection
