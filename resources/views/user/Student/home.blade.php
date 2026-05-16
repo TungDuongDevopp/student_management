@@ -302,8 +302,8 @@
         <section class="stats-grid" aria-label="Chỉ số tổng quan">
             <article class="stat-card">
                 <h2 class="stat-label">Điểm trung bình (GPA)</h2>
-                <p class="stat-value">{{ $gpa ?? '3.45' }}</p>
-                <p class="stat-sub">Xếp loại: {{ $ranking ?? 'Giỏi' }}</p>
+                <p class="stat-value">{{ $gpa ?? 'N/A' }}</p>
+                <p class="stat-sub">Xếp loại: {{ $ranking ?? 'N/A' }}</p>
             </article>
             <article class="stat-card">
                 <h2 class="stat-label">Tín chỉ tích lũy</h2>

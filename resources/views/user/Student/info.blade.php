@@ -264,7 +264,8 @@
             <article class="stat-card">
                 <p class="stat-label">Số tín chỉ tích lũy</p>
                 <p class="stat-value">{{ $earned_credits ?? 0 }}/{{ $max_credits ?? 150 }}</p>
-                <p class="stat-sub">Hoàn thành {{ ($max_credits ?? 150) > 0 ? round((($earned_credits ?? 0) / ($max_credits ?? 150)) * 100) : 0 }}%</p>
+                <p class="stat-sub">Hoàn thành
+                    {{ ($max_credits ?? 150) > 0 ? round((($earned_credits ?? 0) / ($max_credits ?? 150)) * 100) : 0 }}%</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Điểm trung bình (CPA)</p>
@@ -278,7 +279,8 @@
             </article>
             <article class="stat-card">
                 <p class="stat-label">Công nợ học phí</p>
-                <p class="stat-value" style="color: {{ ($debt ?? 0) > 0 ? '#ef4444' : '#10b981' }};">{{ number_format($debt ?? 0, 0, ',', '.') }}đ</p>
+                <p class="stat-value" style="color: {{ ($debt ?? 0) > 0 ? '#ef4444' : '#10b981' }};">
+                    {{ number_format($debt ?? 0, 0, ',', '.') }}đ</p>
                 <p class="stat-sub">{{ ($debt ?? 0) > 0 ? 'Cần thanh toán' : 'Đã nộp đủ' }}</p>
             </article>
         </section>
@@ -305,7 +307,8 @@
                     </div>
                     <div class="info-item">
                         <p class="info-label">Giới tính</p>
-                        <p class="info-value">{{ $student?->gender == 0 ? 'Nam' : ($student?->gender == 1 ? 'Nữ' : 'N/A') }}
+                        <p class="info-value">
+                            {{ $student?->gender == 0 ? 'Nam' : ($student?->gender == 1 ? 'Nữ' : 'N/A') }}
                         </p>
                     </div>
                     <div class="info-item">
