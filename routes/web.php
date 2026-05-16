@@ -97,9 +97,7 @@ Route::prefix('student')->middleware('role:3')->group(function () {
 
     Route::get('/info', [StudentHomeController::class, 'info'])->name('student.info');
 
-    Route::get('/schedule', function () {
-        return view('user.Student.schedule');
-    })->name('student.schedule');
+    Route::get('/schedule', [StudentHomeController::class, 'schedule'])->name('student.schedule');
 
     Route::get('/grades', function () {
         return view('user.Student.grade');
@@ -129,21 +127,11 @@ Route::prefix('student')->middleware('role:3')->group(function () {
 
 //route for teacher
 Route::prefix('teacher')->middleware('role:2')->group(function () {
-    Route::get('/home', function () {
-        return view('user.Teacher.home');
-    })->name('teacher.home');
+    Route::get('/home', [\App\Http\Controllers\TeacherHomeController::class, 'index'])->name('teacher.home');
 
-    Route::get('/info', function () {
-        /** @var \App\Models\Account $account */
-        $account = Auth::user();
-        $account->load('teacher.faculty');
-        $teacher = $account->teacher;
-        return view('user.Teacher.info', compact('teacher'));
-    })->name('teacher.info');
+    Route::get('/info', [\App\Http\Controllers\TeacherHomeController::class, 'info'])->name('teacher.info');
 
-    Route::get('/schedule', function () {
-        return view('user.Teacher.schedule');
-    })->name('teacher.schedule');
+    Route::get('/schedule', [\App\Http\Controllers\TeacherHomeController::class, 'schedule'])->name('teacher.schedule');
 
     Route::get('/classes', function () {
         return view('user.Teacher.class_list');

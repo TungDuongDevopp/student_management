@@ -290,12 +290,11 @@
             }
         }
     </style>
-    'N/A' }}</p>
-    <p class="stat-sub">Kỳ học hiện tại</p>
-    </article>
 
+    <section class="welcome-banner" aria-label="Lời chào">
+        <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
+        <p>Chúc bạn học tập tốt!.</p>
     </section>
-
 
     <section class="news-section" aria-labelledby="news-heading">
         <div class="section-header">

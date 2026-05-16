@@ -277,22 +277,22 @@
         <section class="stats-grid">
             <article class="stat-card">
                 <p class="stat-label">Lớp đang giảng dạy</p>
-                <p class="stat-value">4</p>
+                <p class="stat-value">{{ $stats['assigned_classes'] ?? 0 }}</p>
                 <p class="stat-sub">Theo học kỳ hiện tại</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Sinh viên quản lý</p>
-                <p class="stat-value">245</p>
+                <p class="stat-value">{{ $stats['total_students'] ?? 0 }}</p>
                 <p class="stat-sub">Tổng sinh viên trong lớp học phần</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Bảng điểm chưa chốt</p>
-                <p class="stat-value">2</p>
+                <p class="stat-value">{{ $stats['ungraded_schedules'] ?? 0 }}</p>
                 <p class="stat-sub">Cần rà soát trước khi khóa điểm</p>
             </article>
             <article class="stat-card">
                 <p class="stat-label">Ticket đang xử lý</p>
-                <p class="stat-value">12</p>
+                <p class="stat-value">{{ $stats['pending_tickets'] ?? 0 }}</p>
                 <p class="stat-sub">Phiếu hỗ trợ chưa hoàn tất</p>
             </article>
         </section>

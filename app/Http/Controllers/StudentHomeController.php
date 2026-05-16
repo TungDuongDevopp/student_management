@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Enrollment;
 use App\Models\Tuition;
+use App\Models\Semester;
 
 class StudentHomeController extends Controller
 {
@@ -126,6 +127,52 @@ class StudentHomeController extends Controller
         $stats['student'] = $account->student;
 
         return view('user.Student.info', $stats);
+    }
+
+    public function schedule()
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('student');
+        $student = $account->student;
+
+        $semesters = Semester::orderByDesc('id')->get();
+
+        $schedules = [];
+        if ($student) {
+            $schedules = Enrollment::with([
+                'schedule.subject',
+                'schedule.room',
+                'schedule.semester',
+                'schedule.teacher',
+                'schedule.sessions',
+            ])
+            ->where('student_id', $student->id)
+            ->get()
+            ->map(function ($enrollment) {
+                $s = $enrollment->schedule;
+                if (!$s) return null;
+                return [
+                    'id'           => $s->id,
+                    'semester_id'  => $s->semester_id,
+                    'subject_name' => $s->subject?->name ?? '—',
+                    'group_code'   => $s->group_code ?? '',
+                    'teacher_name' => $s->teacher?->name ?? '—',
+                    'room'         => $s->room ? (($s->room->block ? $s->room->block.'.' : '').$s->room->name) : '—',
+                    'final_score'  => $enrollment->final_score,
+                    'sessions'     => $s->sessions->map(fn($ss) => [
+                        'day_of_week' => $ss->day_of_week,
+                        'start_time'  => substr($ss->start_time ?? '', 0, 5),
+                        'end_time'    => substr($ss->end_time ?? '', 0, 5),
+                    ])->values()->toArray(),
+                ];
+            })
+            ->filter()
+            ->values()
+            ->toArray();
+        }
+
+        return view('user.Student.schedule', compact('semesters', 'schedules', 'student'));
     }
 
     private function convertTo4Scale($score10)
