@@ -48,8 +48,8 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
 
         .stat-card {
@@ -316,11 +316,7 @@
                 <p class="stat-value">{{ $current_subjects_count ?? '6' }}</p>
                 <p class="stat-sub">Kỳ học hiện tại</p>
             </article>
-            <article class="stat-card">
-                <h2 class="stat-label">Số tiết vắng</h2>
-                <p class="stat-value">{{ $absences_count ?? '2' }}</p>
-                <p class="stat-sub">Tối đa cho phép: 15</p>
-            </article>
+
         </section>
 
 
@@ -333,23 +329,24 @@
 
             <div class="news-list">
                 <article class="news-item">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c476?w=600&h=400&fit=crop"
-                        alt="Thông báo lịch thi" class="news-thumb" loading="lazy">
+                    <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Thông báo lịch thi" class="news-thumb"
+                        loading="lazy">
                     <div class="news-body">
                         <div class="news-meta">
                             <span class="news-tag">Đào tạo</span>
                             <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
                                 07/05/2026</time>
                         </div>
-                        <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026</a></h3>
+                        <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
+                                tết</a></h3>
                         <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
                             tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
                     </div>
                 </article>
 
                 <article class="news-item">
-                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=600&h=400&fit=crop"
-                        alt="Danh sách học bổng" class="news-thumb" loading="lazy">
+                    <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
+                        loading="lazy">
                     <div class="news-body">
                         <div class="news-meta">
                             <span class="news-tag">Học bổng</span>
@@ -364,8 +361,8 @@
                 </article>
 
                 <article class="news-item">
-                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop"
-                        alt="Hướng dẫn đăng ký" class="news-thumb" loading="lazy">
+                    <img src="{{ asset('storage/images/news/dang-ky-tin-chi.png') }}" alt="Hướng dẫn đăng ký"
+                        class="news-thumb" loading="lazy">
                     <div class="news-body">
                         <div class="news-meta">
                             <span class="news-tag">Đào tạo</span>
