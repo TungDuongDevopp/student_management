@@ -24,11 +24,37 @@ class EnrollmentController extends Controller
         $validated = $request->validate([
             'student_id'  => 'required|integer|exists:students,id',
             'schedule_id' => 'required|integer|exists:schedules,id',
-            'final_score' => 'nullable|numeric',
+            'final_score' => 'nullable|numeric|min:0|max:10',
             'status'      => 'nullable|integer',
         ]);
 
-        $enrollment = Enrollment::create($validated);
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $schedule = \App\Models\Schedule::lockForUpdate()->findOrFail($validated['schedule_id']);
+            
+            if ($schedule->max_capacity && $schedule->current_capacity >= $schedule->max_capacity) {
+                \Illuminate\Support\Facades\DB::rollBack();
+                return response()->json(['message' => 'Lớp học phần này đã đạt số lượng đăng ký tối đa.'], 400);
+            }
+
+            $exists = Enrollment::where('student_id', $validated['student_id'])
+                ->where('schedule_id', $validated['schedule_id'])
+                ->exists();
+                
+            if ($exists) {
+                \Illuminate\Support\Facades\DB::rollBack();
+                return response()->json(['message' => 'Sinh viên đã đăng ký lớp học phần này.'], 400);
+            }
+
+            $enrollment = Enrollment::create($validated);
+            $schedule->increment('current_capacity');
+            
+            \Illuminate\Support\Facades\DB::commit();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return response()->json(['message' => 'Lỗi khi đăng ký: ' . $e->getMessage()], 500);
+        }
+
         return response()->json($enrollment, 201);
     }
 
@@ -64,7 +90,19 @@ class EnrollmentController extends Controller
     public function destroy($id)
     {
         $enrollment = Enrollment::findOrFail($id);
-        $enrollment->delete();
+        
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $schedule_id = $enrollment->schedule_id;
+            $enrollment->delete();
+            \App\Models\Schedule::where('id', $schedule_id)->where('current_capacity', '>', 0)->decrement('current_capacity');
+            
+            \Illuminate\Support\Facades\DB::commit();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return response()->json(['message' => 'Lỗi khi hủy đăng ký: ' . $e->getMessage()], 500);
+        }
+
         return response()->json(null, 204);
     }
 }
