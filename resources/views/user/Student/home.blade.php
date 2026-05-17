@@ -14,7 +14,7 @@
         }
 
         .welcome-banner {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             border-radius: 8px;
             padding: 2rem;
             color: #fff;
@@ -48,8 +48,8 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
         }
 
         .stat-card {
@@ -291,15 +291,62 @@
         }
     </style>
 
-    <section class="welcome-banner" aria-label="Lời chào">
+    <main class="home-container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li><a href="{{ route('student.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+                <li class="active">Tổng quan</li>
+            </ol>
+        </nav>
+
+        <section class="welcome-banner" aria-label="Lời chào">
+        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">Trang chủ Sinh viên</div>
         <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
         <p>
             @if(count($todaySchedules) > 0)
                 Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
             @else
-                Hôm nay bạn không có lớt học nào. Chúc bạn nghỉ ngơi vui vẻ!
+                Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
             @endif
         </p>
+    </section>
+
+    <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <article class="stat-card">
+            <h2 class="stat-label"><i class="fa-solid fa-graduation-cap" style="color:#2563eb; margin-right:4px;"></i> Điểm trung bình (GPA)</h2>
+            <p class="stat-value" style="font-size: 1.6rem; display: flex; align-items: baseline; gap: 6px;">
+                <span>{{ $gpa ?? 'N/A' }}</span>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">(Hệ 4)</span>
+            </p>
+            <p class="stat-sub">Xếp loại: <b>{{ $ranking ?? 'N/A' }}</b></p>
+        </article>
+        <article class="stat-card">
+            <h2 class="stat-label"><i class="fa-solid fa-book" style="color:#10b981; margin-right:4px;"></i> Tín chỉ tích lũy</h2>
+            <p class="stat-value">{{ $earned_credits ?? '0' }} <span style="font-size:0.8rem; font-weight:400; color:#94a3b8">tín chỉ</span></p>
+        </article>
+        <article class="stat-card">
+            <h2 class="stat-label"><i class="fa-solid fa-calendar-week" style="color:#f59e0b; margin-right:4px;"></i> Học kỳ hiện tại</h2>
+            <p class="stat-value" style="font-size: 1.35rem; display: flex; align-items: baseline; gap: 6px;">
+                <span>{{ $current_credits ?? '0' }}</span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">tín chỉ</span>
+                <span style="font-size: 1rem; color: #e2e8f0; font-weight: 300;">|</span>
+                <span>{{ $current_subjects_count ?? '0' }}</span>
+                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">môn học</span>
+            </p>
+            <p class="stat-sub">Học kỳ II · 2025–2026</p>
+        </article>
+        <article class="stat-card">
+            <h2 class="stat-label"><i class="fa-solid fa-clock" style="color:#ef4444; margin-right:4px;"></i> Tiết học hôm nay</h2>
+            <p class="stat-value">{{ count($todaySchedules) }} <span style="font-size:0.8rem; font-weight:400; color:#94a3b8">môn học</span></p>
+            <p class="stat-sub">
+                @if(count($todaySchedules) > 0)
+                    Lên lớp: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
+                @else
+                    Nghỉ ngơi vui vẻ!
+                @endif
+            </p>
+        </article>
     </section>
 
     <section class="news-section" aria-labelledby="news-heading">
@@ -311,7 +358,7 @@
 
         <div class="news-list">
             <article class="news-item">
-                <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Thông báo lịch thi" class="news-thumb"
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg" alt="Trường Đại học Mỏ - Địa chất" class="news-thumb"
                     loading="lazy">
                 <div class="news-body">
                     <div class="news-meta">
@@ -327,7 +374,7 @@
             </article>
 
             <article class="news-item">
-                <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600" alt="Danh sách học bổng" class="news-thumb"
                     loading="lazy">
                 <div class="news-body">
                     <div class="news-meta">
@@ -343,7 +390,7 @@
             </article>
 
             <article class="news-item">
-                <img src="{{ asset('storage/images/news/dang-ky-tin-chi.png') }}" alt="Hướng dẫn đăng ký" class="news-thumb"
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600" alt="Hướng dẫn đăng ký" class="news-thumb"
                     loading="lazy">
                 <div class="news-body">
                     <div class="news-meta">
