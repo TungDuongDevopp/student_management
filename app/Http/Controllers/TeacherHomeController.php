@@ -150,4 +150,33 @@ class TeacherHomeController extends Controller
 
         return view('user.Teacher.schedule', compact('teacher', 'semesters', 'schedules', 'stats'));
     }
+
+    public function classes()
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('teacher');
+        $teacher = $account->teacher;
+
+        $classRooms = [];
+        $schedules = [];
+
+        if ($teacher) {
+            $classRooms = ClassRoom::with('faculty')
+                ->where('teacher_id', $teacher->id)
+                ->get();
+
+            $schedules = Schedule::with([
+                'subject',
+                'room',
+                'semester',
+                'sessions',
+                'enrollments'
+            ])
+            ->where('teacher_id', $teacher->id)
+            ->get();
+        }
+
+        return view('user.Teacher.class_list', compact('teacher', 'classRooms', 'schedules'));
+    }
 }

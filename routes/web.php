@@ -133,9 +133,7 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
 
     Route::get('/schedule', [\App\Http\Controllers\TeacherHomeController::class, 'schedule'])->name('teacher.schedule');
 
-    Route::get('/classes', function () {
-        return view('user.Teacher.class_list');
-    })->name('teacher.classes');
+    Route::get('/classes', [\App\Http\Controllers\TeacherHomeController::class, 'classes'])->name('teacher.classes');
 
     Route::get('/students', function () {
         return view('user.Teacher.student_list');
