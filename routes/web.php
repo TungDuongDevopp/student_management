@@ -99,30 +99,20 @@ Route::prefix('student')->middleware('role:3')->group(function () {
 
     Route::get('/schedule', [StudentHomeController::class, 'schedule'])->name('student.schedule');
 
-    Route::get('/grades', function () {
-        return view('user.Student.grade');
-    })->name('student.grades');
+    Route::get('/grades', [StudentHomeController::class, 'grades'])->name('student.grades');
 
-    Route::get('/enrollment', function () {
-        return view('user.Student.enrollment');
-    })->name('student.enrollment');
+    Route::get('/enrollment', [StudentHomeController::class, 'enrollment'])->name('student.enrollment');
 
-    Route::get('/attendance', function () {
-        return view('user.Student.attendance_list');
-    })->name('student.attendance');
+    Route::get('/attendance', [StudentHomeController::class, 'attendance'])->name('student.attendance');
 
-    Route::get('/tuition', function () {
-        return view('user.Student.tuition_fee');
-    })->name('student.tuition');
+    Route::get('/tuition', [StudentHomeController::class, 'tuition'])->name('student.tuition');
 
     Route::get('/payment', function () {
         return view('user.Student.payment');
     })->name('student.payment');
 
 
-    Route::get('/feedback', function () {
-        return view('user.Student.feedback');
-    })->name('student.feedback');
+    Route::get('/feedback', [StudentHomeController::class, 'feedback'])->name('student.feedback');
 });
 
 //route for teacher
@@ -169,3 +159,36 @@ Route::post('/admin/logout', function () {
     request()->session()->regenerateToken();
     return redirect()->route('admin.login');
 })->name('admin.logout');
+
+// ===== PAYMENT API =====
+// SePay Webhook — nhận callback khi có giao dịch thành công
+Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request) {
+    $content = $request->input('content') ?? '';
+    $amount  = $request->input('transferAmount') ?? 0;
+
+    // Tách mã sinh viên từ nội dung: "HOCPHI SV001 HK2-2025"
+    preg_match('/HOCPHI\s+(\S+)/i', $content, $matches);
+    $studentCode = $matches[1] ?? null;
+
+    if ($studentCode) {
+        $student = \App\Models\Student::where('student_code', $studentCode)->first();
+        if ($student) {
+            // Ghi nhận payment
+            \App\Models\Payment::create([
+                'student_id' => $student->id,
+                'amount'     => $amount,
+                'method'     => 'bank_transfer',
+                'transaction_code' => $request->input('referenceCode') ?? uniqid('TX'),
+                'status'     => 'paid',
+                'note'       => $content,
+            ]);
+        }
+    }
+    return response()->json(['success' => true]);
+})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
+// Kiểm tra trạng thái thanh toán của sinh viên
+Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
+    // Placeholder — kết nối DB thật sau
+    return response()->json(['success' => false, 'message' => 'Chưa nhận được thanh toán']);
+})->name('payment.check');
