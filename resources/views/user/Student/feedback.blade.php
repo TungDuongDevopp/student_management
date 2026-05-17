@@ -6,18 +6,20 @@
 <style>
     .feedback-container { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
 
-    .page-header {
-        background: #fff; border-radius: 8px; padding: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .page-header h1 { font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-bottom: 0.3rem; }
-    .page-header p  { font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+    .page-hero { background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);color:#fff;border-radius:10px;padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:0.25rem;border:1px solid #1d4ed8; }
+    .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+    .hero-content { position:relative;z-index:1; }
+    .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.3rem; }
+    .hero-title { margin:0;font-size:1.35rem;font-weight:800; }
+    .hero-desc { margin:.3rem 0 0;font-size:.85rem;opacity:.9; }
+    .sem-badge { background:#fff;color:#1d4ed8;border-radius:6px;padding:.35rem .75rem;font-size:.75rem;font-weight:700;position:relative;z-index:1; }
 
     .feedback-form {
         background: #fff; border-radius: 8px; padding: 1.5rem;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .form-group { margin-bottom: 1.25rem; }
+    .form-group:last-of-type { margin-bottom: 0; }
 
     .form-label {
         display: block; font-size: 0.82rem; font-weight: 600; color: #334155;
@@ -25,19 +27,34 @@
     }
     .form-label .required { color: #ef4444; margin-left: 2px; }
 
-    .form-input, .form-textarea {
+    .form-input, .form-select, .form-textarea {
         width: 100%; padding: 0.6rem 0.85rem; border: 1px solid #e2e8f0;
         border-radius: 6px; font-size: 0.88rem; color: #0f172a;
         font-family: 'Inter', sans-serif; transition: border-color 0.15s;
         background: #fff; box-sizing: border-box;
     }
-    .form-input:focus, .form-textarea:focus {
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
         outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
     }
     .form-input::placeholder, .form-textarea::placeholder { color: #94a3b8; }
-    .form-textarea { resize: vertical; min-height: 160px; line-height: 1.6; }
+
+    .form-textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
     .form-hint { font-size: 0.73rem; color: #94a3b8; margin-top: 0.3rem; }
+
+    .file-upload {
+        border: 2px dashed #cbd5e1; border-radius: 8px; padding: 2rem;
+        text-align: center; cursor: pointer; display: block; background: #f8fafc;
+        transition: all 0.2s;
+    }
+    .file-upload:hover { border-color: #2563eb; background: #eff6ff; }
+    .file-upload i { font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem; display: block; }
+    .file-upload p { font-size: 0.85rem; font-weight: 600; color: #0f172a; margin: 0; }
+    .file-upload span { font-size: 0.8rem; color: #64748b; }
+    .file-upload input[type="file"] { display: none; }
+
     .form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
 
     .btn-submit {
@@ -46,7 +63,7 @@
         border: none; border-radius: 6px; font-size: 0.88rem; font-weight: 600;
         cursor: pointer; transition: background 0.15s; font-family: 'Inter', sans-serif;
     }
-    .btn-submit:hover    { background: #1d4ed8; }
+    .btn-submit:hover { background: #1d4ed8; }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .btn-reset {
@@ -72,9 +89,9 @@
         padding: 0.85rem 0; border-bottom: 1px solid #f8fafc; gap: 1rem;
     }
     .history-item:last-child { border-bottom: none; }
-    .history-date    { font-size: 0.73rem; color: #94a3b8; margin-top: 0.2rem; }
-    .history-preview {
-        font-size: 0.78rem; color: #64748b; margin-top: 0.15rem; line-height: 1.4;
+    .history-title { font-size: 0.85rem; font-weight: 600; color: #0f172a; margin-bottom: 0.2rem; }
+    .history-date { font-size: 0.73rem; color: #94a3b8; }
+    .history-preview { font-size: 0.78rem; color: #64748b; margin-top: 0.15rem; line-height: 1.4;
         display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     .history-reply {
@@ -90,6 +107,7 @@
     }
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-replied { background: #dcfce7; color: #166534; }
+    .status-closed { background: #f1f5f9; color: #475569; }
 
     .empty-state { text-align: center; padding: 2rem 1rem; color: #94a3b8; }
     .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
@@ -103,26 +121,89 @@
     .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
     @media (max-width: 640px) {
+        .form-row { grid-template-columns: 1fr; }
         .form-actions { flex-direction: column; }
         .btn-submit, .btn-reset { width: 100%; justify-content: center; }
     }
 </style>
 
 <div class="feedback-container">
-
-    <header class="page-header">
-        <h1><i class="fa-regular fa-comment-dots" style="margin-right:6px; color:#2563eb;"></i>Góp ý & Phản hồi</h1>
-        <p>Gửi ý kiến, góp ý hoặc phản hồi đến Nhà trường. Mọi phản hồi sẽ được tiếp nhận và xử lý trong vòng 3–5 ngày làm việc.</p>
-    </header>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li><a href="{{ route('student.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+            <li class="active">Gửi phản hồi</li>
+        </ol>
+    </nav>
+    <section class="page-hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Student Academic Portal</div>
+            <h1 class="hero-title"><i class="fa-regular fa-comment-dots" style="margin-right:8px;"></i>GÓP Ý & PHẢN HỒI</h1>
+            <p class="hero-desc">Gửi ý kiến đóng góp, thắc mắc hoặc phản ánh trực tiếp tới Ban Đào tạo Nhà trường</p>
+        </div>
+        <span class="sem-badge">Học Kỳ Kỳ này – Đang mở</span>
+    </section>
 
     <section class="feedback-form" aria-label="Form gửi phản hồi">
         <div id="alertMsg" class="alert-msg"></div>
         <form id="feedbackForm">
+            <!-- Thông tin sinh viên (Họ và tên, Mã sinh viên, Lớp, Email liên hệ) -->
+            <div class="form-row" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Họ và tên</label>
+                    <input type="text" class="form-input"
+                        value="{{ Auth::user()->student->name ?? Auth::user()->username ?? '' }}"
+                        readonly style="background:#f8fafc; color:#64748b;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mã sinh viên</label>
+                    <input type="text" class="form-input"
+                        value="{{ Auth::user()->student->code ?? '' }}"
+                        readonly style="background:#f8fafc; color:#64748b;">
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Lớp sinh hoạt</label>
+                    <input type="text" class="form-input"
+                        value="{{ Auth::user()->student->classroom->name ?? '—' }}"
+                        readonly style="background:#f8fafc; color:#64748b;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email liên hệ</label>
+                    <input type="email" class="form-input"
+                        value="{{ Auth::user()->student->email ?? '' }}"
+                        readonly style="background:#f8fafc; color:#64748b;">
+                </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom: 1rem;">
+                <div class="form-group">
+                    <label class="form-label" for="feedback-category">Danh mục góp ý <span class="required">*</span></label>
+                    <select id="feedback-category" name="category" class="form-select" required>
+                        <option value="" disabled selected>— Chọn danh mục —</option>
+                        <option value="academic">Học vụ & Đào tạo</option>
+                        <option value="facility">Cơ sở vật chất</option>
+                        <option value="service">Dịch vụ sinh viên</option>
+                        <option value="system">Hệ thống CNTT</option>
+                        <option value="other">Khác</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="feedback-priority">Mức độ ưu tiên</label>
+                    <select id="feedback-priority" name="priority" class="form-select">
+                        <option value="normal" selected>Bình thường</option>
+                        <option value="high">Quan trọng</option>
+                        <option value="urgent">Khẩn cấp</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label class="form-label">Họ và tên</label>
-                <input type="text" class="form-input"
-                    value="{{ Auth::user()->student->name ?? Auth::user()->username ?? '' }}"
-                    readonly style="background:#f8fafc; color:#64748b;">
+                <label class="form-label" for="feedback-subject">Tiêu đề phản hồi <span class="required">*</span></label>
+                <input type="text" id="feedback-subject" name="subject" class="form-input"
+                    placeholder="Nhập tiêu đề ngắn gọn cho phản hồi" required>
             </div>
 
             <div class="form-group">
@@ -132,6 +213,16 @@
                 <textarea id="feedback-content" class="form-textarea"
                     placeholder="Mô tả chi tiết nội dung bạn muốn phản hồi..." required></textarea>
                 <p class="form-hint">Vui lòng cung cấp đủ thông tin để chúng tôi xử lý nhanh hơn.</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Đính kèm tài liệu (nếu có)</label>
+                <label class="file-upload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Kéo thả hoặc <strong>bấm để chọn file</strong></p>
+                    <span style="font-size: 0.8rem; color: #64748b;">Hỗ trợ: JPG, PNG, PDF, DOCX — Tối đa 5MB</span>
+                    <input type="file" id="feedback-file" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                </label>
             </div>
 
             <div class="form-actions">
@@ -164,8 +255,21 @@
     // ── GỬI PHẢN HỒI ──────────────────────────────────────────────────────────
     document.getElementById('feedbackForm').addEventListener('submit', async function (e) {
         e.preventDefault();
-        const content = document.getElementById('feedback-content').value.trim();
-        if (!content) return;
+        
+        const categorySelect = document.getElementById('feedback-category');
+        const prioritySelect = document.getElementById('feedback-priority');
+        const subjectInput = document.getElementById('feedback-subject');
+        const contentTextarea = document.getElementById('feedback-content');
+        
+        const category = categorySelect.options[categorySelect.selectedIndex].text;
+        const priority = prioritySelect.options[prioritySelect.selectedIndex].text;
+        const subject = subjectInput.value.trim();
+        const detail = contentTextarea.value.trim();
+        
+        if (!subject || !detail) return;
+
+        // Đóng gói thông tin gửi lên server
+        const content = `[${category}] [Mức độ: ${priority}] Tiêu đề: ${subject}\n\nChi tiết:\n${detail}`;
 
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
