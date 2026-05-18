@@ -79,9 +79,17 @@
             border-radius: 12px 0 0 12px;
         }
 
-        .stat-card:nth-child(2)::before { background: #10b981; }
-        .stat-card:nth-child(3)::before { background: #f59e0b; }
-        .stat-card:nth-child(4)::before { background: #ef4444; }
+        .stat-card:nth-child(2)::before {
+            background: #10b981;
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: #f59e0b;
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: #ef4444;
+        }
 
         .stat-card .stat-icon {
             position: absolute;
@@ -91,10 +99,21 @@
             opacity: 0.15;
         }
 
-        .stat-card:nth-child(1) .stat-icon { color: #2563eb; }
-        .stat-card:nth-child(2) .stat-icon { color: #10b981; }
-        .stat-card:nth-child(3) .stat-icon { color: #f59e0b; }
-        .stat-card:nth-child(4) .stat-icon { color: #ef4444; }
+        .stat-card:nth-child(1) .stat-icon {
+            color: #2563eb;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: #10b981;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: #f59e0b;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: #ef4444;
+        }
 
         .stat-card .stat-title {
             font-size: 0.75rem;
@@ -119,7 +138,7 @@
             font-weight: 500;
             margin: 0;
         }
-        
+
         .stat-card .stat-desc b {
             color: #334155;
             font-weight: 600;
@@ -329,17 +348,19 @@
         </nav>
 
         <section class="welcome-banner" aria-label="Lời chào">
-        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">Trang chủ Sinh viên</div>
-        <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
-        <p>
-            @if(count($todaySchedules) > 0)
-                Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
-            @else
-                Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
-            @endif
-        </p>
-    </section>
-
+            <div
+                style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">
+                Trang chủ Sinh viên</div>
+            <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
+            <p>
+                @if (count($todaySchedules) > 0)
+                    Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
+                @else
+                    Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
+                @endif
+            </p>
+        </section>
+    </main>
     <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
         <article class="stat-card">
             <i class="fa-solid fa-graduation-cap stat-icon"></i>
@@ -347,27 +368,27 @@
             <div class="stat-value">{{ $gpa ?? '0.00' }}</div>
             <div class="stat-desc">Xếp loại: <b>{{ $ranking ?? 'Chưa xác định' }}</b></div>
         </article>
-        
+
         <article class="stat-card">
             <i class="fa-solid fa-book stat-icon"></i>
             <div class="stat-title">Tín chỉ</div>
             <div class="stat-value">{{ $earned_credits ?? '0' }}</div>
             <div class="stat-desc">Đã tích lũy</div>
         </article>
-        
+
         <article class="stat-card">
             <i class="fa-solid fa-calendar-week stat-icon"></i>
             <div class="stat-title">Môn học</div>
             <div class="stat-value">{{ $current_subjects_count ?? '0' }}</div>
             <div class="stat-desc">Học kỳ hiện tại</div>
         </article>
-        
+
         <article class="stat-card">
             <i class="fa-solid fa-clock stat-icon"></i>
             <div class="stat-title">Lịch học</div>
             <div class="stat-value">{{ count($todaySchedules) }}</div>
             <div class="stat-desc">
-                @if(count($todaySchedules) > 0)
+                @if (count($todaySchedules) > 0)
                     Ca đầu: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
                 @else
                     Hôm nay nghỉ
@@ -385,30 +406,32 @@
 
         <div class="news-list">
             @forelse($news ?? [] as $article)
-            <article class="news-item">
-                <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}" alt="{{ $article->title }}" class="news-thumb" loading="lazy">
-                <div class="news-body">
-                    <div class="news-meta">
-                        <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
-                        <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                            {{ $article->created_at->format('d/m/Y') }}</time>
+                <article class="news-item">
+                    <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}"
+                        alt="{{ $article->title }}" class="news-thumb" loading="lazy">
+                    <div class="news-body">
+                        <div class="news-meta">
+                            <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
+                            <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock"
+                                    style="margin-right:4px;"></i>
+                                {{ $article->created_at->format('d/m/Y') }}</time>
+                        </div>
+                        <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
+                        <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
                     </div>
-                    <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
-                    <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
-                </div>
-            </article>
+                </article>
             @empty
-            <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
-                Chưa có thông báo mới.
-            </div>
+                <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
+                    Chưa có thông báo mới.
+                </div>
             @endforelse
         </div>
     </section>
 
     <section class="schedule-today" aria-labelledby="schedule-heading">
         <div class="section-header">
-            <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
-                học hôm nay</h2>
+            <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch học
+                hôm nay</h2>
             <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
         </div>
         @forelse($todaySchedules as $item)
@@ -416,10 +439,15 @@
                 <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
                 <div class="schedule-info">
                     <h4>{{ $item['subject_name'] }}</h4>
-                    <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
+                    <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot;
+                        {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
                 </div>
-            @endforelse
-        </section>
+            </div>
+        @empty
+            <div class="no-schedule" style="text-align: center; color: #64748b; padding: 2rem;">
+                Hôm nay bạn không có lịch học.
+            </div>
+        @endforelse
+    </section>
 
-    </main>
 @endsection

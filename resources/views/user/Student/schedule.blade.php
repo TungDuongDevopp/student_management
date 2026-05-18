@@ -597,9 +597,9 @@
                     }
                 });
                 html += `</tr>`;
-                if (si === 5) {
+                if (si === 4) {
                     html +=
-                        `<tr class="lunch-break"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> NGHỈ TRƯA (12:00 – 13:00)</td></tr>`;
+                        `<tr class="lunch-break"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> NGHỈ TRƯA (11:35 – 12:30)</td></tr>`;
                 }
             });
 

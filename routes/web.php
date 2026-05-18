@@ -132,6 +132,8 @@ Route::prefix('student')->middleware('role:3')->group(function () {
     Route::get('/grades', [StudentHomeController::class, 'grades'])->name('student.grades');
 
     Route::get('/enrollment', [StudentHomeController::class, 'enrollment'])->name('student.enrollment');
+    Route::post('/enrollment', [StudentHomeController::class, 'submitEnrollment'])->name('student.enrollment.submit');
+    Route::get('/enrollment/search', [StudentHomeController::class, 'searchSchedules'])->name('student.enrollment.search');
 
     Route::get('/attendance', [StudentHomeController::class, 'attendance'])->name('student.attendance');
 
@@ -169,15 +171,15 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
 // Logout
 Route::post('/logout', function () {
     Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+    session()->invalidate();
+    session()->regenerateToken();
     return redirect()->route('user.login');
 })->name('logout');
 
 Route::post('/admin/logout', function () {
     Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+    session()->invalidate();
+    session()->regenerateToken();
     return redirect()->route('admin.login');
 })->name('admin.logout');
 
