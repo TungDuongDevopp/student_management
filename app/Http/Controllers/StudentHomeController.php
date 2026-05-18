@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Enrollment;
 use App\Models\Tuition;
 use App\Models\Semester;
+use App\Models\News;
 
 class StudentHomeController extends Controller
 {
@@ -164,7 +165,13 @@ class StudentHomeController extends Controller
             ];
         }
 
-        return view('user.Student.home', array_merge($stats, ['todaySchedules' => $todaySchedules]));
+        $news = News::where('is_published', true)
+            ->whereIn('target_audience', ['student', 'all'])
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('user.Student.home', array_merge($stats, ['todaySchedules' => $todaySchedules, 'news' => $news]));
     }
 
     public function info()
@@ -249,35 +256,41 @@ class StudentHomeController extends Controller
             if ($sub->id % 3 == 0) $type = 'cn';
             elseif ($sub->id % 2 == 0) $type = 'tc';
 
-            // Find first session
-            $session = $s->sessions->first();
-            $day = $session ? $session->day_of_week : null;
-            
-            // Map start_time to period_start (1 to 12)
-            $period_start = 1;
-            if ($session && $session->start_time) {
-                $time = substr($session->start_time, 0, 5);
-                $periodsMap = [
-                    '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4, '10:25' => 5, '11:15' => 6,
-                    '13:00' => 7, '13:50' => 8, '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
-                ];
-                $period_start = $periodsMap[$time] ?? 1;
+            $mappedSessions = [];
+            foreach ($s->sessions as $session) {
+                if ($session && $session->start_time) {
+                    $time = substr($session->start_time, 0, 5);
+                    $endTime = substr($session->end_time ?? '', 0, 5);
+                    $periodsMap = [
+                        '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4, '10:25' => 5, '11:15' => 6,
+                        '13:00' => 7, '13:50' => 8, '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
+                    ];
+                    $endPeriodsMap = [
+                        '07:45' => 1, '08:35' => 2, '09:25' => 3, '10:20' => 4, '11:10' => 5, '12:00' => 6,
+                        '13:45' => 7, '14:35' => 8, '15:25' => 9, '16:20' => 10, '17:10' => 11, '18:00' => 12
+                    ];
+                    
+                    $startPeriod = $periodsMap[$time] ?? 1;
+                    $endPeriod = $endPeriodsMap[$endTime] ?? ($startPeriod + 1);
+                    
+                    $mappedSessions[] = [
+                        'day' => $session->day_of_week,
+                        'period' => $startPeriod,
+                        'duration' => max(1, $endPeriod - $startPeriod + 1)
+                    ];
+                }
             }
 
-            // period_count: typically 3
-            $period_count = 3;
-
             $subjects[] = [
-                $sub->id,                  // code/id
+                $s->id,                    // schedule_id instead of subject code for uniqueness
                 $sub->name,                // name
                 $sub->credits,             // credits
                 $type,                     // type (bb, tc, cn)
-                $day,                      // day (2-8)
-                $period_start,             // period_start
-                $period_count,             // period_count
+                $mappedSessions,           // array of sessions instead of single day/period
                 $s->max_capacity,          // max
                 $s->current_capacity,      // cur
-                null                       // prereq
+                null,                      // prereq
+                $sub->id                   // subject_code
             ];
         }
 

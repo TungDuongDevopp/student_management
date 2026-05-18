@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClassRoom;
 use App\Models\Schedule;
 use App\Models\Semester;
+use App\Models\News;
 use Illuminate\Support\Facades\Auth;
 
 class TeacherHomeController extends Controller
@@ -19,6 +20,8 @@ class TeacherHomeController extends Controller
         $stats = [
             'assigned_classes' => 0,
             'total_students' => 0,
+            'ungraded_schedules' => 0,
+            'pending_tickets' => 0,
         ];
 
         $todaySchedules = [];
@@ -29,6 +32,10 @@ class TeacherHomeController extends Controller
 
             $stats['assigned_classes'] = $classRooms->count() + $schedules->count();
             $stats['total_students'] = $classRooms->sum('quantity') + $schedules->sum('current_capacity');
+            $stats['ungraded_schedules'] = Schedule::where('teacher_id', $teacher->id)
+                ->whereHas('enrollments', function($q) {
+                    $q->whereNull('final_score');
+                })->count();
 
             // Lịch hôm nay: day_of_week khớp với thứ hiện tại (PHP: 0=CN, 1=T2... -> +1 hoặc = 8 cho CN)
             $todayDow = (int) now()->format('N') + 1; // ISO: 1=Mon -> +1 = 2..., CN=7->8
@@ -56,7 +63,13 @@ class TeacherHomeController extends Controller
                 ->toArray();
         }
 
-        return view('user.Teacher.home', compact('stats', 'todaySchedules'));
+        $news = News::where('is_published', true)
+            ->whereIn('target_audience', ['teacher', 'all'])
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('user.Teacher.home', compact('stats', 'todaySchedules', 'news'));
     }
 
     public function info()

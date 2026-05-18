@@ -43,18 +43,18 @@ $semesters = [
     [
         'name' => 'Học kỳ 2 - 2025-2026',
         'subjects' => [
-            ['IT3010','Lập trình Web nâng cao',3, 9.0, 8.5, 7.0, 8.0],
-            ['IT3020','Cơ sở dữ liệu nâng cao',3, 8.5, 9.0, 7.5, 8.5],
-            ['IT3030','Kiến trúc máy tính',2,  7.0, 7.5, 6.5, 7.0],
+            ['IT3010','Lập trình Web nâng cao',3, 8.5, 7.5, 8.0],
+            ['IT3020','Cơ sở dữ liệu nâng cao',3, 9.0, 8.0, 8.5],
+            ['IT3030','Kiến trúc máy tính',2,  7.5, 6.5, 7.0],
         ]
     ],
     [
         'name' => 'Học kỳ 1 - 2025-2026',
         'subjects' => [
-            ['IT2010','Lập trình Hướng đối tượng',3, 8.0, 8.0, 7.5, 8.0],
-            ['IT2020','Cấu trúc dữ liệu & Giải thuật',4, 9.5, 9.0, 8.5, 9.0],
-            ['IT2030','Mạng máy tính',3, 7.0, 6.5, 5.5, 6.0],
-            ['IT2040','Xác suất thống kê',2, 6.0, 7.0, 5.0, 5.5],
+            ['IT2010','Lập trình Hướng đối tượng',3, 8.0, 7.5, 8.0],
+            ['IT2020','Cấu trúc dữ liệu & Giải thuật',4, 9.0, 8.5, 9.0],
+            ['IT2030','Mạng máy tính',3, 7.0, 6.0, 6.0],
+            ['IT2040','Xác suất thống kê',2, 6.5, 5.5, 5.5],
         ]
     ],
 ];
@@ -68,7 +68,7 @@ function getLetterGrade($gpa) {
 }
 
 function calcAvg($s) {
-    return round($s[3]*0.1 + $s[4]*0.1 + $s[5]*0.3 + $s[6]*0.5, 2);
+    return round($s[3]*0.1 + $s[4]*0.3 + $s[5]*0.6, 2);
 }
 
 $allGrades = [];
@@ -143,10 +143,9 @@ $rankMock = $gpa10Mock >= 8.5 ? 'Xuất sắc' : ($gpa10Mock >= 7.0 ? 'Giỏi' :
                 <tr>
                     <th>Môn học</th>
                     <th>Tín</th>
-                    <th>CC (10%)</th>
-                    <th>BT (10%)</th>
-                    <th>GK (30%)</th>
-                    <th>CK (50%)</th>
+                    <th>Điểm C (10%)</th>
+                    <th>Điểm B (30%)</th>
+                    <th>Điểm A (60%)</th>
                     <th>Điểm TB</th>
                     <th>Xếp loại</th>
                 </tr>
@@ -165,10 +164,9 @@ $rankMock = $gpa10Mock >= 8.5 ? 'Xuất sắc' : ($gpa10Mock >= 7.0 ? 'Giỏi' :
                         <div style="font-size:0.72rem; color:#94a3b8; font-weight:400;">{{ $s[0] }}</div>
                     </td>
                     <td>{{ $s[2] }}</td>
-                    <td>{{ $s[3] }}</td>
-                    <td>{{ $s[4] }}</td>
-                    <td>{{ $s[5] }}</td>
-                    <td style="font-weight:700;">{{ $s[6] }}</td>
+                    <td>{{ number_format($s[3], 1) }}</td>
+                    <td>{{ number_format($s[4], 1) }}</td>
+                    <td style="font-weight:700;">{{ number_format($s[5], 1) }}</td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
                             <b style="color:{{ $color }};">{{ $avg }}</b>
@@ -187,7 +185,7 @@ $rankMock = $gpa10Mock >= 8.5 ? 'Xuất sắc' : ($gpa10Mock >= 7.0 ? 'Giỏi' :
     <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1rem 1.25rem;">
         <h4 style="font-size:0.85rem; font-weight:700; color:#1e293b; margin:0 0 0.75rem;"><i class="fa-solid fa-circle-info" style="color:#2563eb;"></i> Công thức tính điểm</h4>
         <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; font-size:0.78rem; color:#475569;">
-            <div><b>Điểm TB</b> = CC×10% + BT×10% + GK×30% + CK×50%</div>
+            <div><b>Điểm TB</b> = Điểm C×10% + Điểm B×30% + Điểm A×60%</div>
             <div><b>A</b> ≥ 8.5 · <b>B</b> ≥ 7.0 · <b>C</b> ≥ 5.5 · <b>D</b> ≥ 4.0 · <b>F</b> &lt; 4.0</div>
             <div><b>GPA</b> = Σ(Điểm TB × Tín chỉ) ÷ Tổng tín chỉ</div>
         </div>

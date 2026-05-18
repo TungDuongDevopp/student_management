@@ -366,9 +366,6 @@
     <div class="sidebar-backdrop" onclick="toggleMobile()"></div>
 
     <aside class="user-sidebar" id="sidebar">
-        <div class="toggle-btn" onclick="toggleSidebar()" title="Thu gọn/Phóng to Sidebar">
-            <i class="fa-solid fa-chevron-left"></i>
-        </div>
 
         <div class="sidebar-brand">
             <img src="https://lic.humg.edu.vn/App_Themes/humg/images/humg-logo.png" alt="Logo Trường"
@@ -435,6 +432,14 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{{ route('user.news.index') }}"
+                    class="nav-link {{ request()->routeIs('user.news.index') ? 'active' : '' }}" title="Tin tức & Thông báo">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <span>Tin tức & Thông báo</span>
+                </a>
+            </li>
+            
             <li class="nav-item">
                 <a href="{{ route('teacher.feedback') }}" class="nav-link" title="Gửi phản hồi">
                     <i class="fa-regular fa-comment-dots"></i>

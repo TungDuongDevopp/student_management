@@ -399,6 +399,14 @@
 
             <div class="nav-section">Khác</div>
 
+            <li class="nav-item">
+                <a href="{{ route('admin.news') }}"
+                    class="nav-link {{ request()->routeIs('admin.news') ? 'active' : '' }}" title="Tin tức & Thông báo">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <span>Tin tức & Thông báo</span>
+                </a>
+            </li>
+
 
 
             <li class="nav-item">

@@ -3,9 +3,12 @@
 @section('content')
 <style>
     .sl-wrapper { max-width:1200px; }
-    .sl-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
-    .sl-header h1 { font-size:1.5rem; font-weight:800; color:#0f172a; margin:0; }
-    .sl-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; }
+    .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.5rem 1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem; }
+    .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+    .hero-content { position:relative;z-index:1; }
+    .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
+    .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
+    .sl-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; position:relative; z-index:1; }
     .sl-filters select, .sl-filters input { padding:0.5rem 0.75rem; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; background:#fff; color:#1e293b; }
     .sl-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; }
     .sl-card-header { padding:1rem 1.25rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; }
@@ -24,8 +27,18 @@
 </style>
 
 <div class="sl-wrapper">
-    <div class="sl-header">
-        <h1><i class="fa-solid fa-users-viewfinder" style="color:#2563eb; margin-right:0.5rem;"></i>Danh sách Sinh viên</h1>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+            <li class="active">Danh sách Sinh viên</li>
+        </ol>
+    </nav>
+    <div class="page-hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Teacher Academic Portal</div>
+            <h1 class="hero-title"><i class="fa-solid fa-users-viewfinder" style="margin-right:0.5rem;"></i>Danh sách Sinh viên</h1>
+        </div>
         <div class="sl-filters">
             <select>
                 <option>DCCTTPM70A — Lập trình Web nâng cao</option>

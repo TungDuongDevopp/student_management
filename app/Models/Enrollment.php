@@ -9,6 +9,9 @@ class Enrollment extends Model
     protected $fillable = [
         'student_id',
         'schedule_id',
+        'score_c',
+        'score_b',
+        'score_a',
         'final_score',
         'status'
     ];

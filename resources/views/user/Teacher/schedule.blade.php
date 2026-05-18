@@ -36,26 +36,26 @@
 
     .table-responsive { width:100%;overflow-x:auto; }
     .schedule-table { width:100%;min-width:980px;border-collapse:collapse;table-layout:fixed; }
-    .schedule-table th { background:#fef2f2;color:#991b1b;font-weight:800;font-size:.78rem;text-transform:uppercase;padding:.85rem;border:1px solid #fecaca;text-align:center; }
-    .schedule-table td { border:1px solid #f1f5f9;height:130px;vertical-align:top;padding:.5rem;background:#fff; }
-    .time-col { background:#fff7ed!important;width:90px;text-align:center;vertical-align:middle!important;font-weight:800;color:#9a3412;border:1px solid #fed7aa!important;font-size:.82rem; }
-    .time-col small { display:block;margin-top:.2rem;font-size:.65rem;color:#c2410c;font-weight:600; }
+    .schedule-table th { background:#fef2f2;color:#991b1b;font-weight:800;font-size:.78rem;text-transform:uppercase;padding:.35rem;border:1px solid #fecaca;text-align:center; }
+    .schedule-table td { border:1px solid #f1f5f9;height:34px !important;vertical-align:top;padding:2px !important;background:#fff; }
+    .time-col { background:#fff7ed!important;width:90px;text-align:center;vertical-align:middle!important;font-weight:800;color:#9a3412;border:1px solid #fed7aa!important;font-size:.7rem; }
+    .time-col small { display:block;margin-top:0px;font-size:.58rem;color:#c2410c;font-weight:600; }
 
-    .teacher-card { height:100%;background:#fff;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:8px;padding:.7rem;display:flex;flex-direction:column;gap:.35rem;box-shadow:0 2px 6px rgba(220,38,38,.08);transition:.2s ease; }
-    .teacher-card:hover { transform:translateY(-2px);box-shadow:0 8px 18px rgba(220,38,38,.12); }
-    .class-code { font-size:.65rem;color:#dc2626;font-weight:800;text-transform:uppercase;letter-spacing:.04em; }
-    .subject-title { font-size:.85rem;font-weight:800;color:#0f172a;line-height:1.35; }
-    .meta-info { font-size:.72rem;color:#64748b;display:flex;align-items:center;gap:.4rem; }
-    .status-row { margin-top:.2rem;display:flex;gap:.35rem;flex-wrap:wrap; }
-    .status-badge { display:inline-flex;align-items:center;border-radius:999px;padding:.18rem .5rem;font-size:.64rem;font-weight:700; }
+    .teacher-card { height:100%;background:#fff;border:1px solid #fecaca;border-left:3px solid #dc2626;border-radius:4px;padding:2px 4px;display:flex;flex-direction:column;gap:0px;box-shadow:0 2px 6px rgba(220,38,38,.08);transition:.2s ease; overflow:hidden; box-sizing:border-box; }
+    .teacher-card:hover { transform:translateY(-1px);box-shadow:0 4px 10px rgba(220,38,38,.12); }
+    .class-code { font-size:.55rem;color:#dc2626;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1; }
+    .subject-title { font-size:.7rem;font-weight:700;color:#0f172a;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .meta-info { font-size:.6rem;color:#64748b;display:flex;align-items:center;gap:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1; }
+    .status-row { margin-top:2px;display:flex;gap:.25rem;flex-wrap:wrap;line-height:1; }
+    .status-badge { display:inline-flex;align-items:center;border-radius:999px;padding:0px 4px;font-size:.55rem;font-weight:700;line-height:1; }
     .status-normal { background:#dcfce7;color:#15803d; }
     .status-warning { background:#fef3c7;color:#b45309; }
-    .action-btns { margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:.35rem; }
-    .btn-action { font-size:.68rem;padding:.4rem;border-radius:5px;border:none;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;display:block; }
+    .action-btns { margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:2px; }
+    .btn-action { font-size:.55rem;padding:2px;border-radius:2px;border:none;font-weight:800;cursor:pointer;text-align:center;text-decoration:none;display:block;line-height:1; }
     .btn-view { background:#f1f5f9;color:#475569; }
     .btn-score { background:#dc2626;color:#fff; }
-    .empty-slot { height:100%;border:1px dashed #e2e8f0;border-radius:8px;background:#f8fafc;color:#cbd5e1;font-size:.8rem;display:flex;align-items:center;justify-content:center; }
-    .break-row td { text-align:center;padding:.4rem;background:rgba(59,130,246,.04);color:#94a3b8;font-size:.78rem;font-style:italic; }
+    .empty-slot { height:100%;display:flex;align-items:center;justify-content:center;color:#f1f5f9;font-size:.65rem; }
+    .break-row td { text-align:center;padding:.15rem!important;background:rgba(59,130,246,.04);color:#94a3b8;font-size:.68rem;font-style:italic;height:20px!important; }
 
     @media(max-width:1024px){ .summary-grid{grid-template-columns:repeat(2,1fr);} .toolbar{grid-template-columns:1fr 1fr;} }
     @media(max-width:640px){ .summary-grid,.toolbar{grid-template-columns:1fr;} }

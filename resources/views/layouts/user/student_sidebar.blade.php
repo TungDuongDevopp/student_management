@@ -431,6 +431,13 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('user.news.index') }}"
+                    class="nav-link {{ request()->routeIs('user.news.index') ? 'active' : '' }}" title="Tin tức & Thông báo">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <span>Tin tức & Thông báo</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('student.feedback') }}"
                     class="nav-link {{ request()->routeIs('student.feedback') ? 'active' : '' }}"
                     title="Góp ý & Phản hồi">

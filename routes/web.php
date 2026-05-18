@@ -14,6 +14,22 @@ Route::get('/login', function () {
 })->name('user.login');
 Route::post('/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/news', function() {
+        $target = (Auth::user()->role_id == 2) ? 'teacher' : 'student';
+        $news = \App\Models\News::where('is_published', true)
+            ->whereIn('target_audience', [$target, 'all'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('user.news_index', compact('news'));
+    })->name('user.news.index');
+
+    Route::get('/news/{id}', function($id) {
+        $article = \App\Models\News::findOrFail($id);
+        return view('user.news_show', compact('article'));
+    })->name('user.news.show');
+});
+
 // Admin Login
 Route::get('/admin/login', function () {
     return view('admin.login');
@@ -85,6 +101,11 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     Route::get('/system-configs', function () {
         return view('admin.system_configs');
     })->name('admin.system-configs');
+
+    Route::get('/news', function () {
+        $news = \App\Models\News::orderBy('created_at', 'desc')->get();
+        return view('admin.news_management', compact('news'));
+    })->name('admin.news');
 });
 
 

@@ -4,13 +4,73 @@
         <button class="topbar-toggle" onclick="toggleSidebar()" title="Thu gọn menu">
             <i class="fa-solid fa-bars"></i>
         </button>
+        
+        @php
+            $target = (Auth::check() && Auth::user()->role_id == 2) ? 'teacher' : 'student';
+            $topNews = \App\Models\News::where('is_published', true)
+                ->whereIn('target_audience', [$target, 'all'])
+                ->latest()
+                ->first();
+                
+            $recentNewsList = \App\Models\News::where('is_published', true)
+                ->whereIn('target_audience', [$target, 'all'])
+                ->latest()
+                ->take(5)
+                ->get();
+                
+            $newNewsCount = $recentNewsList->where('created_at', '>=', now()->subDays(3))->count();
+        @endphp
+        
+        @if($topNews)
+        <div class="topbar-news-ticker" style="margin-left: 1.5rem; display: flex; align-items: center; background: rgba(59, 130, 246, 0.1); padding: 0.35rem 0.75rem; border-radius: 6px; border-left: 3px solid #3b82f6; max-width: 400px; cursor: pointer;" onclick="window.location.href='{{ route('user.news.show', $topNews->id) }}'">
+            <i class="fa-solid fa-bullhorn" style="color: #3b82f6; margin-right: 0.5rem; font-size: 0.85rem; animation: ring 2s infinite;"></i>
+            <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <span style="color: #ef4444; margin-right: 4px;">MỚI</span> {{ $topNews->title }}
+            </span>
+        </div>
+        <style>
+            @keyframes ring {
+                0% { transform: rotate(0); }
+                10% { transform: rotate(15deg); }
+                20% { transform: rotate(-10deg); }
+                30% { transform: rotate(5deg); }
+                40% { transform: rotate(-5deg); }
+                50% { transform: rotate(0); }
+                100% { transform: rotate(0); }
+            }
+            [data-theme="dark"] .topbar-news-ticker span { color: #f8fafc !important; }
+        </style>
+        @endif
     </div>
 
     <div class="topbar-right">
-        {{-- Notifications --}}
-        <div class="topbar-icon-btn" title="Thông báo">
-            <i class="fa-regular fa-bell"></i>
-            <span class="topbar-badge">0</span>
+        {{-- Notifications Dropdown --}}
+        <div class="topbar-user" id="topbar-notifications-dropdown" style="position: relative;">
+            <div class="topbar-icon-btn" title="Thông báo" style="cursor: pointer;">
+                <i class="fa-regular fa-bell" style="{{ $newNewsCount > 0 ? 'animation: ring 2s infinite; color: #ef4444;' : '' }}"></i>
+                <span class="topbar-badge" style="{{ $newNewsCount > 0 ? 'background-color: #ef4444;' : '' }}">{{ $newNewsCount }}</span>
+            </div>
+            
+            <div class="topbar-dropdown notifications-menu" style="width: 320px; padding: 0; right: -10px;">
+                <div style="padding: 10px 15px; font-weight: 700; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; color: var(--text-main);">
+                    Thông báo mới
+                    <a href="{{ route('user.news.index') }}" style="font-size: 0.75rem; color: var(--primary); text-decoration: none; padding: 0;">Xem tất cả</a>
+                </div>
+                <div style="max-height: 350px; overflow-y: auto;">
+                    @forelse($recentNewsList as $n)
+                    <a href="{{ route('user.news.show', $n->id) }}" style="display: flex; gap: 12px; padding: 12px 15px; border-bottom: 1px solid var(--border-color); text-decoration: none; align-items: flex-start; transition: background 0.2s;">
+                        <img src="{{ $n->thumbnail ? asset($n->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}" alt="thumb" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #fff;">
+                        <div style="flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 4px;">
+                            <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $n->title }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">{{ strip_tags($n->content) }}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); opacity: 0.8;"><i class="fa-regular fa-clock"></i> {{ $n->created_at->diffForHumans() }}</div>
+                        </div>
+                    </a>
+                    @empty
+                    <div style="padding: 20px 15px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">Không có thông báo nào.</div>
+                    @endforelse
+                </div>
+            </div>
         </div>
 
         {{-- User Dropdown --}}
@@ -70,25 +130,56 @@
 <script>
     // --- DROPDOWN LOGIC (Nằm ngay tại Topbar cho dễ quản lý) ---
     document.addEventListener('click', function(event) {
-        const dropdown = document.querySelector('.topbar-dropdown');
+        // DROPDOWN USER
         const userBtn = document.getElementById('topbar-user-dropdown');
+        const userDropdown = userBtn ? userBtn.querySelector('.topbar-dropdown') : null;
+        
+        // DROPDOWN NOTIFICATIONS
+        const notifBtn = document.getElementById('topbar-notifications-dropdown');
+        const notifDropdown = notifBtn ? notifBtn.querySelector('.topbar-dropdown') : null;
 
-        if (!userBtn || !dropdown) return;
+        // Xử lý đóng tất cả dropdowns
+        function closeAllDropdowns() {
+            if(userDropdown) {
+                userDropdown.classList.remove('show');
+                userBtn.classList.remove('active');
+            }
+            if(notifDropdown) {
+                notifDropdown.classList.remove('show');
+                notifBtn.classList.remove('active');
+            }
+        }
 
-        // 1. Nếu click trúng Link (Thông tin cá nhân, Đăng xuất...) -> CHUYỂN HƯỚNG NGAY
+        // Nếu click trúng Link (Thông tin cá nhân, Đăng xuất, Xem tin tức...) -> CHUYỂN HƯỚNG NGAY
         if (event.target.closest('.topbar-dropdown a')) {
-            return; // Để trình duyệt tự chạy link href
+            return;
         }
 
-        // 2. Nếu click vào vùng Avatar/Tên -> TOGGLE đóng mở menu
-        if (userBtn.contains(event.target)) {
+        // Click vào chuông thông báo
+        if (notifBtn && notifBtn.contains(event.target)) {
             event.preventDefault();
-            dropdown.classList.toggle('show');
-            userBtn.classList.toggle('active');
-        } else {
-            // 3. Click ra ngoài -> ĐÓNG MENU
-            dropdown.classList.remove('show');
-            userBtn.classList.remove('active');
+            const isShowing = notifDropdown.classList.contains('show');
+            closeAllDropdowns();
+            if (!isShowing) {
+                notifDropdown.classList.add('show');
+                notifBtn.classList.add('active');
+            }
+            return;
         }
+
+        // Click vào Avatar/Tên người dùng
+        if (userBtn && userBtn.contains(event.target)) {
+            event.preventDefault();
+            const isShowing = userDropdown.classList.contains('show');
+            closeAllDropdowns();
+            if (!isShowing) {
+                userDropdown.classList.add('show');
+                userBtn.classList.add('active');
+            }
+            return;
+        }
+
+        // Click ra ngoài -> ĐÓNG TẤT CẢ
+        closeAllDropdowns();
     });
 </script>

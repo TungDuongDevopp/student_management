@@ -17,7 +17,7 @@
         }
 
         .profile-header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
             border-radius: 8px;
             padding: 2rem;
             color: #fff;
@@ -261,6 +261,14 @@
     </style>
 
     <main class="info-container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+                <li class="active">Thông tin cá nhân</li>
+            </ol>
+        </nav>
+
         <section class="profile-header">
             <img src="{{ $teacher?->images ? asset('storage/' . $teacher->images) : asset('images/default-avatar.png') }}"
                 alt="Avatar" class="profile-avatar">

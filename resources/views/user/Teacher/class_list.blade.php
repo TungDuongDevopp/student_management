@@ -3,9 +3,12 @@
 @section('content')
 <style>
     .cls-wrapper { max-width: 1200px; }
-    .cls-header { margin-bottom:1.5rem; }
-    .cls-header h1 { font-size:1.5rem; font-weight:800; color:#0f172a; margin:0 0 0.25rem; }
-    .cls-header p { color:#64748b; font-size:0.88rem; margin:0; }
+    .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem; }
+    .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+    .hero-content { position:relative;z-index:1; }
+    .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
+    .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
+    .hero-desc { margin:.45rem 0 0;font-size:.9rem;opacity:.9;line-height:1.5; }
     .cls-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1rem; }
     .cls-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; padding:1.25rem; transition:all 0.2s; position:relative; overflow:hidden; }
     .cls-card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.08); transform:translateY(-2px); }
@@ -35,9 +38,19 @@
 </style>
 
 <div class="cls-wrapper">
-    <div class="cls-header">
-        <h1><i class="fa-solid fa-layer-group" style="color:#2563eb; margin-right:0.5rem;"></i>Danh sách Lớp học phần</h1>
-        <p>Học kỳ 2 — Năm học 2025-2026 · Giảng viên: Ngô Ngọc Anh</p>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+            <li class="active">Danh sách Lớp học</li>
+        </ol>
+    </nav>
+    <div class="page-hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Teacher Academic Portal</div>
+            <h1 class="hero-title"><i class="fa-solid fa-layer-group" style="margin-right:0.5rem;"></i>Danh sách Lớp học phần</h1>
+            <p class="hero-desc">Học kỳ 2 — Năm học 2025-2026 · Giảng viên: {{ Auth::user()->teacher?->name ?? 'Ngô Ngọc Anh' }}</p>
+        </div>
     </div>
 
     <div class="cls-grid">
