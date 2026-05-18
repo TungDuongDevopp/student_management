@@ -361,6 +361,14 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{{ route('admin.rooms') }}"
+                    class="nav-link {{ request()->routeIs('admin.rooms') ? 'active' : '' }}" title="Quản lý phòng học">
+                    <i class="fa-solid fa-door-open"></i>
+                    <span>Quản lý Phòng học</span>
+                </a>
+            </li>
+
 
             <li class="nav-item">
                 <a href="{{ route('admin.semesters') }}"

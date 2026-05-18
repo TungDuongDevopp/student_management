@@ -179,4 +179,156 @@ class TeacherHomeController extends Controller
 
         return view('user.Teacher.class_list', compact('teacher', 'classRooms', 'schedules'));
     }
+
+    public function students(\Illuminate\Http\Request $request)
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('teacher');
+        $teacher = $account->teacher;
+
+        $classId = $request->query('class_id');
+        $scheduleId = $request->query('schedule_id');
+
+        $classRooms = [];
+        $schedules = [];
+        $students = collect();
+        $currentClass = null;
+        $currentSchedule = null;
+        $title = 'Danh sách Sinh viên';
+
+        if ($teacher) {
+            $classRooms = ClassRoom::where('teacher_id', $teacher->id)->get();
+            $schedules = Schedule::with('subject')->where('teacher_id', $teacher->id)->get();
+
+            if ($classId) {
+                $currentClass = $classRooms->firstWhere('id', $classId);
+                if ($currentClass) {
+                    $title = "Lớp hành chính: " . $currentClass->name;
+                    $students = \App\Models\Student::with('account')
+                        ->where('classroom_id', $classId)
+                        ->get()
+                        ->map(function($student) use ($currentClass) {
+                            return (object) [
+                                'id' => $student->id,
+                                'name' => $student->name,
+                                'code' => $student->student_code,
+                                'email' => $student->account->email ?? '',
+                                'class_name' => $currentClass->name,
+                                'status' => 'Đang học',
+                            ];
+                        });
+                }
+            } elseif ($scheduleId) {
+                $currentSchedule = $schedules->firstWhere('id', $scheduleId);
+                if ($currentSchedule) {
+                    $title = "Lớp học phần: " . ($currentSchedule->subject->name ?? '') . " (Nhóm " . $currentSchedule->group_code . ")";
+                    $enrollments = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
+                        ->where('schedule_id', $scheduleId)
+                        ->get();
+                    
+                    $students = $enrollments->map(function($enrollment) {
+                        $student = $enrollment->student;
+                        return (object) [
+                            'id' => $student->id,
+                            'name' => $student->name,
+                            'code' => $student->student_code,
+                            'email' => $student->account->email ?? '',
+                            'class_name' => $student->classroom->name ?? '—',
+                            'status' => 'Đang học',
+                        ];
+                    });
+                }
+            } else {
+                // Default to first class room if none selected
+                if ($classRooms->count() > 0) {
+                    return redirect()->route('teacher.students', ['class_id' => $classRooms->first()->id]);
+                } elseif ($schedules->count() > 0) {
+                    return redirect()->route('teacher.students', ['schedule_id' => $schedules->first()->id]);
+                }
+            }
+        }
+
+        return view('user.Teacher.student_list', compact(
+            'teacher', 'classRooms', 'schedules', 'students', 'currentClass', 'currentSchedule', 'title'
+        ));
+    }
+
+    public function attendances(\Illuminate\Http\Request $request)
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('teacher');
+        $teacher = $account->teacher;
+        
+        $scheduleId = $request->query('schedule_id');
+        $schedules = Schedule::with('subject')->where('teacher_id', $teacher->id)->get();
+        
+        $students = collect();
+        $currentSchedule = null;
+        
+        if ($scheduleId) {
+            $currentSchedule = $schedules->firstWhere('id', $scheduleId);
+            if ($currentSchedule) {
+                $enrollments = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
+                    ->where('schedule_id', $scheduleId)
+                    ->get();
+                
+                $students = $enrollments->map(function($enrollment) {
+                    $student = $enrollment->student;
+                    return (object) [
+                        'id' => $student->id,
+                        'name' => $student->name,
+                        'code' => $student->student_code,
+                        'class_name' => $student->classroom->name ?? '—',
+                        // In a real app, you'd fetch today's attendance record.
+                        'is_present' => true 
+                    ];
+                });
+            }
+        } elseif ($schedules->count() > 0) {
+            return redirect()->route('teacher.attendances', ['schedule_id' => $schedules->first()->id]);
+        }
+        
+        return view('user.Teacher.attendance', compact('teacher', 'schedules', 'students', 'currentSchedule'));
+    }
+
+    public function grades(\Illuminate\Http\Request $request)
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('teacher');
+        $teacher = $account->teacher;
+        
+        $scheduleId = $request->query('schedule_id');
+        $schedules = Schedule::with('subject')->where('teacher_id', $teacher->id)->get();
+        
+        $students = collect();
+        $currentSchedule = null;
+        
+        if ($scheduleId) {
+            $currentSchedule = $schedules->firstWhere('id', $scheduleId);
+            if ($currentSchedule) {
+                $enrollments = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
+                    ->where('schedule_id', $scheduleId)
+                    ->get();
+                
+                $students = $enrollments->map(function($enrollment) {
+                    $student = $enrollment->student;
+                    return (object) [
+                        'id' => $student->id,
+                        'enrollment_id' => $enrollment->id,
+                        'name' => $student->name,
+                        'code' => $student->student_code,
+                        'class_name' => $student->classroom->name ?? '—',
+                        'score' => $enrollment->score ?? '', // Assuming there is a score field or similar. If not, it will be empty.
+                    ];
+                });
+            }
+        } elseif ($schedules->count() > 0) {
+            return redirect()->route('teacher.grades', ['schedule_id' => $schedules->first()->id]);
+        }
+        
+        return view('user.Teacher.grade', compact('teacher', 'schedules', 'students', 'currentSchedule'));
+    }
 }
