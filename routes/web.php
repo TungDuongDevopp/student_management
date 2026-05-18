@@ -196,15 +196,18 @@ Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request)
     if ($studentCode) {
         $student = \App\Models\Student::where('student_code', $studentCode)->first();
         if ($student) {
-            // Ghi nhận payment
-            \App\Models\Payment::create([
-                'student_id' => $student->id,
-                'amount'     => $amount,
-                'method'     => 'bank_transfer',
-                'transaction_code' => $request->input('referenceCode') ?? uniqid('TX'),
-                'status'     => 'paid',
-                'note'       => $content,
-            ]);
+            $tuition = \App\Models\Tuition::where('student_id', $student->id)->first();
+            if ($tuition) {
+                $tuition->paid_amount = min($tuition->total_amount, $tuition->paid_amount + $amount);
+                $tuition->save();
+
+                // Ghi nhận payment
+                \App\Models\Payment::create([
+                    'tuition_id' => $tuition->id,
+                    'amount'     => $amount,
+                    'payment_date' => now(),
+                ]);
+            }
         }
     }
     return response()->json(['success' => true]);
@@ -212,6 +215,30 @@ Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request)
 
 // Kiểm tra trạng thái thanh toán của sinh viên
 Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
-    // Placeholder — kết nối DB thật sau
-    return response()->json(['success' => false, 'message' => 'Chưa nhận được thanh toán']);
+    $studentCode = $request->input('student_code');
+    $student = \App\Models\Student::where('student_code', $studentCode)->first();
+    
+    if ($student) {
+        $tuition = \App\Models\Tuition::where('student_id', $student->id)->first();
+        if ($tuition) {
+            $remaining = $tuition->total_amount - $tuition->paid_amount;
+            if ($remaining > 0) {
+                // Đóng 1 phát hết luôn tất cả các môn đã đăng kí
+                $tuition->paid_amount = $tuition->total_amount;
+                $tuition->save();
+                
+                // Tạo lịch sử giao dịch
+                \App\Models\Payment::create([
+                    'tuition_id' => $tuition->id,
+                    'amount' => $remaining,
+                    'payment_date' => now(),
+                ]);
+                
+                return response()->json(['success' => true, 'message' => 'Thanh toán thành công!']);
+            } else {
+                return response()->json(['success' => true, 'message' => 'Học phí đã được đóng đủ!']);
+            }
+        }
+    }
+    return response()->json(['success' => false, 'message' => 'Chưa nhận được thanh toán hoặc không tìm thấy sinh viên']);
 })->name('payment.check');

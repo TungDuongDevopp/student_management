@@ -381,8 +381,49 @@ class StudentHomeController extends Controller
     {
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        $stats = $this->getStudentStats($account->student);
-        return view('user.Student.tuition_fee', $stats);
+        $student = $account->student;
+        $stats = $this->getStudentStats($student);
+
+        // Lấy học kỳ hiện tại đang active
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+
+        // Lấy tất cả môn học đã đăng ký trong học kỳ active này
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->whereHas('schedule', function ($q) use ($activeSemester) {
+                $q->where('semester_id', $activeSemester->id);
+            })
+            ->with(['schedule.subject'])
+            ->get();
+
+        // Tìm bản ghi Công nợ học phí thực tế
+        $tuition = Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id ?? 1)
+            ->first();
+
+        // Nếu chưa tồn tại, khởi tạo một bản ghi động
+        if (!$tuition && $student) {
+            $feePerCredit = $student->classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
+            $totalCredits = $enrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
+            if ($totalCredits == 0) $totalCredits = 15; // Mặc định nếu chưa học môn nào
+            
+            $tuition = Tuition::create([
+                'student_id' => $student->id,
+                'semester_id' => $activeSemester->id ?? 1,
+                'total_amount' => $totalCredits * $feePerCredit,
+                'paid_amount' => 0
+            ]);
+        }
+
+        // Lấy lịch sử giao dịch từ bảng payments liên kết
+        $payments = $tuition ? \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get() : collect();
+
+        return view('user.Student.tuition_fee', array_merge($stats, [
+            'student' => $student,
+            'activeSemester' => $activeSemester,
+            'enrollments' => $enrollments,
+            'tuition' => $tuition,
+            'payments' => $payments
+        ]));
     }
 
     public function feedback()

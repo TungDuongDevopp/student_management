@@ -20,27 +20,6 @@
                 
             $newNewsCount = $recentNewsList->where('created_at', '>=', now()->subDays(3))->count();
         @endphp
-        
-        @if($topNews)
-        <div class="topbar-news-ticker" style="margin-left: 1.5rem; display: flex; align-items: center; background: rgba(59, 130, 246, 0.1); padding: 0.35rem 0.75rem; border-radius: 6px; border-left: 3px solid #3b82f6; max-width: 400px; cursor: pointer;" onclick="window.location.href='{{ route('user.news.show', $topNews->id) }}'">
-            <i class="fa-solid fa-bullhorn" style="color: #3b82f6; margin-right: 0.5rem; font-size: 0.85rem; animation: ring 2s infinite;"></i>
-            <span style="font-size: 0.8rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                <span style="color: #ef4444; margin-right: 4px;">MỚI</span> {{ $topNews->title }}
-            </span>
-        </div>
-        <style>
-            @keyframes ring {
-                0% { transform: rotate(0); }
-                10% { transform: rotate(15deg); }
-                20% { transform: rotate(-10deg); }
-                30% { transform: rotate(5deg); }
-                40% { transform: rotate(-5deg); }
-                50% { transform: rotate(0); }
-                100% { transform: rotate(0); }
-            }
-            [data-theme="dark"] .topbar-news-ticker span { color: #f8fafc !important; }
-        </style>
-        @endif
     </div>
 
     <div class="topbar-right">
