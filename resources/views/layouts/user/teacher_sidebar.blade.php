@@ -436,7 +436,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('teacher.feedback') }}" class="nav-link" title="Gửi phản hồi">
+                <a href="{{ route('teacher.feedback') }}" class="nav-link {{ request()->routeIs('teacher.feedback') ? 'active' : '' }}" title="Gửi phản hồi">
                     <i class="fa-regular fa-comment-dots"></i>
                     <span>Gửi phản hồi</span>
                 </a>

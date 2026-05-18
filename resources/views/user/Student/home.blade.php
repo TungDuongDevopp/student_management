@@ -301,134 +301,143 @@
         </nav>
 
         <section class="welcome-banner" aria-label="Lời chào">
-        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">Trang chủ Sinh viên</div>
-        <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
-        <p>
-            @if(count($todaySchedules) > 0)
-                Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
-            @else
-                Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
-            @endif
-        </p>
-    </section>
-
-    <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
-        <article class="stat-card">
-            <h2 class="stat-label"><i class="fa-solid fa-graduation-cap" style="color:#2563eb; margin-right:4px;"></i> Điểm trung bình (GPA)</h2>
-            <p class="stat-value" style="font-size: 1.6rem; display: flex; align-items: baseline; gap: 6px;">
-                <span>{{ $gpa ?? 'N/A' }}</span>
-                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">(Hệ 4)</span>
-            </p>
-            <p class="stat-sub">Xếp loại: <b>{{ $ranking ?? 'N/A' }}</b></p>
-        </article>
-        <article class="stat-card">
-            <h2 class="stat-label"><i class="fa-solid fa-book" style="color:#10b981; margin-right:4px;"></i> Tín chỉ tích lũy</h2>
-            <p class="stat-value">{{ $earned_credits ?? '0' }} <span style="font-size:0.8rem; font-weight:400; color:#94a3b8">tín chỉ</span></p>
-        </article>
-        <article class="stat-card">
-            <h2 class="stat-label"><i class="fa-solid fa-calendar-week" style="color:#f59e0b; margin-right:4px;"></i> Học kỳ hiện tại</h2>
-            <p class="stat-value" style="font-size: 1.35rem; display: flex; align-items: baseline; gap: 6px;">
-                <span>{{ $current_credits ?? '0' }}</span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">tín chỉ</span>
-                <span style="font-size: 1rem; color: #e2e8f0; font-weight: 300;">|</span>
-                <span>{{ $current_subjects_count ?? '0' }}</span>
-                <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">môn học</span>
-            </p>
-            <p class="stat-sub">Học kỳ II · 2025–2026</p>
-        </article>
-        <article class="stat-card">
-            <h2 class="stat-label"><i class="fa-solid fa-clock" style="color:#ef4444; margin-right:4px;"></i> Tiết học hôm nay</h2>
-            <p class="stat-value">{{ count($todaySchedules) }} <span style="font-size:0.8rem; font-weight:400; color:#94a3b8">môn học</span></p>
-            <p class="stat-sub">
-                @if(count($todaySchedules) > 0)
-                    Lên lớp: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
+            <div
+                style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">
+                Trang chủ Sinh viên</div>
+            <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
+            <p>
+                @if (count($todaySchedules) > 0)
+                    Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
                 @else
-                    Nghỉ ngơi vui vẻ!
+                    Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
                 @endif
             </p>
-        </article>
-    </section>
+        </section>
 
-    <section class="news-section" aria-labelledby="news-heading">
-        <div class="section-header">
-            <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
-                tức & Thông báo</h2>
-            <a href="#">Xem tất cả →</a>
-        </div>
-
-        <div class="news-list">
-            <article class="news-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg" alt="Trường Đại học Mỏ - Địa chất" class="news-thumb"
-                    loading="lazy">
-                <div class="news-body">
-                    <div class="news-meta">
-                        <span class="news-tag">Đào tạo</span>
-                        <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                            07/05/2026</time>
-                    </div>
-                    <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
-                            tết</a></h3>
-                    <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
-                        tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
-                </div>
+        <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
+            <article class="stat-card">
+                <h2 class="stat-label"><i class="fa-solid fa-graduation-cap" style="color:#2563eb; margin-right:4px;"></i>
+                    Điểm trung bình (GPA)</h2>
+                <p class="stat-value" style="font-size: 1.6rem; display: flex; align-items: baseline; gap: 6px;">
+                    <span>{{ $gpa ?? 'N/A' }}</span>
+                    <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">(Hệ 4)</span>
+                </p>
+                <p class="stat-sub">Xếp loại: <b>{{ $ranking ?? 'N/A' }}</b></p>
             </article>
-
-            <article class="news-item">
-                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600" alt="Danh sách học bổng" class="news-thumb"
-                    loading="lazy">
-                <div class="news-body">
-                    <div class="news-meta">
-                        <span class="news-tag">Học bổng</span>
-                        <time datetime="2026-05-05"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                            05/05/2026</time>
-                    </div>
-                    <h3><a href="#">Công bố danh sách sinh viên nhận học bổng khuyến khích học tập HK1 năm học
-                            2025-2026</a></h3>
-                    <p class="news-desc">Chúc mừng 120 sinh viên khoa CNTT đã đạt thành tích xuất sắc. Chi tiết mức
-                        hưởng và thời gian nhận tiền vui lòng xem trong file đính kèm.</p>
-                </div>
+            <article class="stat-card">
+                <h2 class="stat-label"><i class="fa-solid fa-book" style="color:#10b981; margin-right:4px;"></i> Tín chỉ
+                    tích lũy</h2>
+                <p class="stat-value">{{ $earned_credits ?? '0' }} <span
+                        style="font-size:0.8rem; font-weight:400; color:#94a3b8">tín chỉ</span></p>
             </article>
-
-            <article class="news-item">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600" alt="Hướng dẫn đăng ký" class="news-thumb"
-                    loading="lazy">
-                <div class="news-body">
-                    <div class="news-meta">
-                        <span class="news-tag">Đào tạo</span>
-                        <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                            01/05/2026</time>
-                    </div>
-                    <h3><a href="#">Hướng dẫn chi tiết quy trình đăng ký môn học qua hệ thống trực tuyến – Kỳ Hè
-                            2026</a></h3>
-                    <p class="news-desc">Cổng đăng ký tín chỉ kỳ Hè sẽ chính thức mở vào lúc 08:00 sáng ngày 10/05. Các
-                        bạn sinh viên chuẩn bị sẵn danh sách mã môn.</p>
-                </div>
+            <article class="stat-card">
+                <h2 class="stat-label"><i class="fa-solid fa-calendar-week" style="color:#f59e0b; margin-right:4px;"></i>
+                    Học kỳ hiện tại</h2>
+                <p class="stat-value" style="font-size: 1.35rem; display: flex; align-items: baseline; gap: 6px;">
+                    <span>{{ $current_credits ?? '0' }}</span>
+                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">tín chỉ</span>
+                    <span style="font-size: 1rem; color: #e2e8f0; font-weight: 300;">|</span>
+                    <span>{{ $current_subjects_count ?? '0' }}</span>
+                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">môn học</span>
+                </p>
+                <p class="stat-sub">Học kỳ II · 2025–2026</p>
             </article>
-            {{-- @endforeach --}}
-        </div>
-    </section>
+            <article class="stat-card">
+                <h2 class="stat-label"><i class="fa-solid fa-clock" style="color:#ef4444; margin-right:4px;"></i> Tiết học
+                    hôm nay</h2>
+                <p class="stat-value">{{ count($todaySchedules) }} <span
+                        style="font-size:0.8rem; font-weight:400; color:#94a3b8">môn học</span></p>
+                <p class="stat-sub">
+                    @if (count($todaySchedules) > 0)
+                        Lên lớp: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
+                    @else
+                        Nghỉ ngơi vui vẻ!
+                    @endif
+                </p>
+            </article>
+        </section>
 
-    <section class="schedule-today" aria-labelledby="schedule-heading">
-        <div class="section-header">
-            <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
-                học hôm nay</h2>
-            <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
-        </div>
-        @forelse($todaySchedules as $item)
-            <div class="schedule-item">
-                <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
-                <div class="schedule-info">
-                    <h4>{{ $item['subject_name'] }}</h4>
-                    <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
-                </div>
+        <section class="news-section" aria-labelledby="news-heading">
+            <div class="section-header">
+                <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
+                    tức & Thông báo</h2>
+                <a href="#">Xem tất cả →</a>
             </div>
-        @empty
-            <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
-                <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
-                Không có môn học nào hôm nay
+
+            <div class="news-list">
+                <article class="news-item">
+                    <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Trường Đại học Mỏ - Địa chất"
+                        class="news-thumb" loading="lazy">
+                    <div class="news-body">
+                        <div class="news-meta">
+                            <span class="news-tag">Đào tạo</span>
+                            <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                                07/05/2026</time>
+                        </div>
+                        <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
+                                tết</a></h3>
+                        <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
+                            tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
+                        loading="lazy">
+                    <div class="news-body">
+                        <div class="news-meta">
+                            <span class="news-tag">Học bổng</span>
+                            <time datetime="2026-05-05"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                                05/05/2026</time>
+                        </div>
+                        <h3><a href="#">Công bố danh sách sinh viên nhận học bổng khuyến khích học tập HK1 năm học
+                                2025-2026</a></h3>
+                        <p class="news-desc">Chúc mừng 120 sinh viên khoa CNTT đã đạt thành tích xuất sắc. Chi tiết mức
+                            hưởng và thời gian nhận tiền vui lòng xem trong file đính kèm.</p>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600"
+                        alt="Hướng dẫn đăng ký" class="news-thumb" loading="lazy">
+                    <div class="news-body">
+                        <div class="news-meta">
+                            <span class="news-tag">Đào tạo</span>
+                            <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                                01/05/2026</time>
+                        </div>
+                        <h3><a href="#">Hướng dẫn chi tiết quy trình đăng ký môn học qua hệ thống trực tuyến – Kỳ Hè
+                                2026</a></h3>
+                        <p class="news-desc">Cổng đăng ký tín chỉ kỳ Hè sẽ chính thức mở vào lúc 08:00 sáng ngày 10/05. Các
+                            bạn sinh viên chuẩn bị sẵn danh sách mã môn.</p>
+                    </div>
+                </article>
+                {{-- @endforeach --}}
             </div>
-        @endforelse
-    </section>
+        </section>
+
+        <section class="schedule-today" aria-labelledby="schedule-heading">
+            <div class="section-header">
+                <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
+                    học hôm nay</h2>
+                <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
+            </div>
+            @forelse($todaySchedules as $item)
+                <div class="schedule-item">
+                    <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
+                    <div class="schedule-info">
+                        <h4>{{ $item['subject_name'] }}</h4>
+                        <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot;
+                            {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
+                    </div>
+                </div>
+            @empty
+                <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
+                    Không có môn học nào hôm nay
+                </div>
+            @endforelse
+        </section>
 
     </main>
 @endsection

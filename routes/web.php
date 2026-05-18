@@ -10,12 +10,21 @@ Route::get('/', function () {
 
 // User Login (Sinh viên, Giảng viên)
 Route::get('/login', function () {
+    if (Auth::check()) {
+        $role = Auth::user()->role_id;
+        if ($role == 2) return redirect()->route('teacher.home');
+        if ($role == 3) return redirect()->route('student.home');
+        if ($role == 1) return redirect()->route('admin.dashboard');
+    }
     return view('user.login');
 })->name('user.login');
 Route::post('/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
 // Admin Login
 Route::get('/admin/login', function () {
+    if (Auth::check() && Auth::user()->role_id == 1) {
+        return redirect()->route('admin.dashboard');
+    }
     return view('admin.login');
 })->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login.post');
@@ -123,28 +132,17 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
 
     Route::get('/schedule', [\App\Http\Controllers\TeacherHomeController::class, 'schedule'])->name('teacher.schedule');
 
-    Route::get('/classes', function () {
-        return view('user.Teacher.class_list');
-    })->name('teacher.classes');
+    Route::get('/classes', [\App\Http\Controllers\TeacherHomeController::class, 'classes'])->name('teacher.classes');
 
-    Route::get('/students', function () {
-        return view('user.Teacher.student_list');
-    })->name('teacher.students');
+    Route::get('/students', [\App\Http\Controllers\TeacherHomeController::class, 'students'])->name('teacher.students');
 
-    Route::get('/attendances', function () {
-        return view('user.Teacher.student_list');
-    })->name('teacher.attendances');
+    Route::get('/attendances', [\App\Http\Controllers\TeacherHomeController::class, 'attendances'])->name('teacher.attendances');
 
-    Route::get('/grades', function () {
-        return view('user.Teacher.grade_list');
-    })->name('teacher.grades');
+    Route::get('/grades', [\App\Http\Controllers\TeacherHomeController::class, 'grades'])->name('teacher.grades');
 
     Route::get('/feedback', function () {
         return view('user.Teacher.feedback');
     })->name('teacher.feedback');
-    Route::get('/grades', function () {
-        return view('user.Teacher.student_list');
-    })->name('teacher.grades');
 });
 
 // Logout
@@ -187,7 +185,7 @@ Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request)
         }
     }
     return response()->json(['success' => true]);
-})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+});
 
 // Kiểm tra trạng thái thanh toán của sinh viên
 Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
