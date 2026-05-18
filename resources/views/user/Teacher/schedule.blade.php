@@ -245,29 +245,305 @@ function renderTimetable() {
             for (let r = 1; r < rowspan; r++) {
                 skipSet.add(`${firstSlotIdx + r}_${day}`);
             }
-        });
-    });
 
-    // Build rows
-    let html = '';
-    let slotIdx = 0;
-    while (slotIdx < SLOTS.length) {
-        const slot = SLOTS[slotIdx];
-        html += `<tr>
+            .toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width:640px) {
+
+            .summary-grid,
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="content-wrapper">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+                <li class="active">Lịch giảng dạy</li>
+            </ol>
+        </nav>
+
+        <main class="schedule-page">
+
+            <section class="page-hero">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">Teacher Academic Portal</div>
+                    <h1 class="hero-title">Lịch Giảng Dạy</h1>
+                    <p class="hero-desc">{{ $teacher->name ?? 'Giảng viên' }} · {{ $teacher->faculty->name ?? '' }}</p>
+                </div>
+                <span class="week-badge" id="semBadge">Tất cả học kỳ</span>
+            </section>
+
+            <section class="summary-grid">
+                <article class="summary-card">
+                    <p class="summary-label">Giảng viên</p>
+                    <p class="summary-value" style="font-size:1.05rem;">{{ $teacher->name ?? '—' }}</p>
+                    <p class="summary-sub">{{ $teacher->faculty->name ?? '—' }}</p>
+                </article>
+                <article class="summary-card">
+                    <p class="summary-label">Tổng lớp phụ trách</p>
+                    <p class="summary-value" id="statClasses">{{ $stats['assigned_classes'] }}</p>
+                    <p class="summary-sub">Lớp hành chính + học phần</p>
+                </article>
+                <article class="summary-card">
+                    <p class="summary-label">Tổng sinh viên</p>
+                    <p class="summary-value" id="statStudents">{{ $stats['total_students'] }}</p>
+                    <p class="summary-sub">Tổng sĩ số các lớp</p>
+                </article>
+                <article class="summary-card">
+                    <p class="summary-label">Bảng điểm chưa chốt</p>
+                    <p class="summary-value" id="statUngraded">{{ $stats['ungraded_schedules'] }}</p>
+                    <p class="summary-sub">Cần rà soát trước khi khoá điểm</p>
+                </article>
+            </section>
+
+            <section class="toolbar">
+                <div class="form-group">
+                    <label for="selSemester">Học kỳ</label>
+                    <select id="selSemester" class="form-control">
+                        <option value="">— Tất cả học kỳ —</option>
+                        @foreach ($semesters as $sem)
+                            <option value="{{ $sem->id }}" {{ $sem->status == 1 ? 'selected' : '' }}>
+                                {{ $sem->name }}{{ $sem->academic_year ? ' – ' . $sem->academic_year : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ngày hiện tại</label>
+                    <div class="form-control" style="background:#f8fafc;color:#64748b;" id="todayLabel"></div>
+                </div>
+                <button type="button" class="btn-filter" onclick="renderTimetable()">
+                    <i class="fa-solid fa-rotate"></i> Cập nhật
+                </button>
+            </section>
+
+            <section class="schedule-card">
+                <header class="schedule-header">
+                    <div>
+                        <h2>Thời khoá biểu chi tiết</h2>
+                        <p>Hiển thị lịch theo buổi học trong tuần</p>
+                    </div>
+                    <span class="week-badge" id="filterLabel">Đang tải...</span>
+                </header>
+                <div class="table-responsive">
+                    <table class="schedule-table" id="timetableEl">
+                        <thead>
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Thứ 2</th>
+                                <th>Thứ 3</th>
+                                <th>Thứ 4</th>
+                                <th>Thứ 5</th>
+                                <th>Thứ 6</th>
+                                <th>Thứ 7</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center;padding:2rem;color:#94a3b8;">Đang tải lịch...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // ── DỮ LIỆU TỪ CONTROLLER ─────────────────────────────────────────────────
+        const ALL_SCHEDULES = @json($schedules);
+
+        // ── ĐỊNH NGHĨA CÁC TIẾT ─────────────────────────────────────────────────
+        const SLOTS = [{
+                id: 1,
+                label: 'Tiết 1',
+                start: '06:45',
+                end: '07:35'
+            },
+            {
+                id: 2,
+                label: 'Tiết 2',
+                start: '07:45',
+                end: '08:35'
+            },
+            {
+                id: 3,
+                label: 'Tiết 3',
+                start: '08:45',
+                end: '09:35'
+            },
+            {
+                id: 4,
+                label: 'Tiết 4',
+                start: '09:45',
+                end: '10:35'
+            },
+            {
+                id: 5,
+                label: 'Tiết 5',
+                start: '10:45',
+                end: '11:35'
+            },
+            {
+                id: 6,
+                label: 'Tiết 6',
+                start: '11:45',
+                end: '12:35'
+            },
+            {
+                id: 7,
+                label: 'Tiết 7',
+                start: '13:30',
+                end: '14:20'
+            },
+            {
+                id: 8,
+                label: 'Tiết 8',
+                start: '14:30',
+                end: '15:20'
+            },
+            {
+                id: 9,
+                label: 'Tiết 9',
+                start: '15:30',
+                end: '16:20'
+            },
+            {
+                id: 10,
+                label: 'Tiết 10',
+                start: '16:30',
+                end: '17:20'
+            },
+            {
+                id: 11,
+                label: 'Tiết 11',
+                start: '17:30',
+                end: '18:20'
+            },
+            {
+                id: 12,
+                label: 'Tiết 12',
+                start: '18:30',
+                end: '19:20'
+            },
+            {
+                id: 13,
+                label: 'Tiết 13',
+                start: '19:30',
+                end: '20:20'
+            }
+
+        ];
+
+        // Ngày trong tuần: index 2=Thứ 2 ... 7=Thứ 7
+        const DAYS = [2, 3, 4, 5, 6, 7];
+
+        // ── HÀM TIỆN ÍCH ─────────────────────────────────────────────────────────
+        function toMinutes(hhmm) {
+            if (!hhmm) return 0;
+            const [h, m] = hhmm.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function findFirstSlot(startTime) {
+            const t = toMinutes(startTime);
+            for (let i = 0; i < SLOTS.length; i++) {
+                const slotStart = toMinutes(SLOTS[i].start);
+                const slotEnd = toMinutes(SLOTS[i].end);
+                // Nếu giờ bắt đầu nằm trong hoặc trước khi slot kết thúc
+                if (t <= slotEnd + 5) return i; // +5 phút dung sai
+            }
+            return 0;
+        }
+
+        function findLastSlot(endTime) {
+            const t = toMinutes(endTime);
+            for (let i = SLOTS.length - 1; i >= 0; i--) {
+                if (toMinutes(SLOTS[i].end) <= t + 5) return i;
+            }
+            return 0;
+        }
+
+        function escHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ── RENDER TIMETABLE ───────────────────────────────────────────────────────
+        function renderTimetable() {
+            const semId = document.getElementById('selSemester').value;
+            const semText = document.getElementById('selSemester').selectedOptions[0]?.text ?? '';
+
+            // Lọc theo học kỳ
+            const filtered = semId ?
+                ALL_SCHEDULES.filter(s => String(s.semester_id) === String(semId)) :
+                ALL_SCHEDULES;
+
+            document.getElementById('filterLabel').textContent =
+                semId ? semText : `Tất cả — ${filtered.length} lớp`;
+
+            // Build lookup: cell[slotIndex][day] = { schedule, session, rowspan }
+            // rowspan: số tiết môn chiếm
+            // Đánh dấu các ô bị span bởi ô trên -> skip khi render
+
+            const cellMap = {}; // key: `${slotIndex}_${day}` -> data
+            const skipSet = new Set(); // key: `${slotIndex}_${day}` bị span
+
+            filtered.forEach(sch => {
+                sch.sessions.forEach(ss => {
+                    const day = ss.day_of_week;
+                    if (!DAYS.includes(day)) return;
+
+                    const firstSlotIdx = findFirstSlot(ss.start_time);
+                    const lastSlotIdx = findLastSlot(ss.end_time);
+                    const rowspan = Math.max(1, lastSlotIdx - firstSlotIdx + 1);
+                    const key = `${firstSlotIdx}_${day}`;
+
+                    cellMap[key] = {
+                        sch,
+                        ss,
+                        rowspan
+                    };
+
+                    // Đánh dấu các ô phía dưới bị chiếm bởi rowspan
+                    for (let r = 1; r < rowspan; r++) {
+                        skipSet.add(`${firstSlotIdx + r}_${day}`);
+                    }
+                });
+            });
+
+            // Build rows
+            let html = '';
+            let slotIdx = 0;
+            while (slotIdx < SLOTS.length) {
+                const slot = SLOTS[slotIdx];
+                html += `<tr>
             <td class="time-col">${slot.label}<small>${slot.start}–${slot.end}</small></td>`;
 
-        DAYS.forEach(day => {
-            const key = `${slotIdx}_${day}`;
-            if (skipSet.has(key)) {
-                // bị rowspan từ ô trên -> không render td
-                return;
-            }
-            const cell = cellMap[key];
-            if (cell) {
-                const { sch, ss, rowspan } = cell;
-                const ungradedBadge = sch.has_ungraded
-                    ? `<span class="status-badge status-warning">Chưa chốt điểm</span>` : '';
-                html += `<td rowspan="${rowspan}">
+                DAYS.forEach(day => {
+                    const key = `${slotIdx}_${day}`;
+                    if (skipSet.has(key)) {
+                        // bị rowspan từ ô trên -> không render td
+                        return;
+                    }
+                    const cell = cellMap[key];
+                    if (cell) {
+                        const {
+                            sch,
+                            ss,
+                            rowspan
+                        } = cell;
+                        const ungradedBadge = sch.has_ungraded ?
+                            `<span class="status-badge status-warning">Chưa chốt điểm</span>` : '';
+                        html += `<td rowspan="${rowspan}">
                     <article class="teacher-card">
                         <span class="class-code">${escHtml(sch.group_code || `#${sch.id}`)}</span>
                         <div class="subject-title">${escHtml(sch.subject_name)}</div>
@@ -284,37 +560,38 @@ function renderTimetable() {
                         </div>
                     </article>
                 </td>`;
-            } else {
-                html += `<td><div class="empty-slot">—</div></td>`;
+                    } else {
+                        html += `<td><div class="empty-slot">—</div></td>`;
+                    }
+                });
+
+                html += `</tr>`;
+
+                // Chèn nghỉ trưa sau tiết 6
+                if (slotIdx === 5) {
+                    html +=
+                        `<tr class="break-row"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> Nghỉ trưa (12:00 – 13:00)</td></tr>`;
+                }
+
+                slotIdx++;
             }
-        });
 
-        html += `</tr>`;
-
-        // Chèn nghỉ trưa sau tiết 6
-        if (slotIdx === 5) {
-            html += `<tr class="break-row"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> Nghỉ trưa (12:00 – 13:00)</td></tr>`;
+            document.getElementById('timetableBody').innerHTML = html;
         }
 
-        slotIdx++;
-    }
+        // ── KHỞI TẠO ──────────────────────────────────────────────────────────────
+        const DAYS_VI = ['', '', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+        const now = new Date();
+        const jsDay = now.getDay(); // 0=CN,1=Thứ2,...
+        const dayLabel = jsDay === 0 ? 'Chủ nhật' : `Thứ ${jsDay + 1}`;
+        document.getElementById('todayLabel').textContent =
+            `${dayLabel}, ${now.toLocaleDateString('vi-VN')}`;
 
-    document.getElementById('timetableBody').innerHTML = html;
-}
-
-// ── KHỞI TẠO ──────────────────────────────────────────────────────────────
-const DAYS_VI = ['','','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','Chủ nhật'];
-const now = new Date();
-const jsDay = now.getDay(); // 0=CN,1=Thứ2,...
-const dayLabel = jsDay === 0 ? 'Chủ nhật' : `Thứ ${jsDay + 1}`;
-document.getElementById('todayLabel').textContent =
-    `${dayLabel}, ${now.toLocaleDateString('vi-VN')}`;
-
-// Auto chọn học kỳ đang hoạt động (status=1)
-document.addEventListener('DOMContentLoaded', () => {
-    renderTimetable();
-});
-renderTimetable();
-</script>
+        // Auto chọn học kỳ đang hoạt động (status=1)
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimetable();
+        });
+        renderTimetable();
+    </script>
 
 @endsection

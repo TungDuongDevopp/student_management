@@ -418,14 +418,8 @@
                     <h4>{{ $item['subject_name'] }}</h4>
                     <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
                 </div>
-            </div>
-        @empty
-            <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
-                <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
-                Không có môn học nào hôm nay
-            </div>
-        @endforelse
-    </section>
+            @endforelse
+        </section>
 
     </main>
 @endsection

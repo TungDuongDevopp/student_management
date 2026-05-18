@@ -19,11 +19,15 @@
     .sl-table th { padding:0.75rem 1rem; text-align:left; font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #e2e8f0; background:#f8fafc; }
     .sl-table td { padding:0.65rem 1rem; font-size:0.88rem; color:#334155; border-bottom:1px solid #f1f5f9; }
     .sl-table tbody tr:hover { background:#f8fafc; }
-    .sl-avatar { width:32px; height:32px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; }
-    .sl-name-cell { display:flex; align-items:center; gap:0.75rem; }
+    
+    .sl-avatar { width:36px; height:36px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; text-transform: uppercase; flex-shrink: 0; }
+    .sl-name-cell { display:flex; align-items:center; gap:0.85rem; }
     .sl-name { font-weight:600; color:#1e293b; }
-    .sl-email { font-size:0.78rem; color:#94a3b8; }
-    .sl-badge-active { font-size:0.72rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:600; background:#dcfce7; color:#166534; }
+    .sl-email { font-size:0.8rem; color:#64748b; }
+    .sl-badge-active { font-size:0.75rem; padding:0.25rem 0.6rem; border-radius:6px; font-weight:600; background:#dcfce7; color:#166534; display: inline-block; }
+    
+    .empty-state { text-align: center; padding: 4rem 2rem; background: #fff; color: #64748b; }
+    .empty-state i { font-size: 2.5rem; color: #cbd5e1; margin-bottom: 1rem; display: block; }
 </style>
 
 <div class="sl-wrapper">
@@ -40,67 +44,129 @@
             <h1 class="hero-title"><i class="fa-solid fa-users-viewfinder" style="margin-right:0.5rem;"></i>Danh sách Sinh viên</h1>
         </div>
         <div class="sl-filters">
-            <select>
-                <option>DCCTTPM70A — Lập trình Web nâng cao</option>
-                <option>DCCTTPM70B — Phân tích & thiết kế hệ thống</option>
-                <option>DCCNTT69C — Cơ sở dữ liệu</option>
-                <option>DCCTTPM71A — Lập trình PHP Laravel</option>
+            <select id="classSelector" onchange="window.location.href=this.value">
+                <option value="">-- Chọn danh sách lớp --</option>
+                @if($classRooms->count() > 0)
+                    <optgroup label="Lớp hành chính">
+                        @foreach($classRooms as $c)
+                            <option value="{{ route('teacher.students', ['class_id' => $c->id]) }}" 
+                                {{ request('class_id') == $c->id ? 'selected' : '' }}>
+                                {{ $c->name }}
+                            </option>
+                        @endforeach
+                    </optgroup>
+                @endif
+
+                @if($schedules->count() > 0)
+                    <optgroup label="Lớp học phần">
+                        @foreach($schedules as $s)
+                            <option value="{{ route('teacher.students', ['schedule_id' => $s->id]) }}"
+                                {{ request('schedule_id') == $s->id ? 'selected' : '' }}>
+                                {{ $s->subject->name ?? 'Môn học' }} (Nhóm {{ $s->group_code ?? $s->id }})
+                            </option>
+                        @endforeach
+                    </optgroup>
+                @endif
             </select>
-            <input type="text" placeholder="Tìm sinh viên..." style="width:200px;">
+            <input type="text" id="searchInput" placeholder="Tìm sinh viên..." style="width:200px;" onkeyup="filterTable()">
         </div>
     </div>
 
-    <div class="sl-card">
-        <div class="sl-card-header">
-            <h2>DCCTTPM70A — Lập trình Web nâng cao</h2>
-            <div class="sl-stats">
-                <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng: 65</span>
-                <span class="sl-stat" style="background:#dcfce7; color:#166534;">Đang học: 65</span>
+    @if($currentClass || $currentSchedule)
+        <div class="sl-card">
+            <div class="sl-card-header">
+                <h2>{{ $title }}</h2>
+                <div class="sl-stats">
+                    <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng số: {{ $students->count() }} SV</span>
+                    <span class="sl-stat" style="background:#dcfce7; color:#166534;"><i class="fa-solid fa-check-circle"></i> Đang học: {{ $students->count() }}</span>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="sl-table" id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">STT</th>
+                            <th>Họ và tên</th>
+                            <th>Mã SV</th>
+                            <th>Email</th>
+                            <th>Lớp hành chính</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($students as $idx => $sv)
+                            @php
+                                // Get initials from name (e.g. "Nguyễn Văn An" -> "NA")
+                                $words = explode(' ', trim($sv->name));
+                                $initials = '';
+                                if(count($words) > 0) {
+                                    $firstWord = $words[0];
+                                    $lastWord = end($words);
+                                    $initials = mb_substr($firstWord, 0, 1) . (count($words) > 1 ? mb_substr($lastWord, 0, 1) : '');
+                                }
+                            @endphp
+                            <tr>
+                                <td style="font-weight:600; color:#94a3b8; text-align: center;">{{ $idx + 1 }}</td>
+                                <td>
+                                    <div class="sl-name-cell">
+                                        <div class="sl-avatar">{{ $initials ?: 'SV' }}</div>
+                                        <span class="sl-name">{{ $sv->name }}</span>
+                                    </div>
+                                </td>
+                                <td style="font-weight:600;">{{ $sv->code }}</td>
+                                <td><span class="sl-email">{{ $sv->email }}</span></td>
+                                <td>{{ $sv->class_name }}</td>
+                                <td><span class="sl-badge-active">{{ $sv->status }}</span></td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fa-solid fa-user-xmark"></i>
+                                        <p>Không có sinh viên nào trong danh sách này.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-        <table class="sl-table">
-            <thead>
-                <tr>
-                    <th style="width:50px">STT</th>
-                    <th>Họ và tên</th>
-                    <th>Mã SV</th>
-                    <th>Email</th>
-                    <th>Lớp hành chính</th>
-                    <th>Trạng thái</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                $students = [
-                    ['name'=>'Nguyễn Văn An','code'=>'SV001','email'=>'sv001@student.humg.edu.vn','class'=>'DCCNTT70A','i'=>'NA'],
-                    ['name'=>'Trần Thị Bình','code'=>'SV002','email'=>'sv002@student.humg.edu.vn','class'=>'DCCNTT70A','i'=>'TB'],
-                    ['name'=>'Lê Hoàng Cường','code'=>'SV003','email'=>'sv003@student.humg.edu.vn','class'=>'DCCTPM70A','i'=>'LC'],
-                    ['name'=>'Phạm Minh Đức','code'=>'SV004','email'=>'sv004@student.humg.edu.vn','class'=>'DCCTPM70A','i'=>'MĐ'],
-                    ['name'=>'Hoàng Thị Em','code'=>'SV005','email'=>'sv005@student.humg.edu.vn','class'=>'DCCNTT70B','i'=>'HE'],
-                    ['name'=>'Vũ Quốc Phong','code'=>'SV006','email'=>'sv006@student.humg.edu.vn','class'=>'DCCNTT70A','i'=>'QP'],
-                    ['name'=>'Đặng Thị Giang','code'=>'SV007','email'=>'sv007@student.humg.edu.vn','class'=>'DCCTPM70A','i'=>'TG'],
-                    ['name'=>'Bùi Văn Hải','code'=>'SV008','email'=>'sv008@student.humg.edu.vn','class'=>'DCCNTT70B','i'=>'VH'],
-                    ['name'=>'Ngô Thị Lan','code'=>'SV009','email'=>'sv009@student.humg.edu.vn','class'=>'DCCTPM70A','i'=>'TL'],
-                    ['name'=>'Dương Tuấn Kiệt','code'=>'SV010','email'=>'sv010@student.humg.edu.vn','class'=>'DCCNTT70A','i'=>'TK'],
-                ];
-                @endphp
-                @foreach($students as $idx => $sv)
-                <tr>
-                    <td style="font-weight:600; color:#94a3b8;">{{ $idx + 1 }}</td>
-                    <td>
-                        <div class="sl-name-cell">
-                            <div class="sl-avatar">{{ $sv['i'] }}</div>
-                            <span class="sl-name">{{ $sv['name'] }}</span>
-                        </div>
-                    </td>
-                    <td style="font-weight:600;">{{ $sv['code'] }}</td>
-                    <td><span class="sl-email">{{ $sv['email'] }}</span></td>
-                    <td>{{ $sv['class'] }}</td>
-                    <td><span class="sl-badge-active">Đang học</span></td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+    @else
+        <div class="sl-card">
+            <div class="empty-state">
+                <i class="fa-solid fa-layer-group"></i>
+                <p>Vui lòng chọn một lớp hành chính hoặc lớp học phần từ danh sách phía trên.</p>
+            </div>
+        </div>
+    @endif
 </div>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("studentsTable");
+        if(!table) return;
+        
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) { // Skip header row
+            let tdName = tr[i].getElementsByTagName("td")[1];
+            let tdCode = tr[i].getElementsByTagName("td")[2];
+            
+            if (tdName || tdCode) {
+                let nameValue = tdName.textContent || tdName.innerText;
+                let codeValue = tdCode.textContent || tdCode.innerText;
+                
+                if (nameValue.toUpperCase().indexOf(filter) > -1 || codeValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }       
+        }
+    }
+</script>
 @endsection
