@@ -28,19 +28,20 @@
     .sheet-header p { margin:.25rem 0 0;font-size:.82rem;color:#64748b; }
 
     .sheet-table { width:100%;min-width:900px;border-collapse:collapse;table-layout:fixed; }
-    .sheet-table th { background:#eff6ff;color:#1e40af;font-weight:700;font-size:.78rem;text-transform:uppercase;padding:.85rem;border:1px solid #bfdbfe;text-align:center; }
-    .sheet-table td { border:1px solid #f1f5f9;height:120px;vertical-align:top;padding:.5rem;background:#fff; }
-    .time-col { background:#f8fafc!important;width:90px;text-align:center!important;vertical-align:middle!important;font-weight:800;color:#475569;border:1px solid #e2e8f0!important;font-size:.8rem; }
-    .time-col small { display:block;margin-top:.2rem;font-size:.65rem;color:#94a3b8;font-weight:500; }
+    .sheet-table th { background:#eff6ff;color:#1e40af;font-weight:700;font-size:.7rem;text-transform:uppercase;padding:.35rem;border:1px solid #bfdbfe;text-align:center; }
+    .sheet-table td { border:1px solid #f1f5f9;height:34px !important;vertical-align:top;padding:2px !important;background:#fff; }
+    .time-col { background:#f8fafc!important;width:80px;text-align:center!important;vertical-align:middle!important;font-weight:800;color:#475569;border:1px solid #e2e8f0!important;font-size:.7rem; }
+    .time-col small { display:block;margin-top:0px;font-size:.58rem;color:#94a3b8;font-weight:500; }
 
-    .course-card { height:100%;background:#eff6ff;border-left:4px solid #2563eb;border-radius:6px;padding:.65rem;display:flex;flex-direction:column;gap:.3rem;transition:.2s ease; }
-    .course-card:hover { background:#dbeafe;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.15); }
-    .course-code { font-size:.65rem;color:#2563eb;font-weight:800;text-transform:uppercase; }
-    .course-name { font-size:.83rem;font-weight:700;color:#1e40af;line-height:1.3; }
-    .course-info { font-size:.72rem;color:#64748b;display:flex;align-items:center;gap:.35rem; }
-    .room-tag { margin-top:auto;display:inline-block;background:#2563eb;color:#fff;font-size:.65rem;padding:.18rem .45rem;border-radius:4px;font-weight:700;width:fit-content; }
-    .empty-slot { height:100%;display:flex;align-items:center;justify-content:center;color:#e2e8f0;font-size:.75rem; }
-    .lunch-break td { background:#f8fafc!important;text-align:center;padding:.4rem;font-size:.75rem;font-weight:700;color:#94a3b8;letter-spacing:.1em; }
+    .course-card { height:100%;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;padding:2px 4px;display:flex;flex-direction:column;gap:0px;transition:.15s ease; box-sizing:border-box; overflow:hidden; }
+    .course-card:hover { background:#dbeafe;transform:translateY(-1px);box-shadow:0 2px 6px rgba(37,99,235,.1); }
+    .course-code { font-size:.55rem;color:#2563eb;font-weight:800;text-transform:uppercase;line-height:1; }
+    .course-name { font-size:.7rem;font-weight:700;color:#1e40af;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .course-info { font-size:.6rem;color:#64748b;display:flex;align-items:center;gap:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1; }
+    .course-info i { font-size:.55rem; }
+    .room-tag { margin-top:auto;display:inline-block;background:#2563eb;color:#fff;font-size:.55rem;padding:0px 2px;border-radius:2px;font-weight:700;width:fit-content;line-height:1; }
+    .empty-slot { height:100%;display:flex;align-items:center;justify-content:center;color:#f1f5f9;font-size:.65rem; }
+    .lunch-break td { background:#f8fafc!important;text-align:center;padding:.15rem !important;font-size:.68rem;font-weight:700;color:#94a3b8;letter-spacing:.05em;height:20px !important; }
     .table-responsive { width:100%;overflow-x:auto; }
 
     @media(max-width:1024px){ .toolbar{grid-template-columns:1fr 1fr;} }

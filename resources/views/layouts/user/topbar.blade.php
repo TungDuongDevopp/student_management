@@ -4,16 +4,6 @@
         <button class="topbar-toggle" onclick="toggleSidebar()" title="Thu gọn menu">
             <i class="fa-solid fa-bars"></i>
         </button>
-
-        <div class="topbar-breadcrumb">
-            @if (Auth::check() && Auth::user()->student)
-                <a href="{{ route('student.home') }}"><i class="fa-solid fa-house"></i></a>
-            @elseif(Auth::check() && Auth::user()->teacher)
-                <a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i></a>
-            @endif
-            <i class="fa-solid fa-angle-right"></i>
-            <span>@yield('title', 'Trang chủ')</span>
-        </div>
     </div>
 
     <div class="topbar-right">

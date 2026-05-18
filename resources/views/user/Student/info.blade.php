@@ -14,7 +14,7 @@
         }
 
         .profile-header {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             border-radius: 8px;
             padding: 2rem;
             color: #fff;
@@ -248,8 +248,15 @@
     </style>
 
     <main class="info-container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li><a href="{{ route('student.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+                <li class="active">Thông tin cá nhân</li>
+            </ol>
+        </nav>
         <section class="profile-header">
-            <img src="{{ $student?->images ? asset('storage/' . $student->images) : asset('images/default-avatar.png') }}"
+            <img src="{{ $student?->images ? asset('storage/' . $student->images) : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256' }}"
                 alt="Avatar" class="profile-avatar">
             <div class="profile-main">
                 <h1>{{ $student?->name ?? (auth()->user()->username ?? 'N/A') }}</h1>
