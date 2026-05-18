@@ -47,34 +47,23 @@
 </style>
 
 @php
-$student_code = 'SV001';
-$student_name = 'Nguyễn Văn An';
-$semester = 'Học kỳ 2 - 2025-2026';
-$credits = 11; // tổng tín đang học
-$price_per_credit = 500000; // VND
-$total_fee = $credits * $price_per_credit;
-$paid = 2500000;
+$student_code = $student->student_code ?? 'SV001';
+$student_name = $student->name ?? 'Sinh viên';
+$semester = $activeSemester->name ?? 'Học kỳ';
+
+$price_per_credit = $student->classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
+$total_fee = $tuition->total_amount ?? 0;
+$paid = $tuition->paid_amount ?? 0;
 $remaining = $total_fee - $paid;
 
 $bank_name = 'MB Bank';
 $bank_account = '0388123456';
 $bank_owner = 'TRUONG DAI HOC MO DIA CHAT';
-$transfer_content = 'HOCPHI '.$student_code.' HK2-2025';
+$transfer_content = 'HOCPHI '.$student_code.' '.$activeSemester->id;
 
 // VietQR URL
 $amount_encoded = $remaining;
 $qr_url = "https://img.vietqr.io/image/MB-{$bank_account}-compact2.jpg?amount={$amount_encoded}&addInfo=".urlencode($transfer_content)."&accountName=".urlencode($bank_owner);
-
-$subjects_fee = [
-    ['IT3010','Lập trình Web nâng cao',3,1500000,'paid'],
-    ['IT3020','Cơ sở dữ liệu nâng cao',3,1500000,'partial'],
-    ['IT3030','Kiến trúc máy tính',2,1000000,'unpaid'],
-    ['IT3040','Lập trình PHP Laravel',3,1500000,'unpaid'],
-];
-
-$history = [
-    ['15/03/2026','Chuyển khoản MB Bank','2.500.000đ','HOCPHI SV001 HK2-2025','Thành công'],
-];
 @endphp
 
 <div class="tf-wrap">
@@ -91,12 +80,16 @@ $history = [
             <h1 class="hero-title"><i class="fa-solid fa-credit-card" style="margin-right:8px;"></i>ĐÓNG HỌC PHÍ</h1>
             <p class="hero-desc">Xem chi tiết học phí, lịch sử giao dịch và thực hiện quét mã thanh toán trực tuyến</p>
         </div>
-        <span class="sem-badge">Học Kỳ Kỳ này – Đang mở</span>
+        <span class="sem-badge">{{ $semester }} – Đang mở</span>
     </section>
 
     @if($remaining > 0)
     <div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:10px; padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:#991b1b; font-weight:600;">
-        <i class="fa-solid fa-clock"></i> Còn <b>{{ number_format($remaining,0,',','.') }}đ</b> chưa thanh toán. Hạn nộp: <b>31/05/2026</b>. Quá hạn sẽ bị khóa tài khoản học tập.
+        <i class="fa-solid fa-clock"></i> Còn <b>{{ number_format($remaining,0,',','.') }}đ</b> chưa thanh toán. Quá hạn sẽ bị khóa tài khoản học tập.
+    </div>
+    @else
+    <div style="background:#dcfce7; border:1px solid #86efac; border-radius:10px; padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:#166534; font-weight:600;">
+        <i class="fa-solid fa-circle-check"></i> Chúc mừng! Bạn đã hoàn thành nghĩa vụ đóng học phí cho học kỳ này.
     </div>
     @endif
 
@@ -106,7 +99,7 @@ $history = [
             <div class="tf-card" style="margin-bottom:1.25rem;">
                 <div class="tf-card-head">
                     <h3>Chi tiết học phí theo môn</h3>
-                    <span style="font-size:0.78rem; color:#64748b;">{{ $price_per_credit ? number_format($price_per_credit,0,',','.') : 0 }}đ/tín chỉ</span>
+                    <span style="font-size:0.78rem; color:#64748b;">{{ number_format($price_per_credit,0,',','.') }}đ/tín chỉ</span>
                 </div>
                 <table class="tf-table">
                     <thead>
@@ -118,22 +111,41 @@ $history = [
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($subjects_fee as $s)
+                        @forelse($enrollments as $e)
+                        @php
+                            $subject = $e->schedule->subject ?? null;
+                            if (!$subject) continue;
+                            $subjectFee = $subject->credits * $price_per_credit;
+                            
+                            // Trạng thái thanh toán của môn học
+                            // Nhập 1 phát hết luôn toàn bộ môn:
+                            if ($paid >= $total_fee) {
+                                $status = 'paid';
+                            } elseif ($paid == 0) {
+                                $status = 'unpaid';
+                            } else {
+                                $status = 'partial';
+                            }
+                        @endphp
                         <tr>
                             <td>
-                                <div style="font-weight:600; color:#1e293b;">{{ $s[1] }}</div>
-                                <div style="font-size:0.72rem; color:#94a3b8;">{{ $s[0] }}</div>
+                                <div style="font-weight:600; color:#1e293b;">{{ $subject->name }}</div>
+                                <div style="font-size:0.72rem; color:#94a3b8;">{{ $subject->id }}</div>
                             </td>
-                            <td style="text-align:center;">{{ $s[2] }}</td>
-                            <td>{{ number_format($s[3],0,',','.') }}đ</td>
+                            <td style="text-align:center;">{{ $subject->credits }}</td>
+                            <td style="text-align:right;">{{ number_format($subjectFee,0,',','.') }}đ</td>
                             <td style="text-align:center;">
-                                @if($s[4]=='paid') <span class="status-pill s-paid">✓ Đã đóng</span>
-                                @elseif($s[4]=='partial') <span class="status-pill s-partial">⚡ Đóng 1 phần</span>
+                                @if($status=='paid') <span class="status-pill s-paid">✓ Đã đóng</span>
+                                @elseif($status=='partial') <span class="status-pill s-partial">⚡ Đóng 1 phần</span>
                                 @else <span class="status-pill s-unpaid">✗ Chưa đóng</span>
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" style="text-align:center; color:#94a3b8; padding: 2rem;">Chưa đăng ký môn học nào trong học kỳ này.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <div class="tf-total">
@@ -156,15 +168,19 @@ $history = [
                 <table class="tf-table">
                     <thead><tr><th style="text-align:left;">Ngày</th><th style="text-align:left;">Hình thức</th><th>Số tiền</th><th style="text-align:left;">Nội dung</th><th style="text-align:center;">Trạng thái</th></tr></thead>
                     <tbody>
-                        @foreach($history as $h)
+                        @forelse($payments as $p)
                         <tr>
-                            <td>{{ $h[0] }}</td>
-                            <td>{{ $h[1] }}</td>
-                            <td style="color:#16a34a; font-weight:700;">{{ $h[2] }}</td>
-                            <td style="font-size:0.78rem; color:#64748b;">{{ $h[3] }}</td>
-                            <td style="text-align:center;"><span class="status-pill s-paid">✓ {{ $h[4] }}</span></td>
+                            <td>{{ $p->created_at->format('d/m/Y H:i') }}</td>
+                            <td>Chuyển khoản Ngân hàng</td>
+                            <td style="color:#16a34a; font-weight:700;">{{ number_format($p->amount,0,',','.') }}đ</td>
+                            <td style="font-size:0.78rem; color:#64748b;">HOCPHI {{ $student_code }} {{ $activeSemester->id }}</td>
+                            <td style="text-align:center;"><span class="status-pill s-paid">✓ Thành công</span></td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="5" style="text-align:center; color:#94a3b8; padding:1.5rem;">Chưa có giao dịch thanh toán nào được thực hiện.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -177,7 +193,7 @@ $history = [
                 <p>Tự động điền thông tin — Không cần nhập tay</p>
             </div>
 
-            <div class="qr-img-wrap">
+            <div class="qr-img-wrap" style="background:#fff; @if($remaining <= 0) opacity: 0.3; pointer-events: none; @endif">
                 <img src="{{ $qr_url }}" alt="QR Code học phí" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode('MBBANK '.$bank_account.' '.$transfer_content.' '.$remaining) }}'">
             </div>
 
@@ -198,10 +214,12 @@ $history = [
                     <span class="bval" style="font-size:0.78rem;">{{ $bank_owner }}</span>
                 </div>
                 <div class="bank-row">
-                    <span class="bkey">Số tiền</span>
+                    <span class="bkey">Số tiền cần đóng</span>
                     <span class="bval" style="color:#ef4444; font-size:1rem;">
                         {{ number_format($remaining,0,',','.') }}đ
+                        @if($remaining > 0)
                         <button class="copy-btn" onclick="copyText('{{ $remaining }}', this)">Copy</button>
+                        @endif
                     </span>
                 </div>
                 <div class="bank-row" style="align-items:flex-start;">
@@ -225,8 +243,12 @@ $history = [
                 <span style="font-size:0.78rem; color:#166534; font-weight:600;">Hệ thống đang theo dõi thanh toán tự động (SePay)</span>
             </div>
 
-            <button class="pay-btn" onclick="checkPaymentStatus()">
+            <button class="pay-btn" onclick="checkPaymentStatus()" @if($remaining <= 0) disabled style="background:#64748b; cursor:not-allowed;" @endif>
+                @if($remaining <= 0)
+                ✅ Đã hoàn thành đóng học phí
+                @else
                 <i class="fa-solid fa-rotate"></i> Kiểm tra trạng thái thanh toán
+                @endif
             </button>
         </div>
     </div>
@@ -255,13 +277,16 @@ function checkPaymentStatus() {
     // Gọi API kiểm tra
     fetch('/api/payment/check', {
         method: 'POST',
-        headers: {'Content-Type':'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content || ''},
+        headers: {
+            'Content-Type':'application/json', 
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content || ''
+        },
         body: JSON.stringify({student_code: '{{ $student_code }}'})
     })
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            btn.innerHTML = '✅ Đã thanh toán!';
+            btn.innerHTML = '✅ Đã thanh toán thành công!';
             btn.style.background = '#16a34a';
             setTimeout(() => location.reload(), 1500);
         } else {

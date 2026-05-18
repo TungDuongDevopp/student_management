@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Enrollment;
 use App\Models\Tuition;
 use App\Models\Semester;
+use App\Models\News;
 
 class StudentHomeController extends Controller
 {
@@ -164,7 +165,13 @@ class StudentHomeController extends Controller
             ];
         }
 
-        return view('user.Student.home', array_merge($stats, ['todaySchedules' => $todaySchedules]));
+        $news = News::where('is_published', true)
+            ->whereIn('target_audience', ['student', 'all'])
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('user.Student.home', array_merge($stats, ['todaySchedules' => $todaySchedules, 'news' => $news]));
     }
 
     public function info()
@@ -249,35 +256,41 @@ class StudentHomeController extends Controller
             if ($sub->id % 3 == 0) $type = 'cn';
             elseif ($sub->id % 2 == 0) $type = 'tc';
 
-            // Find first session
-            $session = $s->sessions->first();
-            $day = $session ? $session->day_of_week : null;
-            
-            // Map start_time to period_start (1 to 12)
-            $period_start = 1;
-            if ($session && $session->start_time) {
-                $time = substr($session->start_time, 0, 5);
-                $periodsMap = [
-                    '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4, '10:25' => 5, '11:15' => 6,
-                    '13:00' => 7, '13:50' => 8, '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
-                ];
-                $period_start = $periodsMap[$time] ?? 1;
+            $mappedSessions = [];
+            foreach ($s->sessions as $session) {
+                if ($session && $session->start_time) {
+                    $time = substr($session->start_time, 0, 5);
+                    $endTime = substr($session->end_time ?? '', 0, 5);
+                    $periodsMap = [
+                        '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4, '10:25' => 5, '11:15' => 6,
+                        '13:00' => 7, '13:50' => 8, '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
+                    ];
+                    $endPeriodsMap = [
+                        '07:45' => 1, '08:35' => 2, '09:25' => 3, '10:20' => 4, '11:10' => 5, '12:00' => 6,
+                        '13:45' => 7, '14:35' => 8, '15:25' => 9, '16:20' => 10, '17:10' => 11, '18:00' => 12
+                    ];
+                    
+                    $startPeriod = $periodsMap[$time] ?? 1;
+                    $endPeriod = $endPeriodsMap[$endTime] ?? ($startPeriod + 1);
+                    
+                    $mappedSessions[] = [
+                        'day' => $session->day_of_week,
+                        'period' => $startPeriod,
+                        'duration' => max(1, $endPeriod - $startPeriod + 1)
+                    ];
+                }
             }
 
-            // period_count: typically 3
-            $period_count = 3;
-
             $subjects[] = [
-                $sub->id,                  // code/id
+                $s->id,                    // schedule_id instead of subject code for uniqueness
                 $sub->name,                // name
                 $sub->credits,             // credits
                 $type,                     // type (bb, tc, cn)
-                $day,                      // day (2-8)
-                $period_start,             // period_start
-                $period_count,             // period_count
+                $mappedSessions,           // array of sessions instead of single day/period
                 $s->max_capacity,          // max
                 $s->current_capacity,      // cur
-                null                       // prereq
+                null,                      // prereq
+                $sub->id                   // subject_code
             ];
         }
 
@@ -368,8 +381,49 @@ class StudentHomeController extends Controller
     {
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        $stats = $this->getStudentStats($account->student);
-        return view('user.Student.tuition_fee', $stats);
+        $student = $account->student;
+        $stats = $this->getStudentStats($student);
+
+        // Lấy học kỳ hiện tại đang active
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+
+        // Lấy tất cả môn học đã đăng ký trong học kỳ active này
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->whereHas('schedule', function ($q) use ($activeSemester) {
+                $q->where('semester_id', $activeSemester->id);
+            })
+            ->with(['schedule.subject'])
+            ->get();
+
+        // Tìm bản ghi Công nợ học phí thực tế
+        $tuition = Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id ?? 1)
+            ->first();
+
+        // Nếu chưa tồn tại, khởi tạo một bản ghi động
+        if (!$tuition && $student) {
+            $feePerCredit = $student->classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
+            $totalCredits = $enrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
+            if ($totalCredits == 0) $totalCredits = 15; // Mặc định nếu chưa học môn nào
+            
+            $tuition = Tuition::create([
+                'student_id' => $student->id,
+                'semester_id' => $activeSemester->id ?? 1,
+                'total_amount' => $totalCredits * $feePerCredit,
+                'paid_amount' => 0
+            ]);
+        }
+
+        // Lấy lịch sử giao dịch từ bảng payments liên kết
+        $payments = $tuition ? \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get() : collect();
+
+        return view('user.Student.tuition_fee', array_merge($stats, [
+            'student' => $student,
+            'activeSemester' => $activeSemester,
+            'enrollments' => $enrollments,
+            'tuition' => $tuition,
+            'payments' => $payments
+        ]));
     }
 
     public function feedback()

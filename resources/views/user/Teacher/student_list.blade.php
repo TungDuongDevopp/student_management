@@ -2,22 +2,22 @@
 @section('title', 'Danh sách Sinh viên')
 @section('content')
 <style>
-    .sl-wrapper { max-width:1200px; font-family: 'Inter', sans-serif; color: #334155; }
-    .sl-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
-    .sl-header h1 { font-size:1.5rem; font-weight:800; color:#0f172a; margin:0; }
-    .sl-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; }
-    .sl-filters select, .sl-filters input { padding:0.5rem 0.75rem; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; background:#fff; color:#1e293b; outline: none; transition: border-color 0.2s; }
-    .sl-filters select:focus, .sl-filters input:focus { border-color: #3b82f6; }
-    .sl-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-    .sl-card-header { padding:1.25rem 1.5rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 1rem; }
-    .sl-card-header h2 { font-size:1.1rem; font-weight:700; color:#1e293b; margin:0; line-height: 1.4; }
-    .sl-stats { display:flex; gap:0.75rem; flex-wrap: wrap; }
-    .sl-stat { font-size:0.78rem; padding:0.35rem 0.75rem; border-radius:6px; font-weight:600; background:#eff6ff; color:#2563eb; display: flex; align-items: center; gap: 6px; }
-    
-    .table-responsive { width: 100%; overflow-x: auto; }
-    .sl-table { width:100%; border-collapse:collapse; min-width: 800px; }
-    .sl-table th { padding:0.85rem 1.25rem; text-align:left; font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #e2e8f0; background:#f1f5f9; white-space: nowrap; }
-    .sl-table td { padding:0.75rem 1.25rem; font-size:0.88rem; color:#334155; border-bottom:1px solid #f1f5f9; vertical-align: middle; }
+    .sl-wrapper { max-width:1200px; }
+    .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.5rem 1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem; }
+    .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+    .hero-content { position:relative;z-index:1; }
+    .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
+    .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
+    .sl-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; position:relative; z-index:1; }
+    .sl-filters select, .sl-filters input { padding:0.5rem 0.75rem; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; background:#fff; color:#1e293b; }
+    .sl-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; }
+    .sl-card-header { padding:1rem 1.25rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; }
+    .sl-card-header h2 { font-size:1rem; font-weight:700; color:#1e293b; margin:0; }
+    .sl-stats { display:flex; gap:0.75rem; }
+    .sl-stat { font-size:0.78rem; padding:0.3rem 0.65rem; border-radius:6px; font-weight:600; background:#eff6ff; color:#2563eb; }
+    .sl-table { width:100%; border-collapse:collapse; }
+    .sl-table th { padding:0.75rem 1rem; text-align:left; font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #e2e8f0; background:#f8fafc; }
+    .sl-table td { padding:0.65rem 1rem; font-size:0.88rem; color:#334155; border-bottom:1px solid #f1f5f9; }
     .sl-table tbody tr:hover { background:#f8fafc; }
     
     .sl-avatar { width:36px; height:36px; border-radius:50%; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; text-transform: uppercase; flex-shrink: 0; }
@@ -31,8 +31,18 @@
 </style>
 
 <div class="sl-wrapper">
-    <div class="sl-header">
-        <h1><i class="fa-solid fa-users-viewfinder" style="color:#2563eb; margin-right:0.5rem;"></i>Danh sách Sinh viên</h1>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+            <li class="active">Danh sách Sinh viên</li>
+        </ol>
+    </nav>
+    <div class="page-hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Teacher Academic Portal</div>
+            <h1 class="hero-title"><i class="fa-solid fa-users-viewfinder" style="margin-right:0.5rem;"></i>Danh sách Sinh viên</h1>
+        </div>
         <div class="sl-filters">
             <select id="classSelector" onchange="window.location.href=this.value">
                 <option value="">-- Chọn danh sách lớp --</option>

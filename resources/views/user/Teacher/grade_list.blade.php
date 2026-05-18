@@ -3,9 +3,12 @@
 @section('content')
 <style>
     .gr-wrapper { max-width:1200px; }
-    .gr-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem; }
-    .gr-header h1 { font-size:1.5rem; font-weight:800; color:#0f172a; margin:0; }
-    .gr-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; }
+    .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.5rem 1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem; }
+    .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+    .hero-content { position:relative;z-index:1; }
+    .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
+    .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
+    .gr-filters { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; position:relative; z-index:1; }
     .gr-filters select { padding:0.5rem 0.75rem; border:1px solid #e2e8f0; border-radius:8px; font-size:0.85rem; background:#fff; color:#1e293b; }
     .gr-card { background:#fff; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; }
     .gr-card-header { padding:1rem 1.25rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
@@ -34,8 +37,18 @@
 </style>
 
 <div class="gr-wrapper">
-    <div class="gr-header">
-        <h1><i class="fa-solid fa-marker" style="color:#2563eb; margin-right:0.5rem;"></i>Nhập & Cập nhật điểm</h1>
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+            <li class="active">Nhập & Cập nhật điểm</li>
+        </ol>
+    </nav>
+    <div class="page-hero">
+        <div class="hero-content">
+            <div class="hero-eyebrow">Teacher Academic Portal</div>
+            <h1 class="hero-title"><i class="fa-solid fa-marker" style="margin-right:0.5rem;"></i>Nhập & Cập nhật điểm</h1>
+        </div>
         <div class="gr-filters">
             <select>
                 <option>DCCTTPM70A — Lập trình Web nâng cao</option>
@@ -61,48 +74,46 @@
                     <th style="width:50px">STT</th>
                     <th>Họ và tên</th>
                     <th style="width:80px">Mã SV</th>
-                    <th style="width:70px">CC (10%)</th>
-                    <th style="width:70px">BT (10%)</th>
-                    <th style="width:70px">GK (30%)</th>
-                    <th style="width:70px">CK (50%)</th>
-                    <th style="width:75px">TB (10)</th>
+                    <th style="width:90px">Điểm C (10%)</th>
+                    <th style="width:90px">Điểm B (30%)</th>
+                    <th style="width:90px">Điểm A (60%)</th>
+                    <th style="width:75px">Tổng kết</th>
                 </tr>
             </thead>
             <tbody>
                 @php
                 $gradeData = [
-                    ['name'=>'Nguyễn Văn An','code'=>'SV001','cc'=>8,'bt'=>7,'gk'=>6.5,'ck'=>7.0],
-                    ['name'=>'Trần Thị Bình','code'=>'SV002','cc'=>9,'bt'=>8.5,'gk'=>7.0,'ck'=>8.0],
-                    ['name'=>'Lê Hoàng Cường','code'=>'SV003','cc'=>7,'bt'=>6,'gk'=>5.0,'ck'=>4.5],
-                    ['name'=>'Phạm Minh Đức','code'=>'SV004','cc'=>10,'bt'=>9,'gk'=>8.5,'ck'=>9.0],
-                    ['name'=>'Hoàng Thị Em','code'=>'SV005','cc'=>6,'bt'=>5,'gk'=>4.0,'ck'=>3.5],
-                    ['name'=>'Vũ Quốc Phong','code'=>'SV006','cc'=>8,'bt'=>7.5,'gk'=>7.0,'ck'=>6.5],
-                    ['name'=>'Đặng Thị Giang','code'=>'SV007','cc'=>9,'bt'=>8,'gk'=>8.0,'ck'=>7.5],
-                    ['name'=>'Bùi Văn Hải','code'=>'SV008','cc'=>7,'bt'=>6.5,'gk'=>5.5,'ck'=>6.0],
-                    ['name'=>'Ngô Thị Lan','code'=>'SV009','cc'=>10,'bt'=>9.5,'gk'=>9.0,'ck'=>8.5],
-                    ['name'=>'Dương Tuấn Kiệt','code'=>'SV010','cc'=>5,'bt'=>4,'gk'=>3.5,'ck'=>3.0],
+                    ['name'=>'Nguyễn Văn An','code'=>'SV001','c'=>8,'b'=>6.5,'a'=>7.0],
+                    ['name'=>'Trần Thị Bình','code'=>'SV002','c'=>9,'b'=>7.0,'a'=>8.0],
+                    ['name'=>'Lê Hoàng Cường','code'=>'SV003','c'=>7,'b'=>5.0,'a'=>4.5],
+                    ['name'=>'Phạm Minh Đức','code'=>'SV004','c'=>10,'b'=>8.5,'a'=>9.0],
+                    ['name'=>'Hoàng Thị Em','code'=>'SV005','c'=>6,'b'=>4.0,'a'=>3.5],
+                    ['name'=>'Vũ Quốc Phong','code'=>'SV006','c'=>8,'b'=>7.0,'a'=>6.5],
+                    ['name'=>'Đặng Thị Giang','code'=>'SV007','c'=>9,'b'=>8.0,'a'=>7.5],
+                    ['name'=>'Bùi Văn Hải','code'=>'SV008','c'=>7,'b'=>5.5,'a'=>6.0],
+                    ['name'=>'Ngô Thị Lan','code'=>'SV009','c'=>10,'b'=>9.0,'a'=>8.5],
+                    ['name'=>'Dương Tuấn Kiệt','code'=>'SV010','c'=>5,'b'=>3.5,'a'=>3.0],
                 ];
                 @endphp
                 @foreach($gradeData as $idx => $sv)
                 @php
-                    $avg = round($sv['cc']*0.1 + $sv['bt']*0.1 + $sv['gk']*0.3 + $sv['ck']*0.5, 1);
+                    $avg = round($sv['c']*0.1 + $sv['b']*0.3 + $sv['a']*0.6, 1);
                     $pass = $avg >= 4.0;
                 @endphp
                 <tr>
                     <td style="font-weight:600; color:#94a3b8;">{{ $idx + 1 }}</td>
                     <td style="font-weight:600; color:#1e293b;">{{ $sv['name'] }}</td>
                     <td style="font-weight:600;">{{ $sv['code'] }}</td>
-                    <td><input type="number" class="gr-input" value="{{ $sv['cc'] }}" min="0" max="10" step="0.5"></td>
-                    <td><input type="number" class="gr-input" value="{{ $sv['bt'] }}" min="0" max="10" step="0.5"></td>
-                    <td><input type="number" class="gr-input" value="{{ $sv['gk'] }}" min="0" max="10" step="0.5"></td>
-                    <td><input type="number" class="gr-input" value="{{ $sv['ck'] }}" min="0" max="10" step="0.5"></td>
+                    <td><input type="number" class="gr-input" value="{{ $sv['c'] }}" min="0" max="10" step="0.5"></td>
+                    <td><input type="number" class="gr-input" value="{{ $sv['b'] }}" min="0" max="10" step="0.5"></td>
+                    <td><input type="number" class="gr-input" value="{{ $sv['a'] }}" min="0" max="10" step="0.5"></td>
                     <td class="gr-avg {{ $pass ? 'pass' : 'fail' }}">{{ $avg }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
         <div class="gr-footer">
-            <span class="gr-note"><i class="fa-solid fa-info-circle"></i> CC = Chuyên cần · BT = Bài tập · GK = Giữa kỳ · CK = Cuối kỳ</span>
+            <span class="gr-note"><i class="fa-solid fa-info-circle"></i> Điểm C = Chuyên cần/Quá trình · Điểm B = Giữa kỳ · Điểm A = Cuối kỳ thi</span>
             <div class="gr-actions">
                 <button class="gr-btn gr-btn-draft"><i class="fa-solid fa-floppy-disk"></i> Lưu nháp</button>
                 <button class="gr-btn gr-btn-save"><i class="fa-solid fa-check"></i> Lưu điểm</button>

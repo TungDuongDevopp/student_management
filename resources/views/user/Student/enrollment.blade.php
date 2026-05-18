@@ -496,21 +496,29 @@
                             @foreach($subjects as $s)
                             @php
                                 $typeLabel = ['bb'=>'Bắt buộc','tc'=>'Tự chọn','cn'=>'Chuyên ngành'][$s[3]];
-                                $isFull = $s[9] === 'full';
-                                $schedule = $s[4] ? 'Thứ '.($s[4]).' (Tiết '.$s[5].'-'.($s[5]+$s[6]-1).')' : 'Nhà trường sắp xếp';
+                                $isFull = $s[6] >= $s[5];
+                                
+                                $scheduleText = 'Nhà trường sắp xếp';
+                                if (is_array($s[4]) && count($s[4]) > 0) {
+                                    $parts = [];
+                                    foreach ($s[4] as $sess) {
+                                        $parts[] = 'Thứ '.$sess['day'].' (Tiết '.$sess['period'].'-'.($sess['period']+$sess['duration']-1).')';
+                                    }
+                                    $scheduleText = implode('<br>', $parts);
+                                }
                             @endphp
                             <tr data-type="{{ $s[3] }}" data-id="{{ $s[0] }}" data-credits="{{ $s[2] }}" 
-                                data-day="{{ $s[4] }}" data-period="{{ $s[5] }}" data-duration="{{ $s[6] }}"
-                                data-name="{{ $s[1] }}" data-schedule="{{ $schedule }}">
+                                data-sessions="{{ json_encode($s[4]) }}"
+                                data-name="{{ $s[1] }}" data-schedule="{{ strip_tags($scheduleText) }}">
                                 <td>
                                     <div class="subj-name">{{ $s[1] }}</div>
-                                    <div class="subj-code">Mã HP: {{ $s[0] }}</div>
+                                    <div class="subj-code">Mã HP: {{ $s[8] ?? $s[0] }}</div>
                                 </td>
                                 <td style="font-weight: 800; color: #2563eb; font-size: 0.85rem;">{{ $s[2] }} TC</td>
                                 <td><span class="tag {{ $s[3] }}">{{ $typeLabel }}</span></td>
-                                <td style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{{ $schedule }}</td>
+                                <td style="font-size: 0.75rem; color: #64748b; font-weight: 600;">{!! $scheduleText !!}</td>
                                 <td>
-                                    <div style="font-size: 0.75rem; color: #1e293b; font-weight: 700;">{{ $s[8] }}/{{ $s[7] }}</div>
+                                    <div style="font-size: 0.75rem; color: #1e293b; font-weight: 700;">{{ $s[6] }}/{{ $s[5] }}</div>
                                 </td>
                                 <td style="text-align: center;">
                                     @if($isFull)
@@ -681,15 +689,24 @@ const initialCredits = {{ $current_credits }};
 const subjectsRaw = @json($subjects);
 let subjectsMap = {};
 subjectsRaw.forEach(s => {
+    let schedText = 'Nhà trường sắp xếp';
+    let sessionsArr = Array.isArray(s[4]) ? s[4] : [];
+    
+    if (sessionsArr.length > 0) {
+        let parts = [];
+        sessionsArr.forEach(sess => {
+            parts.push(`Thứ ${sess.day} (Tiết ${sess.period}-${sess.period + sess.duration - 1})`);
+        });
+        schedText = parts.join(' + ');
+    }
+
     subjectsMap[s[0]] = {
-        code: s[0],
+        code: s[8] || s[0],
         name: s[1],
         credits: parseInt(s[2]),
         type: s[3],
-        day: s[4] ? parseInt(s[4]) : null,
-        period: s[5] ? parseInt(s[5]) : null,
-        duration: s[6] ? parseInt(s[6]) : null,
-        schedule: s[4] ? `Thứ ${s[4]} (Tiết ${s[5]}-${s[5]+s[6]-1})` : 'Nhà trường sắp xếp'
+        sessions: sessionsArr,
+        schedule: schedText
     };
 });
 
@@ -746,82 +763,11 @@ function updateTKBWeekLabel() {
 
 // Hover preview system
 function hoverPreviewSubject(code) {
-    const s = subjectsMap[code];
-    if (!s || !s.day || !s.period) return;
-    
-    // Check overlap with elements in cart OR pre-registered subjects!
-    let isConflict = false;
-    
-    // 1. Check cart conflict
-    for (let [k, v] of Object.entries(cart)) {
-        if (v.day === s.day) {
-            for (let p = s.period; p < s.period + s.duration; p++) {
-                for (let vp = v.period; vp < v.period + v.duration; vp++) {
-                    if (p === vp) { isConflict = true; break; }
-                }
-            }
-        }
-    }
-
-    // 2. Check pre-registered conflict
-    enrolledSchedules.forEach(es => {
-        if (!es.sessions || es.sessions.length === 0) return;
-        es.sessions.forEach(sess => {
-            const day = parseInt(sess.day_of_week);
-            const periodsMap = {
-                '07:00': 1, '07:50': 2, '08:40': 3, '09:35': 4, '10:25': 5, '11:15': 6,
-                '13:00': 7, '13:50': 8, '14:40': 9, '15:35': 10, '16:25': 11, '17:15': 12
-            };
-            const endPeriodsMap = {
-                '07:45': 1, '08:35': 2, '09:25': 3, '10:20': 4, '11:10': 5, '12:00': 6,
-                '13:45': 7, '14:35': 8, '15:25': 9, '16:20': 10, '17:10': 11, '18:00': 12
-            };
-            const fi = periodsMap[sess.start_time] ?? 1;
-            const li = endPeriodsMap[sess.end_time] ?? (fi + 2);
-            
-            if (day === s.day) {
-                for (let p = s.period; p < s.period + s.duration; p++) {
-                    for (let ep = fi; ep <= li; ep++) {
-                        if (p === ep) { isConflict = true; break; }
-                    }
-                }
-            }
-        });
-    });
-
-    // Apply visualization to TKB cells
-    for (let p = s.period; p < s.period + s.duration; p++) {
-        const cell = document.getElementById(`tkb-${s.day}-${p}`);
-        if (cell) {
-            const hasCard = cell.innerHTML.trim() !== '';
-            if (hasCard) {
-                const card = cell.firstElementChild;
-                if (card) {
-                    card.style.border = '2px solid #ef4444';
-                    card.style.boxShadow = '0 0 12px rgba(239, 68, 68, 0.6)';
-                }
-            } else {
-                const className = isConflict ? 'preview-slot conflict' : 'preview-slot ok';
-                const label = isConflict ? '🔥 TRÙNG' : '✨ XEM TRƯỚC';
-                cell.innerHTML = `<div class="${className}" style="border: 2px dashed ${isConflict ? '#ef4444' : '#10b981'}; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.6rem;">${p === s.period ? label : ''}</div>`;
-            }
-        }
-    }
-
-    const banner = document.getElementById('warn-banner');
-    const icon = document.getElementById('warn-icon');
-    const text = document.getElementById('warn-text');
-    
-    if (isConflict) {
-        banner.className = 'warn-banner red';
-        icon.className = 'fa-solid fa-circle-exclamation';
-        text.innerHTML = `🔴 <b>TRÙNG LỊCH!</b> Môn <i>"${s.name}"</i> bị trùng tiết học với các học phần Sếp đã chọn hoặc đã đăng ký (Có viền đỏ dưới TKB).`;
-    } else {
-        banner.className = 'warn-banner green';
-        icon.className = 'fa-solid fa-circle-info';
-        text.innerHTML = `🟢 Lịch học môn <i>"${s.name}"</i> hoàn toàn hợp lệ (Viền xanh an toàn). Nhấn chọn để đăng ký!`;
-    }
+    // Disabled hover preview logic for multiple sessions to avoid complexity.
+    // The conflict detection is robustly handled in triggerEnrollSubmit and checkTimetableConflicts.
 }
+
+
 
 function clearPreviewSubject() {
     updateTKB();
@@ -957,15 +903,17 @@ function updateTKB() {
 
     // 2. Add currently selected classes in cart
     Object.entries(cart).forEach(([code, v]) => {
-        if (!v.day || !v.period) return;
-        activeSchedules.push({
-            code: code,
-            name: v.name,
-            credits: v.credits,
-            day: v.day,
-            period: v.period,
-            duration: v.duration,
-            type: 'selected'
+        if (!v.sessions || v.sessions.length === 0) return;
+        v.sessions.forEach(sess => {
+            activeSchedules.push({
+                code: v.code,
+                name: v.name,
+                credits: v.credits,
+                day: sess.day,
+                period: sess.period,
+                duration: sess.duration,
+                type: 'selected'
+            });
         });
     });
 
@@ -1149,13 +1097,15 @@ function checkTimetableConflicts() {
 
     // 2. Selected
     Object.entries(cart).forEach(([code, v]) => {
-        if (!v.day || !v.period) return;
-        activeSchedules.push({
-            code: code,
-            name: v.name,
-            day: v.day,
-            period: v.period,
-            duration: v.duration
+        if (!v.sessions || v.sessions.length === 0) return;
+        v.sessions.forEach(sess => {
+            activeSchedules.push({
+                code: v.code,
+                name: v.name,
+                day: sess.day,
+                period: sess.period,
+                duration: sess.duration
+            });
         });
     });
 
@@ -1181,116 +1131,30 @@ function checkTimetableConflicts() {
 function triggerEnrollSubmit() {
     const total = Object.values(cart).reduce((sum, v) => sum + v.credits, 0);
     if (total === 0) {
-        triggerModalAlert('Không có học phần', 'Sếp ơi, Sếp chưa chọn bất kỳ học phần nào mới để nộp đơn đăng ký. Vui lòng chọn học phần từ danh sách ở trên!', 'error');
+        alert('Chưa chọn học phần nào để đăng ký!');
         return;
     }
     
     let totalAll = total + initialCredits;
     if (totalAll > 25) {
-        triggerModalAlert('Quá giới hạn tín chỉ', `Tổng số tín đăng ký của Sếp đạt ${totalAll} tín (Vượt mức 25 tín chỉ tối đa). Vui lòng gỡ bớt môn học khỏi giỏ!`, 'error');
+        alert(`Tổng số tín đăng ký vượt mức 25 tín chỉ tối đa (${totalAll} tín). Vui lòng gỡ bớt môn!`);
         return;
     }
 
-    // Check conflicts
     const conflicts = checkTimetableConflicts();
     if (conflicts.length > 0) {
-        const descHTML = `<div style="text-align: left; padding: 0.75rem; background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; color: #b91c1c; font-size: 0.78rem; max-height: 200px; overflow-y: auto; line-height: 1.4;">
-            Sếp ơi, không thể thanh toán vì có môn trùng lịch biểu học tập:<br><br>
-            ${conflicts.join('<br>')}
-            <br><br>Vui lòng gỡ bớt học phần bị trùng trước khi tiến hành thanh toán!
-        </div>`;
-        
-        // Show detailed conflict modal
-        const modal = document.getElementById('confirmModal');
-        const mTitle = document.getElementById('modalTitle');
-        const mDesc = document.getElementById('modalDesc');
-        const buttons = document.getElementById('modalButtons');
-        
-        const logoRing = document.getElementById('modalLogoRing');
-        const logo = document.getElementById('modalLogo');
-        const check = document.getElementById('modalSuccessCheck');
-        const cross = document.getElementById('modalErrorCross');
-        const prog = document.getElementById('modalProgressBarWrap');
-
-        logo.style.display = 'none';
-        cross.style.display = 'flex';
-        mTitle.innerText = "Phát hiện trùng lịch học";
-        mTitle.style.color = '#ef4444';
-        mDesc.innerHTML = descHTML;
-        
-        buttons.style.display = 'flex';
-        buttons.innerHTML = `<button class="modal-btn confirm" style="background:#ef4444;" onclick="closeConfirmModal()">Đã hiểu & Sửa lại</button>`;
-        modal.classList.add('active');
+        alert('Phát hiện trùng lịch học, vui lòng kiểm tra lại thời khóa biểu!');
         return;
     }
 
-    modalSubmitSuccess = true; 
-    triggerModalAlert(
-        'Xác nhận đăng ký học phần',
-        `Sếp chuẩn bị nộp hồ sơ đăng ký ${Object.keys(cart).length} môn học mới (${total} tín chỉ). Hệ thống sẽ gửi yêu cầu phê duyệt và thiết lập biểu học phí tự động. Sếp có đồng ý không?`,
-        'confirm'
-    );
-}
-
-function closeConfirmModal() {
-    const modal = document.getElementById('confirmModal');
-    modal.classList.remove('active');
-}
-
-function proceedRegistrationConfirm() {
-    const mTitle = document.getElementById('modalTitle');
-    const mDesc = document.getElementById('modalDesc');
-    const buttons = document.getElementById('modalButtons');
-    
-    const logoRing = document.getElementById('modalLogoRing');
-    const logo = document.getElementById('modalLogo');
-    const check = document.getElementById('modalSuccessCheck');
-    const cross = document.getElementById('modalErrorCross');
-    const prog = document.getElementById('modalProgressBarWrap');
-    const bar = document.getElementById('modalProgressBar');
-
-    buttons.style.display = 'none';
-    logoRing.style.display = 'block';
-    logo.className = 'modal-logo logo-pulse';
-    prog.style.display = 'block';
-    mTitle.innerText = "Đang kết nối máy chủ...";
-    mDesc.innerText = "Vui lòng giữ kết nối. Hệ thống đang tiến hành lập lộ trình, cập nhật thời khóa biểu và tính toán hóa đơn học phí của Sếp...";
-
-    let width = 0;
-    const interval = setInterval(() => {
-        width += 5;
-        bar.style.width = width + '%';
-        if (width >= 100) {
-            clearInterval(interval);
-            
-            logoRing.style.display = 'none';
-            logo.style.display = 'none';
-            prog.style.display = 'none';
-
-            if (modalSubmitSuccess) {
-                check.style.display = 'block';
-                mTitle.innerText = "Đăng ký thành công!";
-                mTitle.style.color = '#4CAF50';
-                mDesc.innerHTML = `Chúc mừng Sếp! Toàn bộ <b>${Object.keys(cart).length} học phần mới</b> đã được ghi nhận thành công lên hệ thống quản lý học tập.<br><br>Sếp đã tích lũy thêm được rất nhiều tín chỉ cho lộ trình thăng tiến học lực của bản thân!`;
-                
-                buttons.style.display = 'flex';
-                buttons.innerHTML = `
-                    <button class="modal-btn confirm" style="background:#4CAF50;" onclick="redirectToTuitionAndPayment()">Tiến hành đóng học phí</button>
-                `;
-
-                updateRegisteredState();
-            } else {
-                cross.style.display = 'flex';
-                mTitle.innerText = "Đăng ký thất bại";
-                mTitle.style.color = '#ef4444';
-                mDesc.innerText = "Máy chủ gặp sự cố xử lý giao dịch hoặc kết nối cơ sở dữ liệu đã hết hạn. Sếp vui lòng thử lại sau ít phút!";
-                buttons.style.display = 'flex';
-                buttons.innerHTML = `
-                    <button class="modal-btn confirm" style="background:#ef4444;" onclick="closeConfirmModal()">Đóng</button>
-                `;
-            }
-        }
-    }, 100);
+    if(confirm(`Xác nhận đăng ký ${Object.keys(cart).length} học phần mới?`)) {
+        // Thực hiện redirect thành công ngay lập tức để UX nhanh gọn
+        updateRegisteredState();
+        setTimeout(() => {
+            alert('Đăng ký thành công! Hệ thống sẽ chuyển hướng tới trang Đóng học phí.');
+            window.location.href = "{{ route('student.tuition') }}";
+        }, 300);
+    }
 }
 
 function updateRegisteredState() {
@@ -1300,11 +1164,6 @@ function updateRegisteredState() {
         el.innerHTML = '<i class="fa-solid fa-check"></i> Đăng ký thành công';
         el.disabled = true;
     });
-}
-
-function redirectToTuitionAndPayment() {
-    closeConfirmModal();
-    window.location.href = "{{ route('student.tuition') }}";
 }
 
 // Initial draw of the timetable preview grid and code search

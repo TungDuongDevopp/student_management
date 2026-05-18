@@ -53,48 +53,76 @@
         }
 
         .stat-card {
-            background: #fff;
-            border-radius: 6px;
-            padding: 1.25rem 1rem;
-            border-left: 4px solid var(--primary, #2563eb);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .stat-card .stat-label {
-            font-size: 0.72rem;
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #2563eb;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .stat-card:nth-child(2)::before { background: #10b981; }
+        .stat-card:nth-child(3)::before { background: #f59e0b; }
+        .stat-card:nth-child(4)::before { background: #ef4444; }
+
+        .stat-card .stat-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.25rem;
+            opacity: 0.15;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { color: #2563eb; }
+        .stat-card:nth-child(2) .stat-icon { color: #10b981; }
+        .stat-card:nth-child(3) .stat-icon { color: #f59e0b; }
+        .stat-card:nth-child(4) .stat-icon { color: #ef4444; }
+
+        .stat-card .stat-title {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
             color: #64748b;
-            letter-spacing: 0.03em;
-            margin-bottom: 0.4rem;
-            margin-top: 0;
+            letter-spacing: 0.5px;
+            margin: 0 0 0.5rem;
         }
 
         .stat-card .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
+            font-size: 1.75rem;
+            font-weight: 800;
             color: #0f172a;
+            margin: 0 0 0.25rem;
+            line-height: 1.2;
+        }
+
+        .stat-card .stat-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
             margin: 0;
         }
-
-        .stat-card .stat-sub {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-weight: 400;
-            margin-top: 0.15rem;
-            margin-bottom: 0;
-        }
-
-        .stat-card:nth-child(2) {
-            border-left-color: #10b981;
-        }
-
-        .stat-card:nth-child(3) {
-            border-left-color: #f59e0b;
-        }
-
-        .stat-card:nth-child(4) {
-            border-left-color: #ef4444;
+        
+        .stat-card .stat-desc b {
+            color: #334155;
+            font-weight: 600;
         }
 
         .news-section {
@@ -301,140 +329,94 @@
         </nav>
 
         <section class="welcome-banner" aria-label="Lời chào">
-            <div
-                style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">
-                Trang chủ Sinh viên</div>
-            <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
-            <p>
-                @if (count($todaySchedules) > 0)
-                    Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
+        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; opacity: 0.9; margin-bottom: 0.25rem;">Trang chủ Sinh viên</div>
+        <h1>Xin chào Sinh viên, {{ Auth::user()->student?->name ?? (Auth::user()->username ?? 'N/A') }}!</h1>
+        <p>
+            @if(count($todaySchedules) > 0)
+                Hôm nay bạn có <strong>{{ count($todaySchedules) }} môn</strong> cần lên lớp. Chúc bạn học tập hiệu quả!
+            @else
+                Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
+            @endif
+        </p>
+    </section>
+
+    <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <article class="stat-card">
+            <i class="fa-solid fa-graduation-cap stat-icon"></i>
+            <div class="stat-title">Điểm GPA</div>
+            <div class="stat-value">{{ $gpa ?? '0.00' }}</div>
+            <div class="stat-desc">Xếp loại: <b>{{ $ranking ?? 'Chưa xác định' }}</b></div>
+        </article>
+        
+        <article class="stat-card">
+            <i class="fa-solid fa-book stat-icon"></i>
+            <div class="stat-title">Tín chỉ</div>
+            <div class="stat-value">{{ $earned_credits ?? '0' }}</div>
+            <div class="stat-desc">Đã tích lũy</div>
+        </article>
+        
+        <article class="stat-card">
+            <i class="fa-solid fa-calendar-week stat-icon"></i>
+            <div class="stat-title">Môn học</div>
+            <div class="stat-value">{{ $current_subjects_count ?? '0' }}</div>
+            <div class="stat-desc">Học kỳ hiện tại</div>
+        </article>
+        
+        <article class="stat-card">
+            <i class="fa-solid fa-clock stat-icon"></i>
+            <div class="stat-title">Lịch học</div>
+            <div class="stat-value">{{ count($todaySchedules) }}</div>
+            <div class="stat-desc">
+                @if(count($todaySchedules) > 0)
+                    Ca đầu: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
                 @else
-                    Hôm nay bạn không có tiết học nào. Chúc bạn nghỉ ngơi vui vẻ!
+                    Hôm nay nghỉ
                 @endif
-            </p>
-        </section>
-
-        <section class="stats-grid" aria-label="Chỉ số tổng quan" style="margin-top: 1rem; margin-bottom: 1rem;">
-            <article class="stat-card">
-                <h2 class="stat-label"><i class="fa-solid fa-graduation-cap" style="color:#2563eb; margin-right:4px;"></i>
-                    Điểm trung bình (GPA)</h2>
-                <p class="stat-value" style="font-size: 1.6rem; display: flex; align-items: baseline; gap: 6px;">
-                    <span>{{ $gpa ?? 'N/A' }}</span>
-                    <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">(Hệ 4)</span>
-                </p>
-                <p class="stat-sub">Xếp loại: <b>{{ $ranking ?? 'N/A' }}</b></p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label"><i class="fa-solid fa-book" style="color:#10b981; margin-right:4px;"></i> Tín chỉ
-                    tích lũy</h2>
-                <p class="stat-value">{{ $earned_credits ?? '0' }} <span
-                        style="font-size:0.8rem; font-weight:400; color:#94a3b8">tín chỉ</span></p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label"><i class="fa-solid fa-calendar-week" style="color:#f59e0b; margin-right:4px;"></i>
-                    Học kỳ hiện tại</h2>
-                <p class="stat-value" style="font-size: 1.35rem; display: flex; align-items: baseline; gap: 6px;">
-                    <span>{{ $current_credits ?? '0' }}</span>
-                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">tín chỉ</span>
-                    <span style="font-size: 1rem; color: #e2e8f0; font-weight: 300;">|</span>
-                    <span>{{ $current_subjects_count ?? '0' }}</span>
-                    <span style="font-size: 0.72rem; color: #64748b; font-weight: 500;">môn học</span>
-                </p>
-                <p class="stat-sub">Học kỳ II · 2025–2026</p>
-            </article>
-            <article class="stat-card">
-                <h2 class="stat-label"><i class="fa-solid fa-clock" style="color:#ef4444; margin-right:4px;"></i> Tiết học
-                    hôm nay</h2>
-                <p class="stat-value">{{ count($todaySchedules) }} <span
-                        style="font-size:0.8rem; font-weight:400; color:#94a3b8">môn học</span></p>
-                <p class="stat-sub">
-                    @if (count($todaySchedules) > 0)
-                        Lên lớp: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
-                    @else
-                        Nghỉ ngơi vui vẻ!
-                    @endif
-                </p>
-            </article>
-        </section>
-
-        <section class="news-section" aria-labelledby="news-heading">
-            <div class="section-header">
-                <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
-                    tức & Thông báo</h2>
-                <a href="#">Xem tất cả →</a>
             </div>
+        </article>
+    </section>
 
-            <div class="news-list">
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/Lichthi.jpg') }}" alt="Trường Đại học Mỏ - Địa chất"
-                        class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Đào tạo</span>
-                            <time datetime="2026-05-07"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                07/05/2026</time>
-                        </div>
-                        <h3><a href="#">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026 và lịch nghỉ
-                                tết</a></h3>
-                        <p class="news-desc">Phòng Đào tạo thông báo lịch thi dự kiến cho học kỳ 2. Sinh viên vui lòng kiểm
-                            tra và phản hồi nếu có trùng lịch trước ngày 15/05.</p>
-                    </div>
-                </article>
+    <section class="news-section" aria-labelledby="news-heading">
+        <div class="section-header">
+            <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
+                tức & Thông báo</h2>
+            <a href="#">Xem tất cả →</a>
+        </div>
 
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/hoc-bong.jpg') }}" alt="Danh sách học bổng" class="news-thumb"
-                        loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Học bổng</span>
-                            <time datetime="2026-05-05"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                05/05/2026</time>
-                        </div>
-                        <h3><a href="#">Công bố danh sách sinh viên nhận học bổng khuyến khích học tập HK1 năm học
-                                2025-2026</a></h3>
-                        <p class="news-desc">Chúc mừng 120 sinh viên khoa CNTT đã đạt thành tích xuất sắc. Chi tiết mức
-                            hưởng và thời gian nhận tiền vui lòng xem trong file đính kèm.</p>
+        <div class="news-list">
+            @forelse($news ?? [] as $article)
+            <article class="news-item">
+                <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}" alt="{{ $article->title }}" class="news-thumb" loading="lazy">
+                <div class="news-body">
+                    <div class="news-meta">
+                        <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
+                        <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                            {{ $article->created_at->format('d/m/Y') }}</time>
                     </div>
-                </article>
-
-                <article class="news-item">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600"
-                        alt="Hướng dẫn đăng ký" class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Đào tạo</span>
-                            <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                01/05/2026</time>
-                        </div>
-                        <h3><a href="#">Hướng dẫn chi tiết quy trình đăng ký môn học qua hệ thống trực tuyến – Kỳ Hè
-                                2026</a></h3>
-                        <p class="news-desc">Cổng đăng ký tín chỉ kỳ Hè sẽ chính thức mở vào lúc 08:00 sáng ngày 10/05. Các
-                            bạn sinh viên chuẩn bị sẵn danh sách mã môn.</p>
-                    </div>
-                </article>
-                {{-- @endforeach --}}
-            </div>
-        </section>
-
-        <section class="schedule-today" aria-labelledby="schedule-heading">
-            <div class="section-header">
-                <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
-                    học hôm nay</h2>
-                <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
-            </div>
-            @forelse($todaySchedules as $item)
-                <div class="schedule-item">
-                    <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
-                    <div class="schedule-info">
-                        <h4>{{ $item['subject_name'] }}</h4>
-                        <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot;
-                            {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
-                    </div>
+                    <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
+                    <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
                 </div>
+            </article>
             @empty
-                <div style="text-align:center;padding:1.5rem;color:#94a3b8;font-size:.9rem;">
-                    <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem;margin-bottom:.5rem;display:block;"></i>
-                    Không có môn học nào hôm nay
+            <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
+                Chưa có thông báo mới.
+            </div>
+            @endforelse
+        </div>
+    </section>
+
+    <section class="schedule-today" aria-labelledby="schedule-heading">
+        <div class="section-header">
+            <h2 id="schedule-heading"><i class="fa-regular fa-clock" style="margin-right:8px; color:#10b981;"></i>Lịch
+                học hôm nay</h2>
+            <a href="{{ route('student.schedule') }}">Xem toàn bộ lịch →</a>
+        </div>
+        @forelse($todaySchedules as $item)
+            <div class="schedule-item">
+                <span class="schedule-time">{{ $item['start_time'] ?: '--:--' }}</span>
+                <div class="schedule-info">
+                    <h4>{{ $item['subject_name'] }}</h4>
+                    <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
                 </div>
             @endforelse
         </section>

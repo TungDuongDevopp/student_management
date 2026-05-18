@@ -12,89 +12,91 @@
             color: #334155;
         }
 
-        .welcome-banner {
-
-            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
-            border-radius: 8px;
-            padding: 2rem;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-banner::after {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.06);
-            transform: rotate(45deg);
-        }
-
-        .welcome-banner h1 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 0.35rem;
-        }
-
-        .welcome-banner p {
-            font-size: 0.88rem;
-            opacity: 0.85;
-            line-height: 1.5;
-            margin: 0;
-        }
+        .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden; }
+        .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
+        .hero-content { position:relative;z-index:1; }
+        .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
+        .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
+        .hero-desc { margin:.45rem 0 0;font-size:.9rem;opacity:.9;line-height:1.5; }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
-            background: #fff;
-            border-radius: 6px;
-            padding: 1.25rem 1rem;
-            border-left: 4px solid var(--primary, #dc2626);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .stat-card .stat-label {
-            font-size: 0.72rem;
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #dc2626;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .stat-card:nth-child(2)::before { background: #0284c7; }
+        .stat-card:nth-child(3)::before { background: #f59e0b; }
+        .stat-card:nth-child(4)::before { background: #10b981; }
+
+        .stat-card .stat-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.25rem;
+            opacity: 0.15;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { color: #dc2626; }
+        .stat-card:nth-child(2) .stat-icon { color: #0284c7; }
+        .stat-card:nth-child(3) .stat-icon { color: #f59e0b; }
+        .stat-card:nth-child(4) .stat-icon { color: #10b981; }
+
+        .stat-card .stat-title {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
             color: #64748b;
-            letter-spacing: 0.03em;
-            margin-bottom: 0.4rem;
-            margin-top: 0;
+            letter-spacing: 0.5px;
+            margin: 0 0 0.5rem;
         }
 
         .stat-card .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
+            font-size: 1.75rem;
+            font-weight: 800;
             color: #0f172a;
+            margin: 0 0 0.25rem;
+            line-height: 1.2;
+        }
+
+        .stat-card .stat-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
             margin: 0;
         }
-
-        .stat-card .stat-sub {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-weight: 400;
-            margin-top: 0.15rem;
-            margin-bottom: 0;
-        }
-
-        .stat-card:nth-child(2) {
-            border-left-color: #0284c7;
-        }
-
-        .stat-card:nth-child(3) {
-            border-left-color: #f59e0b;
-        }
-
-        .stat-card:nth-child(4) {
-            border-left-color: #10b981;
+        
+        .stat-card .stat-desc b {
+            color: #334155;
+            font-weight: 600;
         }
 
         /* Tin tức & Lịch dạy (Tái sử dụng CSS Sinh viên) */
@@ -285,16 +287,63 @@
 
     <main class="home-container">
 
-        <section class="welcome-banner" aria-label="Lời chào">
-            <h1>Xin chào Giảng viên, {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Giảng viên') }}!</h1>
-            <p>
-                @if (count($todaySchedules) > 0)
-                    Hôm nay bạn có <strong>{{ count($todaySchedules) }} lớp</strong> cần giảng dạy. Chúc bạn một buổi lên
-                    lớp hiệu quả!
-                @else
-                    Hôm nay bạn không có lớp dạy nào. Chúc bạn nghỉ ngơi vui vẻ!
-                @endif
-            </p>
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li><a href="{{ route('teacher.home') }}"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li class="separator"><i class="fa-solid fa-angle-right"></i></li>
+                <li class="active">Tổng quan</li>
+            </ol>
+        </nav>
+
+        <section class="welcome-banner page-hero" aria-label="Lời chào">
+            <div class="hero-content">
+                <div class="hero-eyebrow">Teacher Academic Portal</div>
+                <h1 class="hero-title" style="margin-bottom: 0.35rem;">Xin chào Giảng viên, {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Giảng viên') }}!</h1>
+                <p class="hero-desc">
+                    @if (count($todaySchedules) > 0)
+                        Hôm nay bạn có <strong>{{ count($todaySchedules) }} lớp</strong> cần giảng dạy. Chúc bạn một buổi lên
+                        lớp hiệu quả!
+                    @else
+                        Hôm nay bạn không có lớp dạy nào. Chúc bạn nghỉ ngơi vui vẻ!
+                    @endif
+                </p>
+            </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Chỉ số giảng dạy">
+            <article class="stat-card">
+                <i class="fa-solid fa-chalkboard-user stat-icon"></i>
+                <div class="stat-title">Lớp giảng dạy</div>
+                <div class="stat-value">{{ $stats['assigned_classes'] ?? 0 }}</div>
+                <div class="stat-desc">Học kỳ hiện tại</div>
+            </article>
+            
+            <article class="stat-card">
+                <i class="fa-solid fa-users stat-icon"></i>
+                <div class="stat-title">Sinh viên</div>
+                <div class="stat-value">{{ $stats['total_students'] ?? 0 }}</div>
+                <div class="stat-desc">Đang quản lý</div>
+            </article>
+            
+            <article class="stat-card">
+                <i class="fa-solid fa-clock stat-icon"></i>
+                <div class="stat-title">Lịch học hôm nay</div>
+                <div class="stat-value">{{ count($todaySchedules) }}</div>
+                <div class="stat-desc">
+                    @if(count($todaySchedules) > 0)
+                        Ca đầu: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
+                    @else
+                        Hôm nay trống tiết
+                    @endif
+                </div>
+            </article>
+            
+            <article class="stat-card">
+                <i class="fa-solid fa-clipboard-check stat-icon"></i>
+                <div class="stat-title">Lớp chưa điểm</div>
+                <div class="stat-value">{{ $stats['ungraded_schedules'] ?? 0 }}</div>
+                <div class="stat-desc">Chưa chốt điểm CK</div>
+            </article>
         </section>
 
         <section class="news-section" aria-labelledby="news-heading">
@@ -304,48 +353,24 @@
                 <a href="#">Xem tất cả →</a>
             </div>
             <div class="news-list">
+                @forelse($news ?? [] as $article)
                 <article class="news-item">
-                    <img src="{{ asset('storage/images/news/Anhhopkhoa.jpg') }}" alt="Họp khoa" class="news-thumb"
-                        loading="lazy">
+                    <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}" alt="{{ $article->title }}" class="news-thumb" loading="lazy">
                     <div class="news-body">
                         <div class="news-meta">
-                            <span class="news-tag">Công tác</span>
-                            <time datetime="2026-05-10"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                10/05/2026</time>
+                            <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
+                            <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                                {{ $article->created_at->format('d/m/Y') }}</time>
                         </div>
-                        <h3><a href="#">Giấy mời họp giao ban khoa Công nghệ Thông tin tháng 5</a></h3>
-                        <p class="news-desc">Kính mời toàn thể cán bộ, giảng viên khoa CNTT tham dự buổi họp giao ban định
-                            kỳ để tổng kết công tác giảng dạy giữa kỳ.</p>
+                        <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
+                        <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
                     </div>
                 </article>
-                <article class="news-item">
-                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=400&fit=crop"
-                        alt="Nhập điểm" class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">Giáo vụ</span>
-                            <time datetime="2026-05-08"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                08/05/2026</time>
-                        </div>
-                        <h3><a href="#">Hạn chót nhập điểm giữa kỳ lên hệ thống Quản lý đào tạo</a></h3>
-                        <p class="news-desc">Phòng Giáo vụ nhắc nhở các thầy cô hoàn thành việc chấm thi và nhập điểm thành
-                            phần cho sinh viên trước 24h00 ngày 15/05.</p>
-                    </div>
-                </article>
-                <article class="news-item">
-                    <img src="{{ asset('storage/images/news/Anhnghiencuusv.jpg') }}" alt="Nghiên cứu khoa học"
-                        class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">NCKH</span>
-                            <time datetime="2026-05-01"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                01/05/2026</time>
-                        </div>
-                        <h3><a href="#">Thông báo đăng ký đề tài Nghiên cứu khoa học cấp trường năm 2026</a></h3>
-                        <p class="news-desc">Nhà trường mở cổng đăng ký đề tài NCKH cho cán bộ giảng viên. Các nhóm nghiên
-                            cứu nộp thuyết minh đề cương theo biểu mẫu đính kèm.</p>
-                    </div>
-                </article>
+                @empty
+                <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
+                    Chưa có thông báo mới.
+                </div>
+                @endforelse
             </div>
         </section>
 
