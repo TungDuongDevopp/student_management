@@ -9,7 +9,7 @@ class Enrollment extends Model
     protected $fillable = [
         'student_id',
         'schedule_id',
-        'enrollment_receipt_id',
+        'tuition_id',
         'status'
     ];
 
@@ -33,8 +33,8 @@ class Enrollment extends Model
         return $this->hasOne(Grade::class);
     }
 
-    public function receipt()
+    public function tuition()
     {
-        return $this->belongsTo(EnrollmentReceipt::class, 'enrollment_receipt_id');
+        return $this->belongsTo(Tuition::class, 'tuition_id');
     }
 }
