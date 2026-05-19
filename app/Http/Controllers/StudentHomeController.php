@@ -55,8 +55,8 @@ class StudentHomeController extends Controller
             }
 
             // Tính điểm
-            if ($enrollment->final_score !== null) {
-                $score10 = $enrollment->final_score;
+            if ($enrollment->grade?->final_score !== null) {
+                $score10 = $enrollment->grade->final_score;
                 $credits = $subject->credits;
 
                 // Quy đổi hệ 10 sang hệ 4
@@ -211,7 +211,7 @@ class StudentHomeController extends Controller
                         'group_code'   => $s->group_code ?? '',
                         'teacher_name' => $s->teacher?->name ?? '—',
                         'room'         => $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : '—',
-                        'final_score'  => $enrollment->final_score,
+                        'final_score'  => $enrollment->grade?->final_score,
                         'sessions'     => $s->sessions->map(fn($ss) => [
                             'day_of_week' => $ss->day_of_week,
                             'start_time'  => substr($ss->start_time ?? '', 0, 5),
@@ -255,39 +255,8 @@ class StudentHomeController extends Controller
             $mappedSessions = [];
             foreach ($s->sessions as $session) {
                 if ($session && $session->start_time) {
-                    $time = substr($session->start_time, 0, 5);
-                    $endTime = substr($session->end_time ?? '', 0, 5);
-                    $periodsMap = [
-                        '07:00' => 1,
-                        '07:50' => 2,
-                        '08:40' => 3,
-                        '09:35' => 4,
-                        '10:25' => 5,
-                        '11:15' => 6,
-                        '13:00' => 7,
-                        '13:50' => 8,
-                        '14:40' => 9,
-                        '15:35' => 10,
-                        '16:25' => 11,
-                        '17:15' => 12
-                    ];
-                    $endPeriodsMap = [
-                        '07:45' => 1,
-                        '08:35' => 2,
-                        '09:25' => 3,
-                        '10:20' => 4,
-                        '11:10' => 5,
-                        '12:00' => 6,
-                        '13:45' => 7,
-                        '14:35' => 8,
-                        '15:25' => 9,
-                        '16:20' => 10,
-                        '17:10' => 11,
-                        '18:00' => 12
-                    ];
-
-                    $startPeriod = $periodsMap[$time] ?? 1;
-                    $endPeriod = $endPeriodsMap[$endTime] ?? ($startPeriod + 1);
+                    $startPeriod = $this->parseTimeSlot($session->start_time);
+                    $endPeriod = $session->end_time ? $this->parseTimeSlot($session->end_time, true) : ($startPeriod + 1);
 
                     $mappedSessions[] = [
                         'day' => $session->day_of_week,
@@ -557,21 +526,8 @@ class StudentHomeController extends Controller
             $mappedSessions = [];
             foreach ($s->sessions as $session) {
                 if ($session && $session->start_time) {
-                    $time = substr($session->start_time, 0, 5);
-                    $endTime = substr($session->end_time ?? '', 0, 5);
-                    $periodsMap = [
-                        '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4,
-                        '10:25' => 5, '11:15' => 6, '13:00' => 7, '13:50' => 8,
-                        '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
-                    ];
-                    $endPeriodsMap = [
-                        '07:45' => 1, '08:35' => 2, '09:25' => 3, '10:20' => 4,
-                        '11:10' => 5, '12:00' => 6, '13:45' => 7, '14:35' => 8,
-                        '15:25' => 9, '16:20' => 10, '17:10' => 11, '18:00' => 12
-                    ];
-
-                    $startPeriod = $periodsMap[$time] ?? 1;
-                    $endPeriod = $endPeriodsMap[$endTime] ?? ($startPeriod + 1);
+                    $startPeriod = $this->parseTimeSlot($session->start_time);
+                    $endPeriod = $session->end_time ? $this->parseTimeSlot($session->end_time, true) : ($startPeriod + 1);
 
                     $mappedSessions[] = [
                         'day' => $session->day_of_week,
@@ -595,5 +551,48 @@ class StudentHomeController extends Controller
         }
         
         return response()->json(['success' => true, 'subjects' => $subjects]);
+    }
+
+    private function parseTimeSlot($timeStr, $isEnd = false)
+    {
+        if (!$timeStr) return 1;
+        $slots = [
+            ['start' => '06:45', 'end' => '07:35'],
+            ['start' => '07:45', 'end' => '08:35'],
+            ['start' => '08:45', 'end' => '09:35'],
+            ['start' => '09:45', 'end' => '10:35'],
+            ['start' => '10:45', 'end' => '11:35'],
+            ['start' => '12:30', 'end' => '13:20'],
+            ['start' => '13:30', 'end' => '14:20'],
+            ['start' => '14:30', 'end' => '15:20'],
+            ['start' => '15:30', 'end' => '16:20'],
+            ['start' => '16:30', 'end' => '17:20'],
+            ['start' => '17:30', 'end' => '18:20'],
+            ['start' => '18:30', 'end' => '19:20'],
+            ['start' => '19:30', 'end' => '20:20'],
+        ];
+
+        $p = explode(':', substr($timeStr, 0, 5));
+        $tm = (intval($p[0] ?? 0) * 60) + intval($p[1] ?? 0);
+
+        if (!$isEnd) {
+            foreach ($slots as $idx => $slot) {
+                $sp = explode(':', $slot['end']);
+                $endTm = (intval($sp[0]) * 60) + intval($sp[1]);
+                if ($tm <= $endTm + 5) {
+                    return $idx + 1;
+                }
+            }
+            return 1;
+        } else {
+            for ($i = count($slots) - 1; $i >= 0; $i--) {
+                $sp = explode(':', $slots[$i]['end']);
+                $endTm = (intval($sp[0]) * 60) + intval($sp[1]);
+                if ($endTm <= $tm + 5) {
+                    return $i + 1;
+                }
+            }
+            return 1;
+        }
     }
 }

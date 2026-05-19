@@ -928,6 +928,45 @@
         // Load initial data
         let cart = {};
 
+        // TKB Slots Configuration
+        const TKB_SLOTS = [
+            { id: 1, start: '06:45', end: '07:35' },
+            { id: 2, start: '07:45', end: '08:35' },
+            { id: 3, start: '08:45', end: '09:35' },
+            { id: 4, start: '09:45', end: '10:35' },
+            { id: 5, start: '10:45', end: '11:35' },
+            { id: 6, start: '12:30', end: '13:20' },
+            { id: 7, start: '13:30', end: '14:20' },
+            { id: 8, start: '14:30', end: '15:20' },
+            { id: 9, start: '15:30', end: '16:20' },
+            { id: 10, start: '16:30', end: '17:20' },
+            { id: 11, start: '17:30', end: '18:20' },
+            { id: 12, start: '18:30', end: '19:20' },
+            { id: 13, start: '19:30', end: '20:20' }
+        ];
+
+        function toMin(hhmm) {
+            if (!hhmm) return 0;
+            const parts = hhmm.split(':');
+            if (parts.length < 2) return 0;
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function findFirstSlot(t) {
+            const tm = toMin(t);
+            for (let i = 0; i < TKB_SLOTS.length; i++)
+                if (tm <= toMin(TKB_SLOTS[i].end) + 5) return TKB_SLOTS[i].id;
+            return 1;
+        }
+
+        function findLastSlot(t) {
+            if (!t) return 1;
+            const tm = toMin(t);
+            for (let i = TKB_SLOTS.length - 1; i >= 0; i--)
+                if (toMin(TKB_SLOTS[i].end) <= tm + 5) return TKB_SLOTS[i].id;
+            return 1;
+        }
+
         // Database pre-enrolled schedules
         const enrolledSchedules = @json($enrolledSchedules);
 
@@ -1187,38 +1226,8 @@
                 if (!es.sessions || es.sessions.length === 0) return;
                 es.sessions.forEach(sess => {
                     const day = parseInt(sess.day_of_week);
-                    const periodsMap = {
-                        '6:45': 1,
-                        '07:45': 2,
-                        '08:45': 3,
-                        '09:45': 4,
-                        '10:45': 5,
-                        '12:30': 6,
-                        '13:30': 7,
-                        '14:30': 8,
-                        '15:30': 9,
-                        '16:30': 10,
-                        '17:30': 11,
-                        '18:30': 12,
-                        '19:30': 13
-                    };
-                    const endPeriodsMap = {
-                        '07:35': 1,
-                        '08:35': 2,
-                        '09:35': 3,
-                        '10:35': 4,
-                        '11:35': 5,
-                        '13:20': 6,
-                        '14:20': 7,
-                        '15:20': 8,
-                        '16:20': 9,
-                        '17:20': 10,
-                        '18:20': 11,
-                        '19:20': 12,
-                        '20:20': 13
-                    };
-                    const fi = periodsMap[sess.start_time] ?? 1;
-                    const li = endPeriodsMap[sess.end_time] ?? (fi + 2);
+                    const fi = findFirstSlot(sess.start_time);
+                    const li = findLastSlot(sess.end_time || sess.start_time);
                     const duration = Math.max(1, li - fi + 1);
 
                     activeSchedules.push({
@@ -1421,38 +1430,8 @@
                 if (!es.sessions || es.sessions.length === 0) return;
                 es.sessions.forEach(sess => {
                     const day = parseInt(sess.day_of_week);
-                    const periodsMap = {
-                        '06:45': 1,
-                        '07:45': 2,
-                        '08:45': 3,
-                        '09:45': 4,
-                        '10:45': 5,
-                        '12:30': 6,
-                        '13:30': 7,
-                        '14:30': 8,
-                        '15:30': 9,
-                        '16:30': 10,
-                        '17:30': 11,
-                        '18:30': 12,
-                        '19:30': 13,
-                    };
-                    const endPeriodsMap = {
-                        '07:35': 1,
-                        '08:35': 2,
-                        '09:35': 3,
-                        '10:35': 4,
-                        '11:35': 5,
-                        '13:20': 6,
-                        '14:20': 7,
-                        '15:20': 8,
-                        '16:20': 9,
-                        '17:20': 10,
-                        '18:20': 11,
-                        '19:20': 12,
-                        '20:20': 13
-                    };
-                    const fi = periodsMap[sess.start_time] ?? 1;
-                    const li = endPeriodsMap[sess.end_time] ?? (fi + 2);
+                    const fi = findFirstSlot(sess.start_time);
+                    const li = findLastSlot(sess.end_time || sess.start_time);
                     const duration = Math.max(1, li - fi + 1);
 
                     activeSchedules.push({
