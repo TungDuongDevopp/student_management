@@ -589,7 +589,7 @@
                         <div class="course-name" style="color:${c.text};">${esc(sch.subject_name)}</div>
                         <div class="course-info"><i class="fa-solid fa-user-tie"></i> ${esc(sch.teacher_name)}</div>
                         <div class="course-info"><i class="fa-regular fa-clock"></i> ${ss.start_time}–${ss.end_time}</div>
-                        <div class="room-tag" style="background:${c.tag};">${esc(sch.room)}</div>
+                        <div class="room-tag" style="background:${c.tag};">${esc(ss.room || '—')}</div>
                     </div>
                 </td>`;
                     } else {

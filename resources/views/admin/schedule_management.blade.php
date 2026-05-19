@@ -222,12 +222,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Phòng học</label>
-                                <select id="fRoom">
-                                    <option value="">-- Chọn phòng --</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label>Học kỳ *</label>
                                 <select id="fSemester" required>
                                     <option value="">-- Chọn học kỳ --</option>
@@ -305,6 +299,7 @@
         let allTeachers = [];
         let allRooms = [];
         let allFaculties = [];
+        let ROOM_OPTIONS = '';
 
         let filteredData = [];
         let currentPage = 1;
@@ -341,6 +336,9 @@
                 allSubjects = subRes;
                 allTeachers = teaRes;
                 allRooms = romRes;
+                ROOM_OPTIONS = allRooms.map(x =>
+                    `<option value="${x.id}">${x.block ? x.block + '.' : ''}${x.name}</option>`
+                ).join('');
                 allFaculties = facRes;
                 buildFilters();
                 applyFilters();
@@ -419,16 +417,18 @@
                         `<div style="font-size:0.75rem;color:#64748b;margin-top:4px;">📅 ${new Date(s.start_date).toLocaleDateString('vi-VN')} - ${new Date(s.end_date).toLocaleDateString('vi-VN')}</div>`;
                 }
 
-                const room = s.room ?
-                    `${s.room.block ? s.room.block + '.' : ''}${s.room.name}` :
+                const room = (s.sessions && s.sessions.length) ?
+                    [...new Set(s.sessions.filter(ss => ss.room).map(ss => `${ss.room.block ? ss.room.block + '.' : ''}${ss.room.name}`))].join(', ') :
                     '—';
 
                 // Hiển thị tất cả buổi học
                 const sessionsHtml = (s.sessions && s.sessions.length) ?
                     s.sessions.map(ss => {
+                        const rName = ss.room ? ` (${ss.room.block ? ss.room.block + '.' : ''}${ss.room.name})` : '';
                         return `<div class="day-badge" style="display:block;margin-bottom:4px;padding:4px;border:1px solid #e2e8f0;">` +
                             `${DAY_MAP[ss.day_of_week] || ''} ` +
                             `<span class="shift-badge">${fmtTime(ss.start_time)}–${fmtTime(ss.end_time)}</span>` +
+                            `<span style="font-size:0.75rem;font-weight:700;color:var(--accent);margin-left:4px;">${rName}</span>` +
                             `</div>`;
                     }).join('') :
                     '—';
@@ -498,12 +498,6 @@
                     `<option value="${x.id}" ${x.id == s.teacher_id ? 'selected' : ''}>${x.name}${x.teacher_code ? ' (' + x.teacher_code + ')' : ''}</option>`
                 ).join('');
 
-            document.getElementById('fRoom').innerHTML =
-                '<option value="">-- Chọn phòng --</option>' +
-                allRooms.map(x =>
-                    `<option value="${x.id}" ${x.id == s.room_id ? 'selected' : ''}>${x.block ? x.block + '.' : ''}${x.name}</option>`
-                ).join('');
-
             // Chỉ hiển thị HK đang hoạt động (status=1), nhưng giữ HK hiện tại nếu đang sửa
             const activeSemesters = allSemesters.filter(x => x.status == 1 || x.id == s.semester_id);
             document.getElementById('fSemester').innerHTML =
@@ -542,11 +536,15 @@
             const row = document.createElement('div');
             row.className = 'session-row';
             row.style.cssText =
-                'display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px';
+                'display:grid;grid-template-columns:1.5fr 1.5fr 1fr 1fr auto;gap:0.5rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:8px';
             row.innerHTML = `
                 <select class="sess-day" style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)" title="Thứ">
                     <option value="">-- Thứ --</option>
                     ${DAY_OPTIONS}
+                </select>
+                <select class="sess-room" style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)" title="Phòng học">
+                    <option value="">-- Phòng --</option>
+                    ${ROOM_OPTIONS}
                 </select>
                 <input type="time" class="sess-start" step="300" title="Giờ bắt đầu"
                     style="padding:0.4rem;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text)">
@@ -558,6 +556,7 @@
             `;
             // Điền dữ liệu nếu có
             if (data.day_of_week) row.querySelector('.sess-day').value = data.day_of_week;
+            if (data.room_id) row.querySelector('.sess-room').value = data.room_id;
             if (data.start_time) row.querySelector('.sess-start').value = fmtTime(data.start_time);
             if (data.end_time) row.querySelector('.sess-end').value = fmtTime(data.end_time);
             list.appendChild(row);
@@ -566,9 +565,10 @@
         function collectSessions() {
             return [...document.querySelectorAll('#sessionList .session-row')].map(row => ({
                 day_of_week: parseInt(row.querySelector('.sess-day').value) || null,
+                room_id: parseInt(row.querySelector('.sess-room').value) || null,
                 start_time: row.querySelector('.sess-start').value || null,
                 end_time: row.querySelector('.sess-end').value || null,
-            })).filter(ss => ss.day_of_week || ss.start_time);
+            })).filter(ss => ss.day_of_week || ss.room_id || ss.start_time);
         }
 
         // ── ADD / EDIT ────────────────────────────────────────────────────────
@@ -599,7 +599,6 @@
             const body = {
                 subject_id: parseInt(get('fSubject')) || null,
                 teacher_id: parseInt(get('fTeacher')) || null,
-                room_id: parseInt(get('fRoom')) || null,
                 semester_id: parseInt(get('fSemester')) || null,
                 group_code: get('fGroupCode').trim() || null,
                 max_capacity: parseInt(get('fMaxCapacity')) || 40,

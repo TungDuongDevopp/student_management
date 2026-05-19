@@ -727,7 +727,7 @@
                             <span class="class-code">${escHtml(sch.group_code || `#${sch.id}`)}</span>
                             <div class="subject-title" title="${escHtml(sch.subject_name)}">${escHtml(sch.subject_name)}</div>
                             <div class="meta-info"><i class="fa-solid fa-users"></i> Sĩ số: ${sch.current_capacity}/${sch.max_capacity}</div>
-                            <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: ${escHtml(sch.room)}</div>
+                            <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: ${escHtml(ss.room || '—')}</div>
                             <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết: ${ss.start_time}–${ss.end_time}</div>
                             <div class="status-row">
                                 <span class="status-badge status-normal">Đúng lịch</span>

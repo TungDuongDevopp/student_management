@@ -32,7 +32,7 @@ class StudentHomeController extends Controller
 
         // Lấy tất cả môn học đã đăng ký
         $enrollments = Enrollment::where('student_id', $student->id)
-            ->with(['schedule.subject', 'schedule.semester'])
+            ->with(['schedule.subject', 'schedule.semester', 'grade'])
             ->get();
 
         $totalGradePoints = 0;
@@ -194,10 +194,9 @@ class StudentHomeController extends Controller
         if ($student) {
             $schedules = Enrollment::with([
                 'schedule.subject',
-                'schedule.room',
                 'schedule.semester',
                 'schedule.teacher',
-                'schedule.sessions',
+                'schedule.sessions.room',
             ])
                 ->where('student_id', $student->id)
                 ->get()
@@ -210,12 +209,12 @@ class StudentHomeController extends Controller
                         'subject_name' => $s->subject?->name ?? '—',
                         'group_code'   => $s->group_code ?? '',
                         'teacher_name' => $s->teacher?->name ?? '—',
-                        'room'         => $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : '—',
                         'final_score'  => $enrollment->grade?->final_score,
                         'sessions'     => $s->sessions->map(fn($ss) => [
                             'day_of_week' => $ss->day_of_week,
                             'start_time'  => substr($ss->start_time ?? '', 0, 5),
                             'end_time'    => substr($ss->end_time ?? '', 0, 5),
+                            'room'        => $ss->room ? (($ss->room->block ? $ss->room->block . '.' : '') . $ss->room->name) : '—',
                         ])->values()->toArray(),
                     ];
                 })
