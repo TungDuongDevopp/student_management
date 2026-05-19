@@ -418,7 +418,12 @@
                     <h4>{{ $item['subject_name'] }}</h4>
                     <p>Phòng {{ $item['room'] }} &middot; {{ $item['teacher_name'] }} &middot; {{ $item['start_time'] }}–{{ $item['end_time'] }}</p>
                 </div>
-            @endforelse
+            </div>
+        @empty
+            <div style="text-align: center; color: #64748b; padding: 2rem; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                Hôm nay bạn không có lịch học.
+            </div>
+        @endforelse
         </section>
 
     </main>
