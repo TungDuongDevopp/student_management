@@ -155,16 +155,6 @@ class StudentHomeController extends Controller
             ->toArray();
         }
 
-        if (empty($todaySchedules)) {
-            $todaySchedules[] = [
-                'subject_name' => 'Kỹ năng mềm (Mock)',
-                'teacher_name' => 'Nguyễn Văn Test',
-                'room'         => 'C301',
-                'start_time'   => '08:40',
-                'end_time'     => '11:10',
-            ];
-        }
-
         $news = News::where('is_published', true)
             ->whereIn('target_audience', ['student', 'all'])
             ->orderBy('created_at', 'desc')
@@ -293,33 +283,6 @@ class StudentHomeController extends Controller
                 $sub->id                   // subject_code
             ];
         }
-
-        // If DB is empty, use backup static array to make sure it always runs!
-        if (empty($subjects)) {
-            $subjects = [
-                ['IT3010','Lập trình Web nâng cao',3,'bb',2,1,3,65,60,null],
-                ['IT3020','Cơ sở dữ liệu nâng cao',3,'bb',4,1,3,58,55,null],
-                ['IT3030','Kiến trúc máy tính',2,'bb',3,4,2,62,30,null],
-                ['IT3040','Lập trình PHP Laravel',3,'cn',5,7,3,61,20,null],
-                ['IT3050','Trí tuệ nhân tạo',3,'tc',2,7,3,50,48,null],
-                ['IT3060','An toàn thông tin',2,'tc',6,4,3,55,55,'full'],
-                ['IT3070','Phát triển ứng dụng Mobile',3,'cn',4,7,3,45,10,null],
-                ['IT3080','Thực tập doanh nghiệp',5,'bb',null,null,null,100,0,null],
-            ];
-        }
-
-        // Always append additional comprehensive testing subjects (1-2 credits, 2-3 periods, overlapping schedules)
-        $subjects[] = ['TEST01', 'Giáo dục thể chất (Bóng chuyền)', 1, 'tc', 2, 1, 2, 40, 15, null]; // Monday slot 1-2 (overlaps with Web slot 1-3)
-        $subjects[] = ['TEST02', 'Kỹ năng mềm và Giao tiếp', 1, 'tc', 5, 10, 2, 40, 20, null]; // Thursday slot 10-11 (overlaps with CNPM slot 10-12)
-        $subjects[] = ['TEST03', 'Anh văn chuyên ngành CNTT', 1, 'bb', 7, 1, 2, 35, 10, null]; // Saturday slot 1-2
-        $subjects[] = ['TEST04', 'Pháp luật đại cương', 2, 'bb', 3, 1, 2, 60, 45, null]; // Tuesday slot 1-2
-        $subjects[] = ['TEST05', 'Kiến trúc máy tính', 2, 'bb', 3, 4, 2, 50, 30, null]; // Tuesday slot 4-5 (overlaps with UML slot 4-6)
-        $subjects[] = ['TEST06', 'An toàn thông tin', 2, 'tc', 6, 4, 3, 50, 48, null]; // Friday slot 4-6
-        $subjects[] = ['TEST07', 'Lập trình PHP Laravel', 3, 'cn', 6, 7, 3, 45, 25, null]; // Friday slot 7-9
-        $subjects[] = ['TEST08', 'Trí tuệ nhân tạo (AI)', 3, 'cn', 2, 2, 3, 40, 10, null]; // Monday slot 2-4 (overlaps with Web slot 1-3)
-        $subjects[] = ['TEST09', 'Phát triển ứng dụng Mobile', 3, 'cn', 5, 7, 3, 45, 12, null]; // Thursday slot 7-9
-        $subjects[] = ['TEST10', 'Quản trị mạng doanh nghiệp', 3, 'cn', 4, 7, 2, 35, 5, null]; // Wednesday slot 7-8 (overlaps with C++ slot 7-9)
-
 
         // Fetch student's already enrolled schedules for active semester (status = 1)
         $enrolledSchedules = \App\Models\Enrollment::where('student_id', $student->id)
