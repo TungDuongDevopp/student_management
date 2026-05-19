@@ -34,7 +34,7 @@ class TeacherHomeController extends Controller
             $stats['total_students'] = $classRooms->sum('quantity') + $schedules->sum('current_capacity');
             $stats['ungraded_schedules'] = Schedule::where('teacher_id', $teacher->id)
                 ->whereHas('enrollments', function($q) {
-                    $q->whereNull('final_score');
+                    $q->doesntHave('grade');
                 })->count();
 
             // Lịch hôm nay: day_of_week khớp với thứ hiện tại (PHP: 0=CN, 1=T2... -> +1 hoặc = 8 cho CN)

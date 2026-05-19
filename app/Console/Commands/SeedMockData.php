@@ -69,20 +69,19 @@ class SeedMockData extends Command
             $this->info('Đã tạo xong Schedule Sessions (Lịch học/Thời khóa biểu).');
         }
 
-        // Tạo điểm thi ngẫu nhiên cho bảng enrollments để tính GPA
-        $enrollments = \App\Models\Enrollment::whereNull('final_score')->get();
+        // Tạo điểm thi ngẫu nhiên cho bảng grades để tính GPA
+        $enrollments = \App\Models\Enrollment::doesntHave('grade')->get();
         if ($enrollments->count() > 0) {
             foreach ($enrollments as $enrollment) {
                 $scoreC = rand(50, 100) / 10;
                 $scoreB = rand(50, 100) / 10;
                 $scoreA = rand(40, 100) / 10;
-                $finalScore = ($scoreC * 0.1) + ($scoreB * 0.3) + ($scoreA * 0.6);
                 
-                $enrollment->update([
+                \App\Models\Grade::create([
+                    'enrollment_id' => $enrollment->id,
                     'score_c' => $scoreC,
                     'score_b' => $scoreB,
-                    'score_a' => $scoreA,
-                    'final_score' => round($finalScore, 2),
+                    'score_a' => $scoreA
                 ]);
             }
             $this->info('Đã cập nhật điểm (Điểm A, B, C và Tổng kết) cho các môn học.');

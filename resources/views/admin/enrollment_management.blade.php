@@ -216,9 +216,19 @@
                     <div class="meta-info" id="scoreMeta"
                         style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:0.85rem;color:var(--text-muted)">
                     </div>
+                    <div class="form-group" style="margin-bottom:0.5rem">
+                        <label>Điểm Chuyên cần (10%)</label>
+                        <input type="number" id="scoreCInput" min="0" max="10" step="0.1"
+                            placeholder="Nhập điểm..." style="width:100%">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0.5rem">
+                        <label>Điểm Giữa kỳ (30%)</label>
+                        <input type="number" id="scoreBInput" min="0" max="10" step="0.1"
+                            placeholder="Nhập điểm..." style="width:100%">
+                    </div>
                     <div class="form-group">
-                        <label>Điểm tổng kết (0 – 10)</label>
-                        <input type="number" id="scoreInput" min="0" max="10" step="0.1"
+                        <label>Điểm Cuối kỳ (60%)</label>
+                        <input type="number" id="scoreAInput" min="0" max="10" step="0.1"
                             placeholder="Nhập điểm..." style="width:100%">
                     </div>
                 </div>
@@ -299,8 +309,8 @@
         // ── STATS ─────────────────────────────────────────────────────────────
         function updateStats(data) {
             document.getElementById('statTotal').textContent = data.length;
-            document.getElementById('statPassed').textContent = data.filter(e => e.final_score !== null).length;
-            document.getElementById('statNone').textContent = data.filter(e => e.final_score === null).length;
+            document.getElementById('statPassed').textContent = data.filter(e => e.grade?.final_score !== null && e.grade?.final_score !== undefined).length;
+            document.getElementById('statNone').textContent = data.filter(e => e.grade?.final_score === null || e.grade?.final_score === undefined).length;
         }
 
         // ── FILTERS ───────────────────────────────────────────────────────────
@@ -338,8 +348,8 @@
             }
 
             tb.innerHTML = pageData.map(e => {
-                const score = e.final_score;
-                const scoreBadge = score === null ?
+                const score = e.grade?.final_score;
+                const scoreBadge = (score === null || score === undefined) ?
                     `<span class="badge badge-score-none">Chưa có</span>` :
                     score >= 5 ?
                     `<span class="badge badge-score-pass">${parseFloat(score).toFixed(1)}</span>` :
@@ -401,7 +411,9 @@
                 <span><strong>Môn:</strong> ${escHtml(e.schedule?.subject?.name || '—')}</span>
                 <span><strong>HK:</strong> ${escHtml(semName)}</span>
             `;
-            document.getElementById('scoreInput').value = e.final_score !== null ? e.final_score : '';
+            document.getElementById('scoreCInput').value = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? e.grade.score_c : '';
+            document.getElementById('scoreBInput').value = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? e.grade.score_b : '';
+            document.getElementById('scoreAInput').value = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? e.grade.score_a : '';
             document.getElementById('scoreModal').classList.add('active');
         }
 
@@ -412,9 +424,13 @@
 
         async function saveScore() {
             if (!editId) return;
-            const val = document.getElementById('scoreInput').value;
+            const valC = document.getElementById('scoreCInput').value;
+            const valB = document.getElementById('scoreBInput').value;
+            const valA = document.getElementById('scoreAInput').value;
             const body = {
-                final_score: val === '' ? null : parseFloat(val)
+                score_c: valC === '' ? null : parseFloat(valC),
+                score_b: valB === '' ? null : parseFloat(valB),
+                score_a: valA === '' ? null : parseFloat(valA),
             };
             try {
                 const res = await fetch(`${API}/${editId}`, {
