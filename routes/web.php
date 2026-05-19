@@ -143,9 +143,7 @@ Route::prefix('student')->middleware('role:3')->group(function () {
 
     Route::get('/tuition', [StudentHomeController::class, 'tuition'])->name('student.tuition');
 
-    Route::get('/payment', function () {
-        return view('user.Student.payment');
-    })->name('student.payment');
+    Route::get('/payment', [StudentHomeController::class, 'payment'])->name('student.payment');
 
 
     Route::get('/feedback', [StudentHomeController::class, 'feedback'])->name('student.feedback');

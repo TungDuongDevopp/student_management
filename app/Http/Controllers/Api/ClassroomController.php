@@ -20,6 +20,7 @@ class ClassroomController extends Controller
             'faculty_id' => 'required|integer|exists:faculties,id',
             'teacher_id' => 'nullable|integer|exists:teachers,id',
             'code'       => 'nullable|string|max:50|unique:classrooms,code',
+            'name'       => 'nullable|string|max:100',
             'quantity'   => 'nullable|integer',
         ]);
 
@@ -40,6 +41,7 @@ class ClassroomController extends Controller
             'faculty_id' => 'sometimes|required|integer|exists:faculties,id',
             'teacher_id' => 'nullable|integer|exists:teachers,id',
             'code'       => 'sometimes|nullable|string|max:50|unique:classrooms,code,' . $id,
+            'name'       => 'sometimes|nullable|string|max:100',
             'quantity'   => 'nullable|integer',
         ]);
 

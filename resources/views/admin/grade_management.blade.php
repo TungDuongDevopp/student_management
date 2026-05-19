@@ -185,11 +185,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Sinh viên</th>
-                            <th>Lớp</th>
-                            <th>Môn học</th>
-                            <th>Giảng viên</th>
-                            <th>Học kỳ</th>
-                            <th>Điểm</th>
+                            <th>Môn học / Học kỳ</th>
+                            <th style="text-align:center">Chuyên cần (10%)</th>
+                            <th style="text-align:center">Giữa kỳ (30%)</th>
+                            <th style="text-align:center">Cuối kỳ (60%)</th>
+                            <th style="text-align:center">Tổng kết</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -239,23 +239,7 @@
             </div>
         </div>
 
-        {{-- Delete Confirm Modal --}}
-        <div class="modal-overlay" id="deleteModal">
-            <div class="modal" style="width:400px">
-                <div class="modal-header">
-                    <h2>Xác nhận xóa</h2>
-                    <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p style="color:var(--text-muted)">Bạn có chắc muốn xóa đăng ký học phần này? Điểm và dữ liệu điểm danh
-                        liên quan cũng sẽ bị ảnh hưởng.</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="closeDeleteModal()">Hủy</button>
-                    <button class="btn btn-delete" onclick="confirmDelete()">🗑 Xóa</button>
-                </div>
-            </div>
-        </div>
+
 
         <div class="toast" id="toast"></div>
     </div>
@@ -270,7 +254,6 @@
         let allSemesters = [];
         let currentPage = 1;
         let editId = null;
-        let deleteId = null;
 
         // ── BOOT ─────────────────────────────────────────────────────────────
         async function fetchData() {
@@ -350,10 +333,14 @@
             }
 
             tb.innerHTML = pageData.map(e => {
+                const scoreC = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? parseFloat(e.grade.score_c).toFixed(1) : '—';
+                const scoreB = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? parseFloat(e.grade.score_b).toFixed(1) : '—';
+                const scoreA = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? parseFloat(e.grade.score_a).toFixed(1) : '—';
+
                 const score = e.grade?.final_score;
                 const scoreBadge = (score === null || score === undefined) ?
                     `<span class="badge badge-score-none">Chưa có</span>` :
-                    score >= 5 ?
+                    score >= 4 ? // Trong hệ đào tạo tín chỉ, điểm >= 4 là qua môn (D trở lên)
                     `<span class="badge badge-score-pass">${parseFloat(score).toFixed(1)}</span>` :
                     `<span class="badge badge-score-fail">${parseFloat(score).toFixed(1)}</span>`;
 
@@ -365,16 +352,18 @@
                     <td><strong>#${e.id}</strong></td>
                     <td>
                         <div class="student-name">${escHtml(e.student?.name || '—')}</div>
-                        <div class="muted">${escHtml(e.student?.student_code || '')}</div>
+                        <div class="muted">${escHtml(e.student?.student_code || '')} | Lớp: ${escHtml(e.student?.classroom?.code || '—')}</div>
                     </td>
-                    <td><span class="badge badge-faculty">${escHtml(e.student?.classroom?.code || '—')}</span></td>
-                    <td><div class="subject-name">${escHtml(e.schedule?.subject?.name || '—')}</div></td>
-                    <td class="muted">${escHtml(e.schedule?.teacher?.name || '—')}</td>
-                    <td><span class="badge badge-semester">${escHtml(semName)}</span></td>
-                    <td>${scoreBadge}</td>
+                    <td>
+                        <div class="subject-name">${escHtml(e.schedule?.subject?.name || '—')}</div>
+                        <div class="muted">GV: ${escHtml(e.schedule?.teacher?.name || '—')} | HK: ${escHtml(semName)}</div>
+                    </td>
+                    <td style="text-align:center;font-weight:500;">${scoreC}</td>
+                    <td style="text-align:center;font-weight:500;">${scoreB}</td>
+                    <td style="text-align:center;font-weight:500;">${scoreA}</td>
+                    <td style="text-align:center">${scoreBadge}</td>
                     <td><div class="actions">
                         <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>✏️ Điểm</button>
-                        <button class="btn btn-sm btn-delete" onclick="openDelete(${e.id})">🗑</button>
                     </div></td>
                 </tr>`;
             }).join('');
@@ -456,36 +445,6 @@
             }
         }
 
-        // ── DELETE ────────────────────────────────────────────────────────────
-        function openDelete(id) {
-            deleteId = id;
-            document.getElementById('deleteModal').classList.add('active');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-            deleteId = null;
-        }
-
-        async function confirmDelete() {
-            if (!deleteId) return;
-            try {
-                const r = await fetch(`${API}/${deleteId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-                        'Accept': 'application/json'
-                    }
-                });
-                if (!r.ok) throw new Error('Lỗi xóa');
-                showToast('Đã xóa đăng ký!', 'success');
-                closeDeleteModal();
-                fetchData();
-            } catch (e) {
-                showToast('Lỗi: ' + e.message, 'error');
-            }
-        }
-
         // ── UTILS ─────────────────────────────────────────────────────────────
         function escHtml(str) {
             return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -500,9 +459,6 @@
 
         document.getElementById('scoreModal').addEventListener('click', function(e) {
             if (e.target === this) closeScoreModal();
-        });
-        document.getElementById('deleteModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDeleteModal();
         });
 
         fetchData();

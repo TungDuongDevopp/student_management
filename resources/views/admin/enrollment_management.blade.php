@@ -1,5 +1,5 @@
 @extends('layouts.admin.sidebar')
-@section('title', 'Quản lý Đăng ký học phần')
+@section('title', 'Quản lý Đơn đăng ký học phần')
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 
@@ -51,7 +51,7 @@
 
         .stat-card {
             flex: 1;
-            min-width: 130px;
+            min-width: 140px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -77,88 +77,121 @@
             color: #60a5fa;
         }
 
-        .stat-passed .stat-value {
+        .stat-credits .stat-value {
             color: #4ade80;
         }
 
-        .stat-failed .stat-value {
-            color: #f87171;
-        }
-
-        .badge-score-pass {
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-        }
-
-        .badge-score-fail {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-        }
-
-        .badge-score-none {
-            background: rgba(148, 163, 184, 0.15);
-            color: var(--text-muted);
-        }
-
-        .score-input {
-            width: 70px;
-            padding: 0.3rem 0.5rem;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .score-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .btn-save-score {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-save-score:hover {
-            background: rgba(59, 130, 246, 0.25);
-        }
-
-        .subject-name {
-            font-weight: 600;
-            max-width: 180px;
+        .stat-avg .stat-value {
+            color: #fbbf24;
         }
 
         .student-name {
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .muted {
             color: var(--text-muted);
             font-size: 0.8rem;
         }
+
+        /* Detail Modal Table styles */
+        .detail-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .detail-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-info-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .detail-info-value {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .detail-table-wrapper {
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .detail-table th, .detail-table td {
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-table th {
+            background: var(--bg-body);
+            color: var(--text-muted);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .btn-cancel-subject {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel-subject:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #f87171;
+        }
     </style>
 
     <div class="content-wrapper">
         <div class="page-header">
-            <h1>Quản lý Đăng ký học phần</h1>
+            <h1>Quản lý Đơn đăng ký học phần</h1>
         </div>
 
         {{-- Stats --}}
         <div class="stats-row">
             <div class="stat-card stat-total">
                 <span class="stat-value" id="statTotal">—</span>
-                <span class="stat-label">Tổng đăng ký</span>
+                <span class="stat-label">Tổng số đơn</span>
             </div>
-            <div class="stat-card stat-passed">
-                <span class="stat-value" id="statPassed">—</span>
-                <span class="stat-label">Đã có điểm</span>
+            <div class="stat-card stat-credits">
+                <span class="stat-value" id="statTotalCredits">—</span>
+                <span class="stat-label">Tổng số tín chỉ</span>
             </div>
-            <div class="stat-card stat-failed">
-                <span class="stat-value" id="statNone">—</span>
-                <span class="stat-label">Chưa có điểm</span>
+            <div class="stat-card stat-avg">
+                <span class="stat-value" id="statAvgCredits">—</span>
+                <span class="stat-label">Tín chỉ TB / Đơn</span>
             </div>
         </div>
 
@@ -172,7 +205,7 @@
             </div>
             <div class="filter-group">
                 <span class="filter-label">Tìm kiếm</span>
-                <input type="text" class="filter-select" id="searchInput" placeholder="Tên SV, môn học, mã SV..."
+                <input type="text" class="filter-select" id="searchInput" placeholder="Tên SV, mã SV, lớp..."
                     oninput="applyFilters()" style="min-width:240px">
             </div>
         </div>
@@ -183,19 +216,18 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>ID Đơn</th>
+                            <th>Mã SV</th>
                             <th>Sinh viên</th>
-                            <th>Lớp</th>
-                            <th>Môn học</th>
-                            <th>Giảng viên</th>
+                            <th>Lớp sinh hoạt</th>
                             <th>Học kỳ</th>
-                            <th>Điểm</th>
+                            <th style="text-align:center">Tổng số tín chỉ</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="8">
+                            <td colspan="7">
                                 <div class="empty-state">Đang tải dữ liệu...</div>
                             </td>
                         </tr>
@@ -205,36 +237,60 @@
             <div class="pagination" id="pagination"></div>
         </div>
 
-        {{-- Score Edit Modal --}}
-        <div class="modal-overlay" id="scoreModal">
-            <div class="modal" style="width:440px">
+        {{-- Detail Modal --}}
+        <div class="modal-overlay" id="detailModal">
+            <div class="modal" style="width:680px">
                 <div class="modal-header">
-                    <h2>✏️ Cập nhật điểm</h2>
-                    <button class="modal-close" onclick="closeScoreModal()">&times;</button>
+                    <h2>🔍 Chi tiết đơn đăng ký</h2>
+                    <button class="modal-close" onclick="closeDetailModal()">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="meta-info" id="scoreMeta"
-                        style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:0.85rem;color:var(--text-muted)">
+                    <div class="detail-info-grid">
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">Sinh viên</span>
+                            <span class="detail-info-value" id="detailStudentName">—</span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">Mã SV / Lớp</span>
+                            <span class="detail-info-value" id="detailStudentMeta">—</span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">Học kỳ</span>
+                            <span class="detail-info-value" id="detailSemester">—</span>
+                        </div>
+                        <div class="detail-info-item">
+                            <span class="detail-info-label">Tổng tín chỉ</span>
+                            <span class="detail-info-value" id="detailTotalCredits" style="color:var(--accent)">0</span>
+                        </div>
                     </div>
-                    <div class="form-group" style="margin-bottom:0.5rem">
-                        <label>Điểm Chuyên cần (10%)</label>
-                        <input type="number" id="scoreCInput" min="0" max="10" step="0.1"
-                            placeholder="Nhập điểm..." style="width:100%">
-                    </div>
-                    <div class="form-group" style="margin-bottom:0.5rem">
-                        <label>Điểm Giữa kỳ (30%)</label>
-                        <input type="number" id="scoreBInput" min="0" max="10" step="0.1"
-                            placeholder="Nhập điểm..." style="width:100%">
-                    </div>
-                    <div class="form-group">
-                        <label>Điểm Cuối kỳ (60%)</label>
-                        <input type="number" id="scoreAInput" min="0" max="10" step="0.1"
-                            placeholder="Nhập điểm..." style="width:100%">
+
+                    <div>
+                        <div class="filter-label" style="margin-bottom:0.25rem">Danh sách môn học đã đăng ký</div>
+                        <div class="detail-table-wrapper">
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px">STT</th>
+                                        <th>Mã lớp HP</th>
+                                        <th>Tên môn học</th>
+                                        <th style="text-align:center;width:80px">Tín chỉ</th>
+                                        <th>Giảng viên</th>
+                                        <th style="text-align:center;width:80px">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detailTableBody">
+                                    <tr>
+                                        <td colspan="6" class="muted" style="text-align:center;padding:1rem">
+                                            Chưa đăng ký môn học nào.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" onclick="closeScoreModal()">Hủy</button>
-                    <button class="btn btn-primary" onclick="saveScore()">💾 Lưu điểm</button>
+                    <button class="btn btn-secondary" onclick="closeDetailModal()">Đóng</button>
                 </div>
             </div>
         </div>
@@ -243,16 +299,18 @@
         <div class="modal-overlay" id="deleteModal">
             <div class="modal" style="width:400px">
                 <div class="modal-header">
-                    <h2>Xác nhận xóa</h2>
+                    <h2>Xác nhận xóa đơn đăng ký</h2>
                     <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p style="color:var(--text-muted)">Bạn có chắc muốn xóa đăng ký học phần này? Điểm và dữ liệu điểm danh
-                        liên quan cũng sẽ bị ảnh hưởng.</p>
+                    <p style="color:var(--text-muted)">
+                        Bạn có chắc chắn muốn xóa đơn đăng ký học phần này?
+                        Tất cả các môn học đã đăng ký trong đơn của học kỳ này sẽ bị hủy bỏ.
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" onclick="closeDeleteModal()">Hủy</button>
-                    <button class="btn btn-delete" onclick="confirmDelete()">🗑 Xóa</button>
+                    <button class="btn btn-delete" onclick="confirmDelete()">🗑 Xóa đơn</button>
                 </div>
             </div>
         </div>
@@ -261,7 +319,8 @@
     </div>
 
     <script>
-        const API = '/api/enrollments';
+        const API = '/api/tuitions';
+        const ENROLL_API = '/api/enrollments';
         const SEM_API = '/api/semesters';
         const PER_PAGE = 15;
 
@@ -269,13 +328,13 @@
         let filteredData = [];
         let allSemesters = [];
         let currentPage = 1;
-        let editId = null;
+        let activeDetailId = null;
         let deleteId = null;
 
         // ── BOOT ─────────────────────────────────────────────────────────────
         async function fetchData() {
             try {
-                const [enrollRes, semRes] = await Promise.all([
+                const [tuitionRes, semRes] = await Promise.all([
                     fetch(API, {
                         headers: {
                             'Accept': 'application/json'
@@ -287,7 +346,7 @@
                         }
                     }).then(r => r.json()),
                 ]);
-                allData = enrollRes;
+                allData = tuitionRes;
                 allSemesters = semRes;
                 buildSemesterFilter();
                 updateStats(allData);
@@ -308,9 +367,13 @@
 
         // ── STATS ─────────────────────────────────────────────────────────────
         function updateStats(data) {
-            document.getElementById('statTotal').textContent = data.length;
-            document.getElementById('statPassed').textContent = data.filter(e => e.grade?.final_score !== null && e.grade?.final_score !== undefined).length;
-            document.getElementById('statNone').textContent = data.filter(e => e.grade?.final_score === null || e.grade?.final_score === undefined).length;
+            const totalRecords = data.length;
+            const totalCredits = data.reduce((acc, t) => acc + (t.total_credits || 0), 0);
+            const avgCredits = totalRecords > 0 ? (totalCredits / totalRecords).toFixed(1) : '0.0';
+
+            document.getElementById('statTotal').textContent = totalRecords;
+            document.getElementById('statTotalCredits').textContent = totalCredits;
+            document.getElementById('statAvgCredits').textContent = avgCredits;
         }
 
         // ── FILTERS ───────────────────────────────────────────────────────────
@@ -318,13 +381,12 @@
             const semId = document.getElementById('semesterFilter').value;
             const q = document.getElementById('searchInput').value.toLowerCase();
 
-            filteredData = allData.filter(e => {
-                const matchSem = semId === 'all' || String(e.schedule?.semester?.id) === semId;
-                const studentName = (e.student?.name || '').toLowerCase();
-                const studentCode = (e.student?.student_code || '').toLowerCase();
-                const subjectName = (e.schedule?.subject?.name || '').toLowerCase();
-                const matchSearch = !q || studentName.includes(q) || studentCode.includes(q) || subjectName
-                    .includes(q);
+            filteredData = allData.filter(t => {
+                const matchSem = semId === 'all' || String(t.semester_id) === semId;
+                const studentName = (t.student?.name || '').toLowerCase();
+                const studentCode = (t.student?.student_code || '').toLowerCase();
+                const classCode = (t.student?.classroom?.code || '').toLowerCase();
+                const matchSearch = !q || studentName.includes(q) || studentCode.includes(q) || classCode.includes(q);
                 return matchSem && matchSearch;
             });
 
@@ -342,37 +404,28 @@
             const tb = document.getElementById('tableBody');
 
             if (!filteredData.length) {
-                tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">Không có đăng ký nào phù hợp</div></td></tr>';
+                tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">Không có đơn đăng ký nào phù hợp</div></td></tr>';
                 renderPagination(1);
                 return;
             }
 
-            tb.innerHTML = pageData.map(e => {
-                const score = e.grade?.final_score;
-                const scoreBadge = (score === null || score === undefined) ?
-                    `<span class="badge badge-score-none">Chưa có</span>` :
-                    score >= 5 ?
-                    `<span class="badge badge-score-pass">${parseFloat(score).toFixed(1)}</span>` :
-                    `<span class="badge badge-score-fail">${parseFloat(score).toFixed(1)}</span>`;
-
-                const semName = e.schedule?.semester ?
-                    `${e.schedule.semester.name}${e.schedule.semester.academic_year ? ' – ' + e.schedule.semester.academic_year : ''}` :
+            tb.innerHTML = pageData.map(t => {
+                const semName = t.semester ?
+                    `${t.semester.name}${t.semester.academic_year ? ' – ' + t.semester.academic_year : ''}` :
                     '—';
 
                 return `<tr>
-                    <td><strong>#${e.id}</strong></td>
+                    <td><strong>#${t.id}</strong></td>
+                    <td class="muted" style="font-weight:600;">${escHtml(t.student?.student_code || '—')}</td>
                     <td>
-                        <div class="student-name">${escHtml(e.student?.name || '—')}</div>
-                        <div class="muted">${escHtml(e.student?.student_code || '')}</div>
+                        <div class="student-name">${escHtml(t.student?.name || '—')}</div>
                     </td>
-                    <td><span class="badge badge-faculty">${escHtml(e.student?.classroom?.code || '—')}</span></td>
-                    <td><div class="subject-name">${escHtml(e.schedule?.subject?.name || '—')}</div></td>
-                    <td class="muted">${escHtml(e.schedule?.teacher?.name || '—')}</td>
+                    <td><span class="badge badge-faculty">${escHtml(t.student?.classroom?.code || '—')}</span></td>
                     <td><span class="badge badge-semester">${escHtml(semName)}</span></td>
-                    <td>${scoreBadge}</td>
+                    <td style="text-align:center;font-weight:600;color:var(--accent)">${t.total_credits || 0}</td>
                     <td><div class="actions">
-                        <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>✏️ Điểm</button>
-                        <button class="btn btn-sm btn-delete" onclick="openDelete(${e.id})">🗑</button>
+                        <button class="btn btn-sm btn-edit" onclick='openDetailModal(${JSON.stringify(t)})'>🔍 Chi tiết</button>
+                        <button class="btn btn-sm btn-delete" onclick="openDelete(${t.id})">🗑 Xóa</button>
                     </div></td>
                 </tr>`;
             }).join('');
@@ -389,7 +442,7 @@
             let html = `<button onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
             for (let i = 1; i <= totalPages; i++)
                 html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
-            html += `<span class="page-info">${filteredData.length} đăng ký</span>`;
+            html += `<span class="page-info">${filteredData.length} đơn</span>`;
             html +=
                 `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
             pg.innerHTML = html;
@@ -400,58 +453,89 @@
             renderPage();
         }
 
-        // ── SCORE MODAL ───────────────────────────────────────────────────────
-        function openScoreModal(e) {
-            editId = e.id;
-            const semName = e.schedule?.semester ?
-                `${e.schedule.semester.name}${e.schedule.semester.academic_year ? ' – ' + e.schedule.semester.academic_year : ''}` :
+        // ── DETAIL MODAL ───────────────────────────────────────────────────────
+        function openDetailModal(t) {
+            activeDetailId = t.id;
+            const semName = t.semester ?
+                `${t.semester.name}${t.semester.academic_year ? ' – ' + t.semester.academic_year : ''}` :
                 '—';
-            document.getElementById('scoreMeta').innerHTML = `
-                <span><strong>SV:</strong> ${escHtml(e.student?.name || '—')}</span>
-                <span><strong>Môn:</strong> ${escHtml(e.schedule?.subject?.name || '—')}</span>
-                <span><strong>HK:</strong> ${escHtml(semName)}</span>
-            `;
-            document.getElementById('scoreCInput').value = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? e.grade.score_c : '';
-            document.getElementById('scoreBInput').value = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? e.grade.score_b : '';
-            document.getElementById('scoreAInput').value = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? e.grade.score_a : '';
-            document.getElementById('scoreModal').classList.add('active');
+
+            document.getElementById('detailStudentName').textContent = t.student?.name || '—';
+            document.getElementById('detailStudentMeta').textContent = `${t.student?.student_code || '—'} | Lớp: ${t.student?.classroom?.code || '—'}`;
+            document.getElementById('detailSemester').textContent = semName;
+            document.getElementById('detailTotalCredits').textContent = t.total_credits || 0;
+
+            renderDetailEnrollments(t.enrollments || []);
+            document.getElementById('detailModal').classList.add('active');
         }
 
-        function closeScoreModal() {
-            document.getElementById('scoreModal').classList.remove('active');
-            editId = null;
+        function renderDetailEnrollments(enrollments) {
+            const tb = document.getElementById('detailTableBody');
+            if (!enrollments || enrollments.length === 0) {
+                tb.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center;padding:1.5rem">Chưa đăng ký môn học nào.</td></tr>`;
+                return;
+            }
+
+            tb.innerHTML = enrollments.map((e, idx) => {
+                const schedule = e.schedule || {};
+                const subject = schedule.subject || {};
+                const teacherName = schedule.teacher?.name || '—';
+                const classCode = schedule.class_section_group_code || '—';
+
+                return `<tr>
+                    <td>${idx + 1}</td>
+                    <td style="font-weight:600;color:var(--text-muted)">${escHtml(classCode)}</td>
+                    <td style="font-weight:600;">${escHtml(subject.name || '—')}</td>
+                    <td style="text-align:center;font-weight:600;color:var(--accent)">${subject.credits || 0}</td>
+                    <td>${escHtml(teacherName)}</td>
+                    <td style="text-align:center">
+                        <button class="btn-cancel-subject" onclick="cancelSubject(${e.id})">Hủy môn</button>
+                    </td>
+                </tr>`;
+            }).join('');
         }
 
-        async function saveScore() {
-            if (!editId) return;
-            const valC = document.getElementById('scoreCInput').value;
-            const valB = document.getElementById('scoreBInput').value;
-            const valA = document.getElementById('scoreAInput').value;
-            const body = {
-                score_c: valC === '' ? null : parseFloat(valC),
-                score_b: valB === '' ? null : parseFloat(valB),
-                score_a: valA === '' ? null : parseFloat(valA),
-            };
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            activeDetailId = null;
+        }
+
+        // ── CANCEL INDIVIDUAL SUBJECT ──────────────────────────────────────────
+        async function cancelSubject(enrollmentId) {
+            if (!confirm('Bạn có chắc chắn muốn hủy đăng ký môn học này?')) return;
             try {
-                const res = await fetch(`${API}/${editId}`, {
-                    method: 'PUT',
+                const res = await fetch(`${ENROLL_API}/${enrollmentId}`, {
+                    method: 'DELETE',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                         'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(body)
+                    }
                 });
-                if (!res.ok) throw new Error((await res.json()).message || 'Lỗi');
-                showToast('Cập nhật điểm thành công!', 'success');
-                closeScoreModal();
-                fetchData();
+
+                if (!res.ok) throw new Error('Hủy môn học thất bại');
+                showToast('Hủy môn học thành công!', 'success');
+
+                // Reload the whole tuition list and update modal content
+                const freshTuitionRes = await fetch(API, {
+                    headers: { 'Accept': 'application/json' }
+                }).then(r => r.json());
+
+                allData = freshTuitionRes;
+                applyFilters();
+
+                // Find the updated tuition and update modal display
+                const updatedTuition = allData.find(t => t.id === activeDetailId);
+                if (updatedTuition) {
+                    openDetailModal(updatedTuition);
+                } else {
+                    closeDetailModal();
+                }
             } catch (e) {
                 showToast('Lỗi: ' + e.message, 'error');
             }
         }
 
-        // ── DELETE ────────────────────────────────────────────────────────────
+        // ── DELETE ENTIRE TUITION APPLICATION ──────────────────────────────────
         function openDelete(id) {
             deleteId = id;
             document.getElementById('deleteModal').classList.add('active');
@@ -472,8 +556,8 @@
                         'Accept': 'application/json'
                     }
                 });
-                if (!r.ok) throw new Error('Lỗi xóa');
-                showToast('Đã xóa đăng ký!', 'success');
+                if (!r.ok) throw new Error('Lỗi khi xóa đơn đăng ký');
+                showToast('Đã xóa đơn đăng ký học phần thành công!', 'success');
                 closeDeleteModal();
                 fetchData();
             } catch (e) {
@@ -493,8 +577,8 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        document.getElementById('scoreModal').addEventListener('click', function(e) {
-            if (e.target === this) closeScoreModal();
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
         });
         document.getElementById('deleteModal').addEventListener('click', function(e) {
             if (e.target === this) closeDeleteModal();

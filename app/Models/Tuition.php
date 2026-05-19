@@ -13,6 +13,16 @@ class Tuition extends Model
         'paid_amount'
     ];
 
+    protected $appends = ['total_credits'];
+
+    public function getTotalCreditsAttribute()
+    {
+        // Load relation if not already loaded to prevent N+1 queries, but default is fine
+        return $this->enrollments->sum(function ($enrollment) {
+            return $enrollment->schedule?->subject?->credits ?? 0;
+        });
+    }
+
     public function student()
     {
         return $this->belongsTo(Student::class);

@@ -41,7 +41,7 @@ class TeacherHomeController extends Controller
             $todayDow = (int) now()->format('N') + 1; // ISO: 1=Mon -> +1 = 2..., CN=7->8
             if (now()->dayOfWeek === 0) $todayDow = 8; // Chủ nhật
 
-            $todaySchedules = Schedule::with(['subject', 'room', 'sessions'])
+            $todaySchedules = Schedule::with(['subject', 'sessions.room'])
                 ->where('teacher_id', $teacher->id)
                 ->whereHas('sessions', function ($q) use ($todayDow) {
                     $q->where('day_of_week', $todayDow);
@@ -52,7 +52,7 @@ class TeacherHomeController extends Controller
                     return [
                         'subject_name'     => $s->subject?->name ?? '—',
                         'group_code'       => $s->group_code ?? '',
-                        'room'             => $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : '—',
+                        'room'             => $session?->room ? (($session->room->block ? $session->room->block . '.' : '') . $session->room->name) : '—',
                         'current_capacity' => $s->current_capacity ?? 0,
                         'start_time'       => substr($session?->start_time ?? '', 0, 5),
                         'end_time'         => substr($session?->end_time ?? '', 0, 5),
@@ -180,7 +180,7 @@ class TeacherHomeController extends Controller
 
             $schedules = Schedule::with([
                 'subject',
-                'room',
+                'sessions.room',
                 'semester',
                 'sessions',
                 'enrollments'

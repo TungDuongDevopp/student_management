@@ -130,7 +130,7 @@
                             <div class="cls-meta-item"><i class="fa-regular fa-calendar"></i> Chưa xếp lịch</div>
                         @endif
 
-                        <div class="cls-meta-item"><i class="fa-solid fa-location-dot"></i> Phòng: {{ $schedule->room ? (($schedule->room->block ? $schedule->room->block.'.' : '').$schedule->room->name) : 'Chưa xếp phòng' }}</div>
+                        <div class="cls-meta-item"><i class="fa-solid fa-location-dot"></i> Phòng: {{ $schedule->room_names }}</div>
                         <div class="cls-meta-item"><i class="fa-solid fa-layer-group"></i> Học kỳ: {{ $schedule->semester->name ?? '—' }} {{ $schedule->semester->academic_year ? '('.$schedule->semester->academic_year.')' : '' }}</div>
                     </div>
                     <div class="cls-badges">
