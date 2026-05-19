@@ -9,7 +9,6 @@ class Schedule extends Model
     protected $fillable = [
         'subject_id',
         'teacher_id',
-        'room_id',
         'semester_id',
         'group_code',
         'max_capacity',
@@ -31,11 +30,6 @@ class Schedule extends Model
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);
-    }
-
-    public function room()
-    {
-        return $this->belongsTo(Room::class);
     }
 
     public function semester()

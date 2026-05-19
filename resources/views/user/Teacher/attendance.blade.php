@@ -216,7 +216,7 @@
                     <div class="sl-stats">
                         <span style="font-size:0.85rem; font-weight: 600; color:#475569;"><i class="fa-solid fa-users"></i>
                             Tổng số: {{ $students->count() }} SV</span>
-                        <button class="btn-save" onclick="alert('Đã lưu điểm danh (Demo)')"><i class="fa-solid fa-save"></i>
+                        <button class="btn-save" onclick="saveAttendance()"><i class="fa-solid fa-save"></i>
                             Lưu điểm danh</button>
                     </div>
                 </div>
@@ -255,8 +255,9 @@
                                     <td>{{ $sv->class_name }}</td>
                                     <td>
                                         <div class="checkbox-wrapper">
-                                            <input type="checkbox" class="custom-checkbox"
-                                                name="attendance[{{ $sv->id }}]" checked>
+                                            <input type="checkbox" class="custom-checkbox attendance-checkbox"
+                                                data-enrollment-id="{{ $sv->enrollment_id }}"
+                                                {{ $sv->is_present ? 'checked' : '' }}>
                                         </div>
                                     </td>
                                 </tr>
@@ -307,6 +308,44 @@
                         tr[i].style.display = "none";
                     }
                 }
+            }
+        }
+
+        async function saveAttendance() {
+            const checkboxes = document.querySelectorAll('.attendance-checkbox');
+            const attendance = {};
+            checkboxes.forEach(cb => {
+                const enrollmentId = cb.getAttribute('data-enrollment-id');
+                attendance[enrollmentId] = cb.checked ? 1 : 0;
+            });
+
+            const btn = document.querySelector('.btn-save');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('{{ route("teacher.attendances.save") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ attendance })
+                });
+                const resData = await response.json();
+                if (response.ok && resData.success) {
+                    alert('Lưu điểm danh thành công!');
+                    location.reload();
+                } else {
+                    alert('Lỗi: ' + (resData.message || 'Không thể lưu điểm danh.'));
+                }
+            } catch (e) {
+                alert('Lỗi kết nối hoặc hệ thống.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         }
     </script>
