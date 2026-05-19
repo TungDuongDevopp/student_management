@@ -47,4 +47,11 @@ class Schedule extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function getRoomNamesAttribute()
+    {
+        return $this->sessions->map(function ($s) {
+            return $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : null;
+        })->filter()->unique()->implode(', ') ?: 'Chưa xếp phòng';
+    }
 }

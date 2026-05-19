@@ -365,8 +365,8 @@
                     <h2><i class="fa-solid fa-bolt" style="margin-right:8px; color:#f59e0b;"></i>Truy cập nhanh</h2>
                 </div>
                 <div class="action-row">
-                    <a href="{{ route('teacher.classes') }}" class="btn btn-primary"><i
-                            class="fa-solid fa-chalkboard-user"></i> Lớp đang giảng dạy</a>
+                    <a href="{{ route('teacher.attendances') }}" class="btn btn-primary"><i
+                            class="fa-solid fa-chalkboard-user"></i> Điểm danh</a>
                     <a href="{{ route('teacher.schedule') }}" class="btn"><i class="fa-regular fa-calendar"></i>
                         Lịch
                         giảng dạy</a>

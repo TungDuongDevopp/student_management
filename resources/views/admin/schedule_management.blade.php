@@ -377,10 +377,13 @@
                 const matchSem = semId === 'all' || String(s.semester_id) === semId;
                 const subFacId = s.subject?.faculty_id;
                 const matchFac = facId === 'all' || String(subFacId) === facId;
+                const roomNames = (s.sessions && s.sessions.length) ?
+                    s.sessions.filter(ss => ss.room).map(ss => `${ss.room.block ? ss.room.block + '.' : ''}${ss.room.name}`).join(' ').toLowerCase() :
+                    '';
                 const matchQ = !q ||
                     (s.subject?.name || '').toLowerCase().includes(q) ||
                     (s.teacher?.name || '').toLowerCase().includes(q) ||
-                    (s.room?.name || '').toLowerCase().includes(q);
+                    roomNames.includes(q);
                 return matchSem && matchFac && matchQ;
             });
 

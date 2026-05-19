@@ -339,8 +339,8 @@
 
             <li class="nav-item">
                 <a href="{{ route('admin.enrollments') }}"
-                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Bảng điểm">
-                    <i class="fa-solid fa-star-half-stroke"></i>
+                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Quản lý đơn đăng ký">
+                    <i class="fa-solid fa-clipboard-list"></i>
                     <span>Quản lý đơn đăng ký</span>
                 </a>
             </li>

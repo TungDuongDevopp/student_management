@@ -582,5 +582,21 @@
         }
 
         loadHistory();
+
+        // Parse URL parameters for auto-filling
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('category')) {
+            const cat = urlParams.get('category');
+            const selectEl = document.getElementById('feedback-category');
+            if (selectEl) selectEl.value = cat;
+        }
+        if (urlParams.has('subject')) {
+            const subjectInput = document.getElementById('feedback-subject');
+            if (subjectInput) subjectInput.value = urlParams.get('subject');
+        }
+        if (urlParams.has('content')) {
+            const contentTextarea = document.getElementById('feedback-content');
+            if (contentTextarea) contentTextarea.value = urlParams.get('content');
+        }
     </script>
 @endsection

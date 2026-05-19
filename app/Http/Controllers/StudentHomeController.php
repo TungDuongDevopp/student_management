@@ -133,7 +133,7 @@ class StudentHomeController extends Controller
 
             $todaySchedules = Enrollment::with([
                 'schedule.subject',
-                'schedule.room',
+                'schedule.sessions.room',
                 'schedule.teacher',
                 'schedule.sessions'
             ])
@@ -147,7 +147,7 @@ class StudentHomeController extends Controller
                     return [
                         'subject_name' => $s->subject?->name ?? '—',
                         'teacher_name' => $s->teacher?->name ?? '—',
-                        'room'         => $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : '—',
+                        'room'         => $session?->room ? (($session->room->block ? $session->room->block . '.' : '') . $session->room->name) : '—',
                         'start_time'   => substr($session?->start_time ?? '', 0, 5),
                         'end_time'     => substr($session?->end_time ?? '', 0, 5),
                     ];
@@ -237,7 +237,7 @@ class StudentHomeController extends Controller
 
         // Fetch active schedules and subjects from database!
         $activeSemester = \App\Models\Semester::where('status', 1)->first() ?? \App\Models\Semester::latest()->first();
-        $dbSchedules = \App\Models\Schedule::with(['subject', 'room', 'teacher', 'sessions'])
+        $dbSchedules = \App\Models\Schedule::with(['subject', 'sessions.room', 'teacher', 'sessions'])
             ->when($activeSemester, fn($q) => $q->where('semester_id', $activeSemester->id))
             ->get();
 
@@ -282,7 +282,7 @@ class StudentHomeController extends Controller
 
         // Fetch student's already enrolled schedules for active semester (status = 1)
         $enrolledSchedules = \App\Models\Enrollment::where('student_id', $student->id)
-            ->with(['schedule.subject', 'schedule.semester', 'schedule.teacher', 'schedule.room', 'schedule.sessions'])
+            ->with(['schedule.subject', 'schedule.semester', 'schedule.teacher', 'schedule.sessions.room', 'schedule.sessions'])
             ->get()
             ->filter(fn($e) => $e->schedule?->semester?->status == 1)
             ->map(fn($e) => [
@@ -291,7 +291,7 @@ class StudentHomeController extends Controller
                 'subject_name' => $e->schedule->subject->name ?? '',
                 'credits' => $e->schedule->subject->credits ?? 0,
                 'teacher_name' => $e->schedule->teacher->name ?? '—',
-                'room' => $e->schedule->room ? (($e->schedule->room->block ? $e->schedule->room->block . '.' : '') . $e->schedule->room->name) : '—',
+                'room' => $e->schedule->room_names,
                 'sessions' => $e->schedule->sessions->map(fn($ss) => [
                     'day_of_week' => $ss->day_of_week,
                     'start_time' => substr($ss->start_time ?? '', 0, 5),
@@ -399,7 +399,19 @@ class StudentHomeController extends Controller
         }
 
         $stats = $this->getStudentStats($student);
-        return view('user.Student.grade', $stats);
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->with(['schedule.subject', 'schedule.semester', 'grade'])
+            ->get();
+
+        $enrollmentsBySemester = $enrollments->groupBy(function ($e) {
+            $sem = $e->schedule?->semester;
+            return $sem ? $sem->name . ($sem->academic_year ? ' – ' . $sem->academic_year : '') : 'Khác';
+        });
+
+        return view('user.Student.grade', array_merge($stats, [
+            'enrollmentsBySemester' => $enrollmentsBySemester,
+            'enrollments' => $enrollments
+        ]));
     }
 
     public function attendance()
@@ -414,7 +426,13 @@ class StudentHomeController extends Controller
         }
 
         $stats = $this->getStudentStats($student);
-        return view('user.Student.attendance_list', $stats);
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->with(['schedule.subject', 'schedule.teacher', 'attendances'])
+            ->get();
+
+        return view('user.Student.attendance_list', array_merge($stats, [
+            'enrollments' => $enrollments
+        ]));
     }
 
     public function tuition()
@@ -441,34 +459,27 @@ class StudentHomeController extends Controller
             ->with(['schedule.subject'])
             ->get();
 
-        // Tìm bản ghi Công nợ học phí thực tế
+        // Tìm bản ghi học phí thực tế (chỉ lấy, không tự động tạo)
         $tuition = Tuition::where('student_id', $student->id)
             ->where('semester_id', $activeSemester->id ?? 1)
             ->first();
 
-        // Nếu chưa tồn tại, khởi tạo một bản ghi động
-        if (!$tuition && $student) {
-            $feePerCredit = $student->classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
-            $totalCredits = $enrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
-            if ($totalCredits == 0) $totalCredits = 15; // Mặc định nếu chưa học môn nào
-
-            $tuition = Tuition::create([
-                'student_id' => $student->id,
-                'semester_id' => $activeSemester->id ?? 1,
-                'total_amount' => $totalCredits * $feePerCredit,
-                'paid_amount' => 0
-            ]);
-        }
-
         // Lấy lịch sử giao dịch từ bảng payments liên kết
         $payments = $tuition ? \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get() : collect();
 
+        // Lấy tất cả phiếu học phí qua các học kỳ để hiển thị lịch sử
+        $allTuitions = Tuition::where('student_id', $student->id)
+            ->with(['semester', 'payments'])
+            ->orderByDesc('id')
+            ->get();
+
         return view('user.Student.tuition_fee', array_merge($stats, [
-            'student' => $student,
+            'student'        => $student,
             'activeSemester' => $activeSemester,
-            'enrollments' => $enrollments,
-            'tuition' => $tuition,
-            'payments' => $payments
+            'enrollments'    => $enrollments,
+            'tuition'        => $tuition,
+            'payments'       => $payments,
+            'allTuitions'    => $allTuitions,
         ]));
     }
 
@@ -487,6 +498,39 @@ class StudentHomeController extends Controller
         return view('user.Student.feedback', $stats);
     }
 
+    public function payment()
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('student.classroom.faculty.facultyGeneral');
+        $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
+        $stats = $this->getStudentStats($student);
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+
+        $tuition = Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id ?? 1)
+            ->first();
+
+        // Nếu chưa có tuition, redirect về trang học phí
+        if (!$tuition) {
+            return redirect()->route('student.tuition')->with('info', 'Vui lòng xem lại thông tin học phí trước khi thanh toán.');
+        }
+
+        $payments = \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get();
+
+        return view('user.Student.payment', array_merge($stats, [
+            'student'        => $student,
+            'activeSemester' => $activeSemester,
+            'tuition'        => $tuition,
+            'payments'       => $payments,
+        ]));
+    }
+
     public function searchSchedules(Request $request)
     {
         $code = $request->input('code', '');
@@ -494,7 +538,7 @@ class StudentHomeController extends Controller
         
         $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
         
-        $query = \App\Models\Schedule::with(['subject', 'room', 'teacher', 'sessions'])
+        $query = \App\Models\Schedule::with(['subject', 'sessions.room', 'teacher', 'sessions'])
             ->when($activeSemester, fn($q) => $q->where('semester_id', $activeSemester->id));
             
         if ($code || $name) {
