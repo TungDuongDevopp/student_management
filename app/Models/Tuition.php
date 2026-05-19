@@ -27,4 +27,9 @@ class Tuition extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'tuition_id');
+    }
 }

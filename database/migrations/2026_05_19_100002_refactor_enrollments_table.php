@@ -26,23 +26,37 @@ return new class extends Migration
         $enrollments = DB::table('enrollments')->get();
         foreach ($enrollments as $enrollment) {
             if ($enrollment->score_c !== null || $enrollment->score_b !== null || $enrollment->score_a !== null) {
-                DB::table('grades')->insert([
-                    'enrollment_id' => $enrollment->id,
-                    'score_c' => $enrollment->score_c,
-                    'score_b' => $enrollment->score_b,
-                    'score_a' => $enrollment->score_a,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                // Ensure grades table doesn't already have it
+                $exists = DB::table('grades')->where('enrollment_id', $enrollment->id)->exists();
+                if (!$exists) {
+                    DB::table('grades')->insert([
+                        'enrollment_id' => $enrollment->id,
+                        'score_c' => $enrollment->score_c,
+                        'score_b' => $enrollment->score_b,
+                        'score_a' => $enrollment->score_a,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 
         Schema::table('enrollments', function (Blueprint $table) {
-            // Drop score columns
-            $table->dropColumn(['score_c', 'score_b', 'score_a', 'final_score']);
+            // Drop score columns if they exist
+            $colsToDrop = [];
+            foreach (['score_c', 'score_b', 'score_a', 'final_score'] as $c) {
+                if (Schema::hasColumn('enrollments', $c)) {
+                    $colsToDrop[] = $c;
+                }
+            }
+            if (!empty($colsToDrop)) {
+                $table->dropColumn($colsToDrop);
+            }
             
-            // Thêm foreign key liên kết với Phiếu đăng ký (tạm cho nullable để hỗ trợ data cũ)
-            $this->addDynamicForeign($table, 'enrollment_receipt_id', 'enrollment_receipts');
+            // Thêm foreign key liên kết với Phiếu học phí (Tuition)
+            if (!Schema::hasColumn('enrollments', 'tuition_id')) {
+                $this->addDynamicForeign($table, 'tuition_id', 'tuitions');
+            }
         });
     }
 
@@ -54,8 +68,8 @@ return new class extends Migration
             $table->decimal('score_a', 5, 2)->nullable();
             $table->decimal('final_score', 5, 2)->nullable();
             
-            $table->dropForeign(['enrollment_receipt_id']);
-            $table->dropColumn('enrollment_receipt_id');
+            $table->dropForeign(['tuition_id']);
+            $table->dropColumn('tuition_id');
         });
     }
 };
