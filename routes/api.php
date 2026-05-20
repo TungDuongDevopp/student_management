@@ -37,6 +37,8 @@ Route::apiResource('schedules', ScheduleController::class);
 Route::apiResource('enrollments', EnrollmentController::class);
 Route::apiResource('attendances', AttendanceController::class);
 Route::apiResource('tuitions', TuitionController::class);
+Route::post('payments/{id}/approve', [PaymentController::class, 'approve']);
+Route::post('payments/{id}/reject', [PaymentController::class, 'reject']);
 Route::apiResource('payments', PaymentController::class);
 
 // Feedback: custom actions trước resource routes

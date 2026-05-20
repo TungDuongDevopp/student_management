@@ -329,7 +329,23 @@ class StudentHomeController extends Controller
             return response()->json(['success' => false, 'message' => 'Không có học kỳ nào đang mở.'], 400);
         }
 
-        // Tạo bản ghi Enrollment cho từng môn
+        // Tự động sửa cấu hình cột tuition_id thành nullable đề phòng lỗi DB schema
+        try {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE enrollments MODIFY tuition_id BIGINT UNSIGNED NULL DEFAULT NULL");
+        } catch (\Exception $e) {
+            // Bỏ qua nếu lỗi
+        }
+
+        // 1. Tạo phiếu học phí (Tuition) cho học kỳ này vì sinh viên đã bắt đầu đăng ký môn học
+        $tuition = Tuition::firstOrCreate([
+            'student_id'  => $student->id,
+            'semester_id' => $activeSemester->id,
+        ], [
+            'total_amount' => 0,
+            'paid_amount'  => 0
+        ]);
+
+        // 2. Tạo bản ghi Enrollment cho từng môn
         foreach ($scheduleIds as $scheduleId) {
             // Kiểm tra xem đã đăng ký chưa
             $exists = Enrollment::where('student_id', $student->id)
@@ -337,38 +353,73 @@ class StudentHomeController extends Controller
                 ->exists();
 
             if (!$exists) {
-                // Tăng sĩ số lớp học lên 1
                 $schedule = \App\Models\Schedule::find($scheduleId);
-                if ($schedule && $schedule->current_capacity < $schedule->max_capacity) {
-                    $schedule->current_capacity += 1;
-                    $schedule->save();
-
-                    Enrollment::create([
-                        'student_id' => $student->id,
-                        'schedule_id' => $scheduleId,
-                        'status' => 'registered'
-                    ]);
+                if ($schedule) {
+                    // Tự động đếm sĩ số thực tế để sửa lỗi lệch sĩ số nếu có
+                    $actualEnrolledCount = Enrollment::where('schedule_id', $scheduleId)->count();
+                    
+                    if ($actualEnrolledCount < $schedule->max_capacity) {
+                        Enrollment::create([
+                            'student_id'  => $student->id,
+                            'schedule_id' => $scheduleId,
+                            'tuition_id'  => $tuition->id, // Gán để lưu đúng công nợ
+                            'status'      => 1
+                        ]);
+                        
+                        $schedule->current_capacity = $actualEnrolledCount + 1;
+                        $schedule->save();
+                    }
                 }
+            } else {
+                // Nếu đã đăng ký nhưng cột tuition_id bị null thì cập nhật lại
+                Enrollment::where('student_id', $student->id)
+                    ->where('schedule_id', $scheduleId)
+                    ->whereNull('tuition_id')
+                    ->update(['tuition_id' => $tuition->id]);
             }
         }
 
-        // Cập nhật lại số tiền học phí nếu đang có bản ghi học phí
-        $tuition = Tuition::where('student_id', $student->id)
-            ->where('semester_id', $activeSemester->id)
-            ->first();
-
-        if ($tuition) {
-            $feePerCredit = $student->classroom?->faculty?->facultyGeneral?->tuition_fee_per_credit ?? 480000;
-            $allEnrollments = Enrollment::where('student_id', $student->id)
-                ->whereHas('schedule', function ($q) use ($activeSemester) {
-                    $q->where('semester_id', $activeSemester->id);
-                })
-                ->with(['schedule.subject'])
-                ->get();
-            $totalCredits = $allEnrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
-            $tuition->total_amount = $totalCredits * $feePerCredit;
-            $tuition->save();
+        // 3. Lấy thông tin học phí mỗi tín chỉ một cách chắc chắn trực tiếp từ database
+        $feePerCredit = 480000; // Mặc định
+        if ($student->classroom_id) {
+            $classroom = \App\Models\Classroom::with('faculty.facultyGeneral')->find($student->classroom_id);
+            if ($classroom && $classroom->faculty && $classroom->faculty->facultyGeneral) {
+                $feePerCredit = $classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
+            }
         }
+
+        // 4. Lấy tất cả môn học đã đăng ký trong học kỳ active này
+        $allEnrollments = Enrollment::where('student_id', $student->id)
+            ->whereHas('schedule', function ($q) use ($activeSemester) {
+                $q->where('semester_id', $activeSemester->id);
+            })
+            ->with(['schedule.subject'])
+            ->get();
+
+        $totalCredits = $allEnrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
+        
+        $tuition->total_amount = $totalCredits * $feePerCredit;
+        $tuition->save();
+
+        // Ghi log để chẩn đoán nếu cần
+        \Illuminate\Support\Facades\Log::info('HocPhiDebug: ', [
+            'student_id' => $student->id,
+            'fee_per_credit' => $feePerCredit,
+            'total_credits' => $totalCredits,
+            'total_amount' => $tuition->total_amount
+        ]);
+
+        // 5. Đồng bộ tất cả enrollment khác của kỳ này nếu còn thiếu tuition_id hoặc không khớp
+        Enrollment::where('student_id', $student->id)
+            ->where(function($query) use ($tuition) {
+                $query->whereNull('tuition_id')
+                      ->orWhere('tuition_id', 0)
+                      ->orWhere('tuition_id', '!=', $tuition->id);
+            })
+            ->whereHas('schedule', function ($q) use ($activeSemester) {
+                $q->where('semester_id', $activeSemester->id);
+            })
+            ->update(['tuition_id' => $tuition->id]);
 
         return response()->json(['success' => true, 'message' => 'Đăng ký thành công!']);
     }
@@ -457,10 +508,51 @@ class StudentHomeController extends Controller
             ->with(['schedule.subject'])
             ->get();
 
-        // Tìm bản ghi học phí thực tế (chỉ lấy, không tự động tạo)
+        // Tìm bản ghi học phí thực tế
         $tuition = Tuition::where('student_id', $student->id)
-            ->where('semester_id', $activeSemester->id ?? 1)
+            ->where('semester_id', $activeSemester->id)
             ->first();
+
+        // Tự động sửa/đồng bộ nếu đã đăng ký môn nhưng chưa có phiếu học phí hoặc tiền bị lệch
+        if ($enrollments->count() > 0) {
+            if (!$tuition) {
+                $tuition = Tuition::create([
+                    'student_id'   => $student->id,
+                    'semester_id'  => $activeSemester->id,
+                    'total_amount' => 0,
+                    'paid_amount'  => 0
+                ]);
+            }
+
+            // Lấy học phí mỗi tín từ DB một cách chắc chắn
+            $feePerCredit = 480000;
+            if ($student->classroom_id) {
+                $classroom = \App\Models\Classroom::with('faculty.facultyGeneral')->find($student->classroom_id);
+                if ($classroom && $classroom->faculty && $classroom->faculty->facultyGeneral) {
+                    $feePerCredit = $classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
+                }
+            }
+
+            $totalCredits = $enrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
+            $expectedTotalAmount = $totalCredits * $feePerCredit;
+
+            if ($tuition->total_amount != $expectedTotalAmount) {
+                $tuition->total_amount = $expectedTotalAmount;
+                $tuition->save();
+            }
+
+            // Gán tuition_id cho các bản ghi đăng ký nếu bị null hoặc không khớp
+            Enrollment::where('student_id', $student->id)
+                ->where(function($query) use ($tuition) {
+                    $query->whereNull('tuition_id')
+                          ->orWhere('tuition_id', 0)
+                          ->orWhere('tuition_id', '!=', $tuition->id);
+                })
+                ->whereHas('schedule', function ($q) use ($activeSemester) {
+                    $q->where('semester_id', $activeSemester->id);
+                })
+                ->update(['tuition_id' => $tuition->id]);
+        }
 
         // Lấy lịch sử giao dịch từ bảng payments liên kết
         $payments = $tuition ? \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get() : collect();
@@ -498,6 +590,12 @@ class StudentHomeController extends Controller
 
     public function payment()
     {
+        try {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE payments ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'completed'");
+        } catch (\Exception $e) {
+            // Already added
+        }
+
         /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');

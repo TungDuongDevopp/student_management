@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 18, 2026 lúc 10:24 PM
+-- Thời gian đã tạo: Th5 20, 2026 lúc 11:56 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -594,6 +594,7 @@ CREATE TABLE `classrooms` (
   `faculty_id` int(11) NOT NULL,
   `teacher_id` int(11) DEFAULT NULL,
   `code` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -603,21 +604,21 @@ CREATE TABLE `classrooms` (
 -- Đang đổ dữ liệu cho bảng `classrooms`
 --
 
-INSERT INTO `classrooms` (`id`, `faculty_id`, `teacher_id`, `code`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'CNTT01', 35, '2026-05-10 17:13:09', '2026-05-10 17:13:09'),
-(2, 1, 2, 'CNTT02', 36, '2026-05-10 17:19:32', '2026-05-10 17:19:32'),
-(3, 2, 3, 'DK01', 36, '2026-05-10 17:19:59', '2026-05-10 17:19:59'),
-(4, 2, 4, 'DK02', 36, '2026-05-10 17:20:22', '2026-05-10 17:20:22'),
-(5, 3, 5, 'MO01', 36, '2026-05-10 17:20:42', '2026-05-10 17:20:57'),
-(6, 3, 6, 'MO02', 36, '2026-05-10 17:21:23', '2026-05-10 17:21:23'),
-(7, 4, 7, 'TDBD01', 36, '2026-05-10 17:21:46', '2026-05-10 17:22:18'),
-(8, 4, 8, 'TDBD02', 36, '2026-05-10 17:23:03', '2026-05-10 17:23:03'),
-(9, 5, 9, 'KHKTDC01', 36, '2026-05-10 17:23:39', '2026-05-10 17:23:39'),
-(10, 5, 10, 'KHKTDC02', 36, '2026-05-10 17:23:58', '2026-05-10 17:24:10'),
-(11, 6, 11, 'KT01', 36, '2026-05-10 17:24:46', '2026-05-10 17:24:46'),
-(12, 6, 12, 'KT02', 35, '2026-05-10 17:25:05', '2026-05-10 17:25:05'),
-(13, 7, 13, 'CD01', 35, '2026-05-10 17:25:32', '2026-05-10 17:25:32'),
-(14, 7, 14, 'CD02', 35, '2026-05-10 17:25:50', '2026-05-10 17:25:50');
+INSERT INTO `classrooms` (`id`, `faculty_id`, `teacher_id`, `code`, `name`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'CNTT01', 'Công nghệ thông tin 01', 35, '2026-05-10 17:13:09', '2026-05-19 03:22:14'),
+(2, 1, 2, 'CNTT02', 'Công nghệ thông tin 02', 36, '2026-05-10 17:19:32', '2026-05-19 03:22:26'),
+(3, 2, 3, 'DK01', 'Dầu khí 01', 36, '2026-05-10 17:19:59', '2026-05-19 03:22:37'),
+(4, 2, 4, 'DK02', 'Dầu khí 02', 36, '2026-05-10 17:20:22', '2026-05-19 03:22:48'),
+(5, 3, 5, 'MO01', 'Mỏ 01', 36, '2026-05-10 17:20:42', '2026-05-19 03:23:08'),
+(6, 3, 6, 'MO02', 'Mỏ 02', 36, '2026-05-10 17:21:23', '2026-05-19 03:23:17'),
+(7, 4, 7, 'TDBD01', 'Trắc địa bản đồ 01', 36, '2026-05-10 17:21:46', '2026-05-19 03:23:27'),
+(8, 4, 8, 'TDBD02', 'Trắc địa bản đồ 02', 36, '2026-05-10 17:23:03', '2026-05-19 03:23:40'),
+(9, 5, 9, 'KHKTDC01', 'Khoa học và kỹ thuật địa chất 01', 36, '2026-05-10 17:23:39', '2026-05-19 03:23:58'),
+(10, 5, 10, 'KHKTDC02', 'Khoa học và kỹ thuật địa chất 02', 36, '2026-05-10 17:23:58', '2026-05-19 03:24:16'),
+(11, 6, 11, 'Kinh tế 01', 'KT01', 36, '2026-05-10 17:24:46', '2026-05-19 03:24:39'),
+(12, 6, 12, 'KT02', 'Kinh tế 02', 35, '2026-05-10 17:25:05', '2026-05-19 03:25:00'),
+(13, 7, 13, 'CD01', 'Cơ Điện 01', 35, '2026-05-10 17:25:32', '2026-05-19 03:25:12'),
+(14, 7, 14, 'CD02', 'Cơ Điện 02', 35, '2026-05-10 17:25:50', '2026-05-19 03:25:23');
 
 -- --------------------------------------------------------
 
@@ -629,13 +630,10 @@ CREATE TABLE `enrollments` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  `final_score` float DEFAULT NULL,
   `status` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `score_c` decimal(4,2) DEFAULT NULL COMMENT 'Điểm C (10%)',
-  `score_b` decimal(4,2) DEFAULT NULL COMMENT 'Điểm B (30%)',
-  `score_a` decimal(4,2) DEFAULT NULL COMMENT 'Điểm A (60%)'
+  `tuition_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -720,6 +718,22 @@ INSERT INTO `feedbacks` (`id`, `account_id`, `content`, `reply`, `status`, `crea
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `grades`
+--
+
+CREATE TABLE `grades` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `enrollment_id` int(11) NOT NULL,
+  `score_c` decimal(5,2) DEFAULT NULL COMMENT 'Điểm chuyên cần 10%',
+  `score_b` decimal(5,2) DEFAULT NULL COMMENT 'Điểm giữa kỳ 30%',
+  `score_a` decimal(5,2) DEFAULT NULL COMMENT 'Điểm cuối kỳ 60%',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `migrations`
 --
 
@@ -756,7 +770,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (21, '2026_05_16_100002_move_dates_to_semesters_table', 16),
 (22, '2026_05_16_100003_add_dates_to_schedules_table', 17),
 (23, '2026_05_18_010000_add_component_scores_to_enrollments_table', 18),
-(24, '2026_05_18_010806_create_news_table', 18);
+(28, '2026_05_19_100000_create_enrollment_receipts_table', 19),
+(29, '2026_05_19_100001_create_grades_table', 19),
+(30, '2026_05_19_100002_refactor_enrollments_table', 19),
+(31, '2026_05_19_100003_drop_enrollment_receipt_id_from_enrollments_table', 20),
+(32, '2026_05_19_100004_move_room_id_to_schedule_sessions_table', 21),
+(33, '2026_05_19_100005_add_name_to_classrooms_table', 22);
 
 -- --------------------------------------------------------
 
@@ -893,7 +912,6 @@ CREATE TABLE `schedules` (
   `id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
-  `room_id` int(11) DEFAULT NULL,
   `semester_id` int(11) DEFAULT NULL,
   `group_code` varchar(20) DEFAULT NULL COMMENT 'Mã nhóm học phần (VD: N01, Nhóm 1)',
   `max_capacity` int(11) NOT NULL DEFAULT 40,
@@ -908,19 +926,19 @@ CREATE TABLE `schedules` (
 -- Đang đổ dữ liệu cho bảng `schedules`
 --
 
-INSERT INTO `schedules` (`id`, `subject_id`, `teacher_id`, `room_id`, `semester_id`, `group_code`, `max_capacity`, `current_capacity`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 5, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-25', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
-(2, 4, 1, 1, 2, 'Nhóm 02', 35, 0, '2026-04-08', '2026-05-29', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
-(3, 1, 2, 28, 2, 'Nhóm 200', 35, 0, '2026-01-01', '2026-05-28', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
-(4, 2, 2, 10, 2, 'Nhóm 01', 40, 0, '2026-01-06', '2026-05-30', '2026-05-17 17:56:44', '2026-05-17 17:56:44'),
-(5, 3, 1, 10, 2, 'Nhóm 01', 40, 0, '2026-01-09', '2026-05-29', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
-(6, 24, 15, 6, 2, 'Nhóm 01', 40, 0, '2026-01-07', '2026-05-28', '2026-05-17 18:02:31', '2026-05-17 18:02:31'),
-(7, 24, 16, 11, 2, 'Nhóm 200', 40, 0, '2026-01-05', '2026-05-25', '2026-05-17 18:03:46', '2026-05-17 18:03:46'),
-(8, 37, 24, 33, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-26', '2026-05-17 18:05:29', '2026-05-17 18:05:29'),
-(9, 39, 23, 10, 2, 'Nhóm 05', 60, 0, '2026-01-09', '2026-05-30', '2026-05-17 18:08:09', '2026-05-17 18:08:09'),
-(10, 32, 21, 2, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-29', '2026-05-17 18:09:59', '2026-05-17 18:09:59'),
-(11, 34, 22, 5, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-26', '2026-05-17 18:12:19', '2026-05-17 18:12:19'),
-(12, 21, 18, 35, 2, 'Nhóm 01', 40, 2, '2026-01-01', '2026-02-26', '2026-05-17 18:16:59', '2026-05-18 13:07:55');
+INSERT INTO `schedules` (`id`, `subject_id`, `teacher_id`, `semester_id`, `group_code`, `max_capacity`, `current_capacity`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-25', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
+(2, 4, 1, 2, 'Nhóm 02', 35, 0, '2026-04-08', '2026-05-29', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
+(3, 1, 2, 2, 'Nhóm 200', 35, 0, '2026-01-01', '2026-05-28', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
+(4, 2, 2, 2, 'Nhóm 01', 40, 1, '2026-01-06', '2026-05-30', '2026-05-17 17:56:44', '2026-05-19 03:27:42'),
+(5, 3, 1, 2, 'Nhóm 01', 40, 0, '2026-01-09', '2026-05-29', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
+(6, 24, 15, 2, 'Nhóm 01', 40, 0, '2026-01-07', '2026-05-28', '2026-05-17 18:02:31', '2026-05-17 18:02:31'),
+(7, 24, 16, 2, 'Nhóm 200', 40, 0, '2026-01-05', '2026-05-25', '2026-05-17 18:03:46', '2026-05-17 18:03:46'),
+(8, 37, 24, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-26', '2026-05-17 18:05:29', '2026-05-17 18:05:29'),
+(9, 39, 23, 2, 'Nhóm 05', 60, 0, '2026-01-09', '2026-05-30', '2026-05-17 18:08:09', '2026-05-17 18:08:09'),
+(10, 32, 21, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-29', '2026-05-17 18:09:59', '2026-05-17 18:09:59'),
+(11, 34, 22, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-26', '2026-05-17 18:12:19', '2026-05-17 18:12:19'),
+(12, 21, 18, 2, 'Nhóm 01', 40, 0, '2026-01-01', '2026-02-26', '2026-05-17 18:16:59', '2026-05-18 13:07:55');
 
 -- --------------------------------------------------------
 
@@ -935,31 +953,32 @@ CREATE TABLE `schedule_sessions` (
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `room_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `schedule_sessions`
 --
 
-INSERT INTO `schedule_sessions` (`id`, `schedule_id`, `day_of_week`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
-(2, 1, 4, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
-(3, 2, 4, '13:30:00', '15:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
-(4, 2, 6, '14:30:00', '16:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
-(5, 3, 5, '07:45:00', '10:30:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
-(6, 3, 2, '12:30:00', '15:20:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
-(7, 4, 3, '07:45:00', '10:30:00', '2026-05-17 17:56:44', '2026-05-17 17:56:44'),
-(8, 5, 7, '15:30:00', '17:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
-(9, 5, 5, '16:30:00', '18:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
-(11, 7, 3, '17:30:00', '20:20:00', '2026-05-17 18:03:46', '2026-05-17 18:03:46'),
-(12, 8, 3, '12:30:00', '15:20:00', '2026-05-17 18:05:29', '2026-05-17 18:05:29'),
-(16, 11, 4, '07:30:00', '10:30:00', '2026-05-17 18:12:19', '2026-05-17 18:12:19'),
-(17, 12, 5, '06:45:00', '08:30:00', '2026-05-17 18:16:59', '2026-05-17 18:16:59'),
-(18, 6, 6, '12:30:00', '15:20:00', '2026-05-18 11:17:48', '2026-05-18 11:17:48'),
-(19, 9, 7, '07:45:00', '10:30:00', '2026-05-18 11:18:09', '2026-05-18 11:18:09'),
-(20, 10, 4, '13:30:00', '15:20:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20'),
-(21, 10, 6, '07:45:00', '09:30:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20');
+INSERT INTO `schedule_sessions` (`id`, `schedule_id`, `day_of_week`, `start_time`, `end_time`, `created_at`, `updated_at`, `room_id`) VALUES
+(1, 1, 2, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20', 5),
+(2, 1, 4, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20', 5),
+(3, 2, 4, '13:30:00', '15:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11', 1),
+(4, 2, 6, '14:30:00', '16:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11', 1),
+(5, 3, 5, '07:45:00', '10:30:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27', 28),
+(6, 3, 2, '12:30:00', '15:20:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27', 28),
+(7, 4, 3, '07:45:00', '10:30:00', '2026-05-17 17:56:44', '2026-05-17 17:56:44', 10),
+(8, 5, 7, '15:30:00', '17:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01', 10),
+(9, 5, 5, '16:30:00', '18:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01', 10),
+(11, 7, 3, '17:30:00', '20:20:00', '2026-05-17 18:03:46', '2026-05-17 18:03:46', 11),
+(12, 8, 3, '12:30:00', '15:20:00', '2026-05-17 18:05:29', '2026-05-17 18:05:29', 33),
+(16, 11, 4, '07:30:00', '10:30:00', '2026-05-17 18:12:19', '2026-05-17 18:12:19', 5),
+(17, 12, 5, '06:45:00', '08:30:00', '2026-05-17 18:16:59', '2026-05-17 18:16:59', 35),
+(18, 6, 6, '12:30:00', '15:20:00', '2026-05-18 11:17:48', '2026-05-18 11:17:48', 6),
+(19, 9, 7, '07:45:00', '10:30:00', '2026-05-18 11:18:09', '2026-05-18 11:18:09', 10),
+(20, 10, 4, '13:30:00', '15:20:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20', 2),
+(21, 10, 6, '07:45:00', '09:30:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20', 2);
 
 -- --------------------------------------------------------
 
@@ -1012,8 +1031,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('8XS71LFIb3jAo1Z7YwvCAakCOxmunGX4Wb9y15RI', 13, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZ0xDOVZWdXJjYXphNkN3QVRQYTlNWFUyRGZYZ285TDJqcFdKM0hWdSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zdHVkZW50L3R1aXRpb24iO3M6NToicm91dGUiO3M6MTU6InN0dWRlbnQudHVpdGlvbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjEzO30=', 1779135550),
-('i1eCiehXQbKoyvxe5uAJErWxs0YVnTsNwSJOShvS', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNVFyUlN6MGxYR1FyYVMyQmxUNUN4UU5xdkM4RUdrMjRqMVhoV0lpZyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDg6Imh0dHA6Ly9sb2NhbGhvc3Qvc3R1ZGVudF9tYW5hZ2VtZW50L3B1YmxpYy9sb2dpbiI7czo1OiJyb3V0ZSI7czoxMDoidXNlci5sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1779127898);
+('vpE0B7DzCXUhLEMdZoLxFcSn0wChT1IP9rtVtz9b', 22, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTXNDT1A3RXNKSVEwbWdqcUJZN3lsUFozNklZSVk0VDY2dmJXNnppUiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zdHVkZW50L3R1aXRpb24iO3M6NToicm91dGUiO3M6MTU6InN0dWRlbnQudHVpdGlvbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjIyO30=', 1779188924);
 
 -- --------------------------------------------------------
 
@@ -1748,16 +1766,6 @@ CREATE TABLE `tuitions` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Đang đổ dữ liệu cho bảng `tuitions`
---
-
-INSERT INTO `tuitions` (`id`, `student_id`, `semester_id`, `total_amount`, `paid_amount`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 8671500.00, 0.00, '2026-05-18 10:38:36', '2026-05-18 10:38:36'),
-(2, 2, 2, 8671500.00, 0.00, '2026-05-18 11:20:02', '2026-05-18 11:20:02'),
-(3, 6, 2, 8671500.00, 0.00, '2026-05-18 11:32:50', '2026-05-18 11:32:50'),
-(4, 45, 2, 8671500.00, 0.00, '2026-05-18 13:15:54', '2026-05-18 13:15:54');
-
 -- --------------------------------------------------------
 
 --
@@ -1808,7 +1816,8 @@ ALTER TABLE `classrooms`
 ALTER TABLE `enrollments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `student_id` (`student_id`),
-  ADD KEY `schedule_id` (`schedule_id`);
+  ADD KEY `schedule_id` (`schedule_id`),
+  ADD KEY `tuition_id` (`tuition_id`);
 
 --
 -- Chỉ mục cho bảng `faculties`
@@ -1831,6 +1840,13 @@ ALTER TABLE `faculty_generals`
 ALTER TABLE `feedbacks`
   ADD PRIMARY KEY (`id`),
   ADD KEY `account_id` (`account_id`);
+
+--
+-- Chỉ mục cho bảng `grades`
+--
+ALTER TABLE `grades`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `grades_enrollment_id_foreign` (`enrollment_id`);
 
 --
 -- Chỉ mục cho bảng `migrations`
@@ -1877,7 +1893,6 @@ ALTER TABLE `schedules`
   ADD PRIMARY KEY (`id`),
   ADD KEY `subject_id` (`subject_id`),
   ADD KEY `teacher_id` (`teacher_id`),
-  ADD KEY `room_id` (`room_id`),
   ADD KEY `semester_id` (`semester_id`);
 
 --
@@ -1885,7 +1900,8 @@ ALTER TABLE `schedules`
 --
 ALTER TABLE `schedule_sessions`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `schedule_sessions_schedule_id_foreign` (`schedule_id`);
+  ADD KEY `schedule_sessions_schedule_id_foreign` (`schedule_id`),
+  ADD KEY `schedule_sessions_room_id_foreign` (`room_id`);
 
 --
 -- Chỉ mục cho bảng `semesters`
@@ -1996,10 +2012,16 @@ ALTER TABLE `feedbacks`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT cho bảng `grades`
+--
+ALTER TABLE `grades`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT cho bảng `news`
@@ -2071,7 +2093,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT cho bảng `tuitions`
 --
 ALTER TABLE `tuitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
@@ -2106,7 +2128,8 @@ ALTER TABLE `classrooms`
 --
 ALTER TABLE `enrollments`
   ADD CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
-  ADD CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`);
+  ADD CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`),
+  ADD CONSTRAINT `enrollments_tuition_id_foreign` FOREIGN KEY (`tuition_id`) REFERENCES `tuitions` (`id`) ON DELETE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `faculties`
@@ -2121,6 +2144,12 @@ ALTER TABLE `feedbacks`
   ADD CONSTRAINT `feedbacks_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`);
 
 --
+-- Các ràng buộc cho bảng `grades`
+--
+ALTER TABLE `grades`
+  ADD CONSTRAINT `grades_enrollment_id_foreign` FOREIGN KEY (`enrollment_id`) REFERENCES `enrollments` (`id`) ON DELETE CASCADE;
+
+--
 -- Các ràng buộc cho bảng `payments`
 --
 ALTER TABLE `payments`
@@ -2132,13 +2161,13 @@ ALTER TABLE `payments`
 ALTER TABLE `schedules`
   ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`),
   ADD CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`),
-  ADD CONSTRAINT `schedules_ibfk_3` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`),
   ADD CONSTRAINT `schedules_ibfk_4` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`id`);
 
 --
 -- Các ràng buộc cho bảng `schedule_sessions`
 --
 ALTER TABLE `schedule_sessions`
+  ADD CONSTRAINT `schedule_sessions_room_id_foreign` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `schedule_sessions_schedule_id_foreign` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE;
 
 --

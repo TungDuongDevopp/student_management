@@ -65,6 +65,8 @@
 
     $qr_url = "https://img.vietqr.io/image/MB-{$bank_account}-compact2.jpg?amount={$remaining}&addInfo=" .
         urlencode($transfer_content) . '&accountName=' . urlencode($bank_owner);
+
+    $pending_payment = $payments->where('status', 'pending')->first();
 @endphp
 
 <div class="pay-wrap">
@@ -91,6 +93,13 @@
     <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:0.75rem 1.25rem; margin-bottom:1.25rem; font-size:0.875rem; color:#166534; font-weight:600; display:flex; align-items:center; gap:0.6rem;">
         <i class="fa-solid fa-circle-check"></i>
         Bạn đã thanh toán đầy đủ học phí học kỳ này. Không cần thực hiện thêm giao dịch nào.
+    </div>
+    @endif
+
+    @if($pending_payment)
+    <div style="background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:0.75rem 1.25rem; margin-bottom:1.25rem; font-size:0.875rem; color:#b45309; font-weight:600; display:flex; align-items:center; gap:0.6rem;">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Yêu cầu xác nhận thanh toán số tiền {{ number_format($pending_payment->amount, 0, ',', '.') }}đ đang chờ duyệt. Vui lòng không thực hiện chuyển khoản lại.
     </div>
     @endif
 
@@ -132,8 +141,19 @@
                 <div style="font-size:0.8rem; font-weight:700; color:#475569; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Lịch sử giao dịch</div>
                 @foreach($payments as $p)
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid #f1f5f9; font-size:0.82rem;">
-                    <div style="color:#64748b;">{{ $p->created_at->format('d/m/Y H:i') }}</div>
-                    <div style="font-weight:700; color:#16a34a;">+{{ number_format($p->amount, 0, ',', '.') }}đ</div>
+                    <div style="color:#64748b;">
+                        {{ $p->created_at->format('d/m/Y H:i') }}
+                        @if(($p->status ?? 'completed') === 'pending')
+                            <span style="font-size:0.7rem; background:#fef3c7; color:#d97706; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:600;">Chờ duyệt</span>
+                        @elseif(($p->status ?? 'completed') === 'failed')
+                            <span style="font-size:0.7rem; background:#fee2e2; color:#dc2626; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:600;">Bị từ chối</span>
+                        @else
+                            <span style="font-size:0.7rem; background:#dcfce7; color:#16a34a; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:600;">Đã duyệt</span>
+                        @endif
+                    </div>
+                    <div style="font-weight:700; color: {{ ($p->status ?? 'completed') === 'pending' ? '#d97706' : (($p->status ?? 'completed') === 'failed' ? '#dc2626' : '#16a34a') }};">
+                        +{{ number_format($p->amount, 0, ',', '.') }}đ
+                    </div>
                 </div>
                 @endforeach
             </div>
@@ -193,9 +213,15 @@
                 </div>
 
                 @if($remaining > 0)
-                <button class="btn-check" onclick="checkPaymentStatus(this)">
-                    <i class="fa-solid fa-rotate"></i> Kiểm tra trạng thái thanh toán
-                </button>
+                    @if($pending_payment)
+                    <button class="btn-check" disabled style="background:#fbbf24; color:#78350f; cursor:not-allowed;">
+                        ⏳ Đang chờ hệ thống phê duyệt chuyển khoản...
+                    </button>
+                    @else
+                    <button class="btn-check" onclick="checkPaymentStatus(this)" style="background:#2563eb;">
+                        <i class="fa-solid fa-circle-check"></i> Tôi đã chuyển khoản (Đã thanh toán)
+                    </button>
+                    @endif
                 @else
                 <button class="btn-check" disabled style="background:#64748b; cursor:not-allowed;">
                     ✅ Đã hoàn thành đóng học phí
@@ -222,7 +248,9 @@ function copyText(text, btn) {
 }
 
 function checkPaymentStatus(btn) {
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang kiểm tra...';
+    if (!confirm('Xác nhận bạn đã chuyển khoản số tiền học phí này qua ngân hàng?')) return;
+    
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
     btn.disabled = true;
 
     fetch('/api/payment/check', {
@@ -236,21 +264,23 @@ function checkPaymentStatus(btn) {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            btn.innerHTML = '✅ Đã thanh toán thành công!';
+            btn.innerHTML = '✅ Gửi yêu cầu thành công!';
             btn.style.background = '#16a34a';
-            setTimeout(() => location.reload(), 1500);
-        } else {
-            btn.innerHTML = '⏳ Chưa nhận được thanh toán';
-            btn.style.background = '#64748b';
             setTimeout(() => {
-                btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Kiểm tra lại';
-                btn.style.background = '';
-                btn.disabled = false;
-            }, 3000);
+                alert(data.message);
+                location.reload();
+            }, 500);
+        } else {
+            btn.innerHTML = '❌ Thất bại';
+            btn.style.background = '#ef4444';
+            setTimeout(() => {
+                alert(data.message || 'Có lỗi xảy ra');
+                location.reload();
+            }, 500);
         }
     })
     .catch(() => {
-        btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Kiểm tra trạng thái thanh toán';
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Tôi đã chuyển khoản (Đã thanh toán)';
         btn.disabled = false;
     });
 }
