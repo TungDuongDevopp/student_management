@@ -224,6 +224,11 @@ Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
     } catch (\Exception $e) {
         // Bỏ qua
     }
+    try {
+        \Illuminate\Support\Facades\DB::statement("ALTER TABLE payments ADD COLUMN proof_image VARCHAR(255) NULL");
+    } catch (\Exception $e) {
+        // Bỏ qua
+    }
 
     $studentCode = $request->input('student_code');
     $student = \App\Models\Student::where('student_code', $studentCode)->first();
@@ -244,21 +249,50 @@ Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
                 return response()->json(['success' => false, 'message' => 'Học phí đã được đóng đủ!']);
             }
 
+            // Lấy số tiền sinh viên khai báo đóng
+            $claimAmount = floatval($request->input('amount'));
+            if ($claimAmount <= 0) {
+                return response()->json(['success' => false, 'message' => 'Số tiền thanh toán phải lớn hơn 0đ.']);
+            }
+            if ($claimAmount > $remaining) {
+                return response()->json(['success' => false, 'message' => 'Số tiền nộp không được vượt quá số tiền còn nợ (' . number_format($remaining, 0, ',', '.') . 'đ).']);
+            }
+
             // Kiểm tra xem đã có giao dịch đang chờ duyệt chưa
             $hasPending = \App\Models\Payment::where('tuition_id', $tuition->id)
                 ->where('status', 'pending')
                 ->exists();
 
             if ($hasPending) {
-                return response()->json(['success' => false, 'message' => 'Bạn đã gửi yêu cầu thanh toán trước đó. Vui lòng chờ hệ thống duyệt.']);
+                return response()->json(['success' => false, 'message' => 'Bạn đã có một yêu cầu thanh toán đang chờ duyệt. Vui lòng đợi hệ thống xác nhận trước khi gửi yêu cầu tiếp theo.']);
             }
 
-            // Tạo giao dịch ở trạng thái chờ duyệt (pending)
+            // Xử lý upload ảnh bằng chứng
+            if (!$request->hasFile('proof_image')) {
+                return response()->json(['success' => false, 'message' => 'Vui lòng tải lên ảnh minh chứng chuyển khoản (Bill).']);
+            }
+
+            $proofImagePath = null;
+            try {
+                $file = $request->file('proof_image');
+                $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+                // Đảm bảo thư mục tồn tại
+                if (!file_exists(public_path('uploads/payments'))) {
+                    mkdir(public_path('uploads/payments'), 0777, true);
+                }
+                $file->move(public_path('uploads/payments'), $filename);
+                $proofImagePath = 'uploads/payments/' . $filename;
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => 'Không thể lưu file minh chứng: ' . $e->getMessage()]);
+            }
+
+            // Tạo giao dịch ở trạng thái chờ duyệt (pending) kèm ảnh minh chứng
             \App\Models\Payment::create([
                 'tuition_id'   => $tuition->id,
-                'amount'       => $remaining,
+                'amount'       => $claimAmount,
                 'payment_date' => now(),
                 'status'       => 'pending',
+                'proof_image'  => $proofImagePath,
             ]);
 
             return response()->json(['success' => true, 'message' => 'Gửi yêu cầu thanh toán thành công! Vui lòng chờ hệ thống duyệt.']);

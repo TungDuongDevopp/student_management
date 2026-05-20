@@ -65,7 +65,10 @@ class PaymentController extends Controller
 
         $tuition = \App\Models\Tuition::find($payment->tuition_id);
         if ($tuition) {
-            $tuition->paid_amount = min($tuition->total_amount, $tuition->paid_amount + $payment->amount);
+            $totalCompleted = Payment::where('tuition_id', $tuition->id)
+                ->where('status', 'completed')
+                ->sum('amount');
+            $tuition->paid_amount = $totalCompleted;
             $tuition->save();
         }
 

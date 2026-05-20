@@ -150,6 +150,10 @@
                         @else
                             <span style="font-size:0.7rem; background:#dcfce7; color:#16a34a; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:600;">Đã duyệt</span>
                         @endif
+
+                        @if($p->proof_image)
+                            <a href="{{ asset($p->proof_image) }}" target="_blank" style="margin-left:8px; font-size:0.72rem; color:#2563eb; text-decoration:underline;" title="Xem ảnh minh chứng"><i class="fa-regular fa-image"></i> Minh chứng</a>
+                        @endif
                     </div>
                     <div style="font-weight:700; color: {{ ($p->status ?? 'completed') === 'pending' ? '#d97706' : (($p->status ?? 'completed') === 'failed' ? '#dc2626' : '#16a34a') }};">
                         +{{ number_format($p->amount, 0, ',', '.') }}đ
@@ -218,9 +222,29 @@
                         ⏳ Đang chờ hệ thống phê duyệt chuyển khoản...
                     </button>
                     @else
-                    <button class="btn-check" onclick="checkPaymentStatus(this)" style="background:#2563eb;">
-                        <i class="fa-solid fa-circle-check"></i> Tôi đã chuyển khoản (Đã thanh toán)
+                    <button class="btn-check" onclick="togglePaymentForm()" style="background:#2563eb;">
+                        <i class="fa-solid fa-circle-check"></i> Xác nhận tôi đã chuyển khoản
                     </button>
+                    
+                    <div id="confirmFormWrap" style="display:none; margin-top:1rem; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 1rem; background: #faf5ff; text-align: left;">
+                        <h4 style="margin-top:0; font-size:0.875rem; color:#1e1b4b; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.75rem;"><i class="fa-solid fa-file-invoice-dollar"></i> Khai báo thông tin chuyển khoản</h4>
+                        
+                        <div style="margin-bottom:0.75rem;">
+                            <label style="display:block; font-size:0.78rem; font-weight:600; color:#475569; margin-bottom:4px;">Số tiền đã chuyển (VNĐ):</label>
+                            <input type="number" id="payAmountInput" value="{{ (int)$remaining }}" max="{{ (int)$remaining }}" min="1000" step="1000" style="width:100%; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; font-weight:700; color:#1e293b; font-size:0.9rem;">
+                        </div>
+                        
+                        <div style="margin-bottom:0.75rem;">
+                            <label style="display:block; font-size:0.78rem; font-weight:600; color:#475569; margin-bottom:4px;">Ảnh minh chứng (Bill chuyển khoản):</label>
+                            <input type="file" id="payProofInput" accept="image/*" style="width:100%; font-size:0.8rem;">
+                            <small style="color:#64748b; font-size:0.7rem; display:block; margin-top:2px;">Hỗ trợ ảnh PNG, JPG, JPEG (Dưới 5MB)</small>
+                        </div>
+                        
+                        <div style="display:flex; gap:0.5rem;">
+                            <button onclick="submitPaymentConfirm(this)" style="flex:1; background:#16a34a; color:#fff; border:none; padding:0.5rem; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.85rem;">Gửi yêu cầu</button>
+                            <button onclick="togglePaymentForm()" style="background:#64748b; color:#fff; border:none; padding:0.5rem 0.75rem; border-radius:6px; cursor:pointer; font-size:0.85rem;">Hủy</button>
+                        </div>
+                    </div>
                     @endif
                 @else
                 <button class="btn-check" disabled style="background:#64748b; cursor:not-allowed;">
@@ -247,40 +271,61 @@ function copyText(text, btn) {
     });
 }
 
-function checkPaymentStatus(btn) {
-    if (!confirm('Xác nhận bạn đã chuyển khoản số tiền học phí này qua ngân hàng?')) return;
-    
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
-    btn.disabled = true;
+function togglePaymentForm() {
+    const wrap = document.getElementById('confirmFormWrap');
+    wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+}
 
+function submitPaymentConfirm(btn) {
+    const amountInput = document.getElementById('payAmountInput');
+    const fileInput = document.getElementById('payProofInput');
+    const amount = parseFloat(amountInput.value);
+    
+    if (isNaN(amount) || amount <= 0) {
+        alert('Vui lòng nhập số tiền thanh toán hợp lệ.');
+        return;
+    }
+    
+    if (amount > {{ $remaining }}) {
+        alert('Số tiền nộp không được vượt quá số tiền còn nợ ({{ number_format($remaining, 0, ",", ".") }}đ).');
+        return;
+    }
+    
+    if (!fileInput.files || fileInput.files.length === 0) {
+        alert('Vui lòng tải lên ảnh minh chứng chuyển khoản (Bill).');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('student_code', '{{ $student_code }}');
+    formData.append('amount', amount);
+    formData.append('proof_image', fileInput.files[0]);
+    
+    const origText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi...';
+    btn.disabled = true;
+    
     fetch('/api/payment/check', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content || ''
         },
-        body: JSON.stringify({ student_code: '{{ $student_code }}' })
+        body: formData
     })
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            btn.innerHTML = '✅ Gửi yêu cầu thành công!';
-            btn.style.background = '#16a34a';
-            setTimeout(() => {
-                alert(data.message);
-                location.reload();
-            }, 500);
+            alert(data.message);
+            location.reload();
         } else {
-            btn.innerHTML = '❌ Thất bại';
-            btn.style.background = '#ef4444';
-            setTimeout(() => {
-                alert(data.message || 'Có lỗi xảy ra');
-                location.reload();
-            }, 500);
+            alert(data.message || 'Có lỗi xảy ra');
+            btn.innerHTML = origText;
+            btn.disabled = false;
         }
     })
-    .catch(() => {
-        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Tôi đã chuyển khoản (Đã thanh toán)';
+    .catch(err => {
+        alert('Có lỗi kết nối hệ thống.');
+        btn.innerHTML = origText;
         btn.disabled = false;
     });
 }

@@ -189,7 +189,7 @@
                             <th style="text-align:center">Chuyên cần (10%)</th>
                             <th style="text-align:center">Giữa kỳ (30%)</th>
                             <th style="text-align:center">Cuối kỳ (60%)</th>
-                            <th style="text-align:center">Tổng kết</th>
+                            <th style="text-align:center">Chốt điểm</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -333,9 +333,12 @@
             }
 
             tb.innerHTML = pageData.map(e => {
-                const scoreC = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? parseFloat(e.grade.score_c).toFixed(1) : '—';
-                const scoreB = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? parseFloat(e.grade.score_b).toFixed(1) : '—';
-                const scoreA = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? parseFloat(e.grade.score_a).toFixed(1) : '—';
+                const scoreC = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? parseFloat(e.grade
+                    .score_c).toFixed(1) : '—';
+                const scoreB = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? parseFloat(e.grade
+                    .score_b).toFixed(1) : '—';
+                const scoreA = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? parseFloat(e.grade
+                    .score_a).toFixed(1) : '—';
 
                 const score = e.grade?.final_score;
                 const scoreBadge = (score === null || score === undefined) ?
@@ -363,7 +366,7 @@
                     <td style="text-align:center;font-weight:500;">${scoreA}</td>
                     <td style="text-align:center">${scoreBadge}</td>
                     <td><div class="actions">
-                        <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>✏️ Điểm</button>
+                        <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>Sửa điểm</button>
                     </div></td>
                 </tr>`;
             }).join('');
