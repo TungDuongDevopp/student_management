@@ -460,11 +460,37 @@
             // Payments list
             const pmts = t.payments || [];
             document.getElementById('paymentsList').innerHTML = pmts.length
-                ? pmts.map(p => `
-                    <div class="payment-item">
-                        <span>${fmtDate(p.payment_date)}</span>
-                        <strong>${fmtVnd(p.amount)}</strong>
-                    </div>`).join('')
+                ? pmts.map(p => {
+                    const status = p.status || 'completed';
+                    let statusBadge = '';
+                    let actionButtons = '';
+                    
+                    if (status === 'pending') {
+                        statusBadge = `<span class="badge" style="background:rgba(251,191,36,0.15); color:#d97706; font-size:0.7rem; padding:2px 6px; margin-left:6px;">Chờ duyệt</span>`;
+                        actionButtons = `
+                            <div style="display:inline-flex; gap:0.25rem; margin-left:10px;">
+                                <button class="btn btn-sm" style="background:#16a34a; color:#fff; padding:2px 8px; font-size:0.7rem; border:none; border-radius:4px; cursor:pointer;" onclick="approvePayment(${p.id}, ${t.id})">Duyệt</button>
+                                <button class="btn btn-sm" style="background:#ef4444; color:#fff; padding:2px 8px; font-size:0.7rem; border:none; border-radius:4px; cursor:pointer;" onclick="rejectPayment(${p.id}, ${t.id})">Từ chối</button>
+                            </div>
+                        `;
+                    } else if (status === 'failed') {
+                        statusBadge = `<span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; font-size:0.7rem; padding:2px 6px; margin-left:6px;">Bị từ chối</span>`;
+                    } else {
+                        statusBadge = `<span class="badge" style="background:rgba(34,197,94,0.15); color:#16a34a; font-size:0.7rem; padding:2px 6px; margin-left:6px;">Đã duyệt</span>`;
+                    }
+                    
+                    return `
+                    <div class="payment-item" style="display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0.5rem; border-bottom:1px solid var(--border);">
+                        <div>
+                            <span>${fmtDate(p.payment_date)}</span>
+                            ${statusBadge}
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <strong style="margin-right:4px;">${fmtVnd(p.amount)}</strong>
+                            ${actionButtons}
+                        </div>
+                    </div>`;
+                }).join('')
                 : '<div class="muted" style="padding:0.5rem">Chưa có giao dịch nào.</div>';
 
             document.getElementById('detailModal').classList.add('active');
@@ -497,6 +523,58 @@
                 fetchData();
             } catch (e) {
                 showToast('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function approvePayment(paymentId, tuitionId) {
+            if (!confirm('Bạn có chắc chắn muốn duyệt giao dịch thanh toán này? Số tiền sẽ tự động được cộng vào phần Đã đóng của sinh viên.')) return;
+            try {
+                const res = await fetch(`/api/payments/${paymentId}/approve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Lỗi duyệt');
+                
+                showToast('Duyệt giao dịch thành công!', 'success');
+                await refreshModalAndData(tuitionId);
+            } catch (e) {
+                showToast('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function rejectPayment(paymentId, tuitionId) {
+            if (!confirm('Bạn có chắc chắn muốn từ chối giao dịch thanh toán này?')) return;
+            try {
+                const res = await fetch(`/api/payments/${paymentId}/reject`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Lỗi từ chối');
+                
+                showToast('Từ chối giao dịch thành công!', 'success');
+                await refreshModalAndData(tuitionId);
+            } catch (e) {
+                showToast('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function refreshModalAndData(tuitionId) {
+            await fetchData();
+            const freshTuition = allData.find(t => t.id === tuitionId);
+            if (freshTuition) {
+                openDetail(freshTuition);
+            } else {
+                closeDetail();
             }
         }
 
