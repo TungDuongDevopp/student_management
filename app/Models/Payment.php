@@ -9,7 +9,8 @@ class Payment extends Model
     protected $fillable = [
         'tuition_id',
         'amount',
-        'payment_date'
+        'payment_date',
+        'status'
     ];
 
     public function tuition()

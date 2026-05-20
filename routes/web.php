@@ -217,32 +217,52 @@ Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request)
     return response()->json(['success' => true]);
 });
 
-// Kiểm tra trạng thái thanh toán của sinh viên
+// Kiểm tra / Gửi yêu cầu thanh toán của sinh viên (Chờ duyệt)
 Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
+    try {
+        \Illuminate\Support\Facades\DB::statement("ALTER TABLE payments ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'completed'");
+    } catch (\Exception $e) {
+        // Bỏ qua
+    }
+
     $studentCode = $request->input('student_code');
     $student = \App\Models\Student::where('student_code', $studentCode)->first();
 
     if ($student) {
-        $tuition = \App\Models\Tuition::where('student_id', $student->id)->first();
+        $activeSemester = \App\Models\Semester::where('status', 1)->first() ?? \App\Models\Semester::latest()->first();
+        if (!$activeSemester) {
+            return response()->json(['success' => false, 'message' => 'Không tìm thấy học kỳ hiện tại.']);
+        }
+
+        $tuition = \App\Models\Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id)
+            ->first();
+
         if ($tuition) {
             $remaining = $tuition->total_amount - $tuition->paid_amount;
-            if ($remaining > 0) {
-                // Đóng 1 phát hết luôn tất cả các môn đã đăng kí
-                $tuition->paid_amount = $tuition->total_amount;
-                $tuition->save();
-
-                // Tạo lịch sử giao dịch
-                \App\Models\Payment::create([
-                    'tuition_id' => $tuition->id,
-                    'amount' => $remaining,
-                    'payment_date' => now(),
-                ]);
-
-                return response()->json(['success' => true, 'message' => 'Thanh toán thành công!']);
-            } else {
-                return response()->json(['success' => true, 'message' => 'Học phí đã được đóng đủ!']);
+            if ($remaining <= 0) {
+                return response()->json(['success' => false, 'message' => 'Học phí đã được đóng đủ!']);
             }
+
+            // Kiểm tra xem đã có giao dịch đang chờ duyệt chưa
+            $hasPending = \App\Models\Payment::where('tuition_id', $tuition->id)
+                ->where('status', 'pending')
+                ->exists();
+
+            if ($hasPending) {
+                return response()->json(['success' => false, 'message' => 'Bạn đã gửi yêu cầu thanh toán trước đó. Vui lòng chờ hệ thống duyệt.']);
+            }
+
+            // Tạo giao dịch ở trạng thái chờ duyệt (pending)
+            \App\Models\Payment::create([
+                'tuition_id'   => $tuition->id,
+                'amount'       => $remaining,
+                'payment_date' => now(),
+                'status'       => 'pending',
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Gửi yêu cầu thanh toán thành công! Vui lòng chờ hệ thống duyệt.']);
         }
     }
-    return response()->json(['success' => false, 'message' => 'Chưa nhận được thanh toán hoặc không tìm thấy sinh viên']);
+    return response()->json(['success' => false, 'message' => 'Không tìm thấy thông tin học phí sinh viên']);
 })->name('payment.check');
