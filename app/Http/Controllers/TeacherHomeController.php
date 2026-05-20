@@ -245,7 +245,7 @@ class TeacherHomeController extends Controller
                             'id' => $student->id,
                             'name' => $student->name,
                             'code' => $student->student_code,
-                            'email' => $student->account->email ?? '',
+                            'email' => $student->email ?? '',
                             'class_name' => $student->classroom->name ?? '—',
                             'status' => 'Đang học',
                         ];

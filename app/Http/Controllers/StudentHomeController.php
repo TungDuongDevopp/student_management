@@ -597,6 +597,11 @@ class StudentHomeController extends Controller
         } catch (\Exception $e) {
             // Already added
         }
+        try {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE payments ADD COLUMN proof_image VARCHAR(255) NULL");
+        } catch (\Exception $e) {
+            // Already added
+        }
 
         /** @var \App\Models\Account $account */
         $account = Auth::user();
