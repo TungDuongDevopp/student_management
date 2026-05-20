@@ -9,7 +9,6 @@ class Schedule extends Model
     protected $fillable = [
         'subject_id',
         'teacher_id',
-        'room_id',
         'semester_id',
         'group_code',
         'max_capacity',
@@ -33,11 +32,6 @@ class Schedule extends Model
         return $this->belongsTo(Teacher::class);
     }
 
-    public function room()
-    {
-        return $this->belongsTo(Room::class);
-    }
-
     public function semester()
     {
         return $this->belongsTo(Semester::class);
@@ -52,5 +46,12 @@ class Schedule extends Model
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function getRoomNamesAttribute()
+    {
+        return $this->sessions->map(function ($s) {
+            return $s->room ? (($s->room->block ? $s->room->block . '.' : '') . $s->room->name) : null;
+        })->filter()->unique()->implode(', ') ?: 'Chưa xếp phòng';
     }
 }

@@ -21,7 +21,7 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/news', function() {
+    Route::get('/news', function () {
         $target = (Auth::user()->role_id == 2) ? 'teacher' : 'student';
         $news = \App\Models\News::where('is_published', true)
             ->whereIn('target_audience', [$target, 'all'])
@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
         return view('user.news_index', compact('news'));
     })->name('user.news.index');
 
-    Route::get('/news/{id}', function($id) {
+    Route::get('/news/{id}', function ($id) {
         $article = \App\Models\News::findOrFail($id);
         return view('user.news_show', compact('article'));
     })->name('user.news.show');
@@ -111,6 +111,10 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
         return view('admin.system_configs');
     })->name('admin.system-configs');
 
+    Route::get('/grades', function () {
+        return view('admin.grade_management');
+    })->name('admin.grades');
+
     Route::get('/news', function () {
         $news = \App\Models\News::orderBy('created_at', 'desc')->get();
         return view('admin.news_management', compact('news'));
@@ -132,14 +136,14 @@ Route::prefix('student')->middleware('role:3')->group(function () {
     Route::get('/grades', [StudentHomeController::class, 'grades'])->name('student.grades');
 
     Route::get('/enrollment', [StudentHomeController::class, 'enrollment'])->name('student.enrollment');
+    Route::post('/enrollment', [StudentHomeController::class, 'submitEnrollment'])->name('student.enrollment.submit');
+    Route::get('/enrollment/search', [StudentHomeController::class, 'searchSchedules'])->name('student.enrollment.search');
 
     Route::get('/attendance', [StudentHomeController::class, 'attendance'])->name('student.attendance');
 
     Route::get('/tuition', [StudentHomeController::class, 'tuition'])->name('student.tuition');
 
-    Route::get('/payment', function () {
-        return view('user.Student.payment');
-    })->name('student.payment');
+    Route::get('/payment', [StudentHomeController::class, 'payment'])->name('student.payment');
 
 
     Route::get('/feedback', [StudentHomeController::class, 'feedback'])->name('student.feedback');
@@ -158,8 +162,10 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
     Route::get('/students', [\App\Http\Controllers\TeacherHomeController::class, 'students'])->name('teacher.students');
 
     Route::get('/attendances', [\App\Http\Controllers\TeacherHomeController::class, 'attendances'])->name('teacher.attendances');
+    Route::post('/attendances/save', [\App\Http\Controllers\TeacherHomeController::class, 'saveAttendances'])->name('teacher.attendances.save');
 
     Route::get('/grades', [\App\Http\Controllers\TeacherHomeController::class, 'grades'])->name('teacher.grades');
+    Route::post('/grades/save', [\App\Http\Controllers\TeacherHomeController::class, 'saveGrades'])->name('teacher.grades.save');
 
     Route::get('/feedback', function () {
         return view('user.Teacher.feedback');
@@ -169,15 +175,15 @@ Route::prefix('teacher')->middleware('role:2')->group(function () {
 // Logout
 Route::post('/logout', function () {
     Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+    session()->invalidate();
+    session()->regenerateToken();
     return redirect()->route('user.login');
 })->name('logout');
 
 Route::post('/admin/logout', function () {
     Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+    session()->invalidate();
+    session()->regenerateToken();
     return redirect()->route('admin.login');
 })->name('admin.logout');
 
@@ -215,7 +221,7 @@ Route::post('/api/payment/webhook', function (\Illuminate\Http\Request $request)
 Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
     $studentCode = $request->input('student_code');
     $student = \App\Models\Student::where('student_code', $studentCode)->first();
-    
+
     if ($student) {
         $tuition = \App\Models\Tuition::where('student_id', $student->id)->first();
         if ($tuition) {
@@ -224,14 +230,14 @@ Route::post('/api/payment/check', function (\Illuminate\Http\Request $request) {
                 // Đóng 1 phát hết luôn tất cả các môn đã đăng kí
                 $tuition->paid_amount = $tuition->total_amount;
                 $tuition->save();
-                
+
                 // Tạo lịch sử giao dịch
                 \App\Models\Payment::create([
                     'tuition_id' => $tuition->id,
                     'amount' => $remaining,
                     'payment_date' => now(),
                 ]);
-                
+
                 return response()->json(['success' => true, 'message' => 'Thanh toán thành công!']);
             } else {
                 return response()->json(['success' => true, 'message' => 'Học phí đã được đóng đủ!']);

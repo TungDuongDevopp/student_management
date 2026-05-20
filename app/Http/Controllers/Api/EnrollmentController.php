@@ -15,6 +15,7 @@ class EnrollmentController extends Controller
             'schedule.subject',
             'schedule.semester',
             'schedule.teacher',
+            'grade',
         ])->get();
         return response()->json($enrollments);
     }
@@ -24,7 +25,9 @@ class EnrollmentController extends Controller
         $validated = $request->validate([
             'student_id'  => 'required|integer|exists:students,id',
             'schedule_id' => 'required|integer|exists:schedules,id',
-            'final_score' => 'nullable|numeric|min:0|max:10',
+            'score_c'     => 'nullable|numeric|min:0|max:10',
+            'score_b'     => 'nullable|numeric|min:0|max:10',
+            'score_a'     => 'nullable|numeric|min:0|max:10',
             'status'      => 'nullable|integer',
         ]);
 
@@ -47,6 +50,15 @@ class EnrollmentController extends Controller
             }
 
             $enrollment = Enrollment::create($validated);
+            
+            if (isset($validated['score_c']) || isset($validated['score_b']) || isset($validated['score_a'])) {
+                $enrollment->grade()->create([
+                    'score_c' => $validated['score_c'] ?? null,
+                    'score_b' => $validated['score_b'] ?? null,
+                    'score_a' => $validated['score_a'] ?? null,
+                ]);
+            }
+            
             $schedule->increment('current_capacity');
             
             \Illuminate\Support\Facades\DB::commit();
@@ -66,6 +78,7 @@ class EnrollmentController extends Controller
             'schedule.semester',
             'schedule.teacher',
             'attendances',
+            'grade',
         ])->findOrFail($id);
         return response()->json($enrollment);
     }
@@ -74,16 +87,31 @@ class EnrollmentController extends Controller
     {
         $enrollment = Enrollment::findOrFail($id);
         $validated  = $request->validate([
-            'final_score' => 'nullable|numeric|min:0|max:10',
+            'score_c'     => 'nullable|numeric|min:0|max:10',
+            'score_b'     => 'nullable|numeric|min:0|max:10',
+            'score_a'     => 'nullable|numeric|min:0|max:10',
             'status'      => 'nullable|integer',
         ]);
 
         $enrollment->update($validated);
+        
+        if (isset($validated['score_c']) || isset($validated['score_b']) || isset($validated['score_a'])) {
+            $enrollment->grade()->updateOrCreate(
+                ['enrollment_id' => $enrollment->id],
+                [
+                    'score_c' => $validated['score_c'] ?? $enrollment->grade?->score_c,
+                    'score_b' => $validated['score_b'] ?? $enrollment->grade?->score_b,
+                    'score_a' => $validated['score_a'] ?? $enrollment->grade?->score_a,
+                ]
+            );
+        }
+
         return response()->json($enrollment->fresh([
             'student.classroom',
             'schedule.subject',
             'schedule.semester',
             'schedule.teacher',
+            'grade',
         ]));
     }
 

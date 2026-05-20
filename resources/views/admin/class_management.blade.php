@@ -22,6 +22,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Mã lớp</th>
+                            <th>Tên lớp</th>
                             <th>Khoa</th>
                             <th>GVCN</th>
                             <th>Sĩ số</th>
@@ -65,6 +66,10 @@
                         <div class="form-group">
                             <label>Mã lớp *</label>
                             <input type="text" id="classCode" placeholder="VD: CNTT01-K18" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên lớp *</label>
+                            <input type="text" id="className" placeholder="VD: Công nghệ thông tin 1 K18" required>
                         </div>
                         <div class="form-group">
                             <label>Sĩ số</label>
@@ -147,11 +152,12 @@
 
                 const tb = document.getElementById('tableBody');
                 if (!filteredData.length) {
-                    tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Chưa có lớp nào</div></td></tr>';
+                    tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">Chưa có lớp nào</div></td></tr>';
                 } else {
                     tb.innerHTML = pageData.map(c => `<tr>
             <td>${c.id}</td>
             <td><strong>${c.code||'-'}</strong></td>
+            <td>${c.name||'-'}</td>
             <td>${c.faculty ? `<span class="badge badge-faculty">${c.faculty.name}</span>` : '-'}</td>
             <td>${c.teacher?.name||'-'}</td>
             <td>${c.quantity||'-'}</td>
@@ -205,6 +211,7 @@
                 document.getElementById('entityId').value = c.id;
                 populateDropdowns(c.faculty_id, c.teacher_id);
                 document.getElementById('classCode').value = c.code || '';
+                document.getElementById('className').value = c.name || '';
                 document.getElementById('classQuantity').value = c.quantity || '';
                 document.getElementById('formModal').classList.add('active');
             }
@@ -217,7 +224,8 @@
                 const id = document.getElementById('entityId').value;
                 const body = {
                     faculty_id: parseInt(document.getElementById('facultyId').value),
-                    code: document.getElementById('classCode').value
+                    code: document.getElementById('classCode').value,
+                    name: document.getElementById('className').value
                 };
                 const teachId = document.getElementById('teacherId').value;
                 if (teachId) body.teacher_id = parseInt(teachId);

@@ -589,7 +589,7 @@
                         <div class="course-name" style="color:${c.text};">${esc(sch.subject_name)}</div>
                         <div class="course-info"><i class="fa-solid fa-user-tie"></i> ${esc(sch.teacher_name)}</div>
                         <div class="course-info"><i class="fa-regular fa-clock"></i> ${ss.start_time}–${ss.end_time}</div>
-                        <div class="room-tag" style="background:${c.tag};">${esc(sch.room)}</div>
+                        <div class="room-tag" style="background:${c.tag};">${esc(ss.room || '—')}</div>
                     </div>
                 </td>`;
                     } else {
@@ -597,9 +597,9 @@
                     }
                 });
                 html += `</tr>`;
-                if (si === 5) {
+                if (si === 4) {
                     html +=
-                        `<tr class="lunch-break"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> NGHỈ TRƯA (12:00 – 13:00)</td></tr>`;
+                        `<tr class="lunch-break"><td colspan="7"><i class="fa-solid fa-mug-hot"></i> NGHỈ TRƯA (11:35 – 12:30)</td></tr>`;
                 }
             });
 

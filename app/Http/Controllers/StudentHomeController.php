@@ -32,7 +32,7 @@ class StudentHomeController extends Controller
 
         // Lấy tất cả môn học đã đăng ký
         $enrollments = Enrollment::where('student_id', $student->id)
-            ->with(['schedule.subject', 'schedule.semester'])
+            ->with(['schedule.subject', 'schedule.semester', 'grade'])
             ->get();
 
         $totalGradePoints = 0;
@@ -55,8 +55,8 @@ class StudentHomeController extends Controller
             }
 
             // Tính điểm
-            if ($enrollment->final_score !== null) {
-                $score10 = $enrollment->final_score;
+            if ($enrollment->grade?->final_score !== null) {
+                $score10 = $enrollment->grade->final_score;
                 $credits = $subject->credits;
 
                 // Quy đổi hệ 10 sang hệ 4
@@ -132,28 +132,32 @@ class StudentHomeController extends Controller
             if (now()->dayOfWeek === 0) $todayDow = 8;
 
             $todaySchedules = Enrollment::with([
-                'schedule.subject', 'schedule.room', 'schedule.teacher', 'schedule.sessions'
+                'schedule.subject',
+                'schedule.sessions.room',
+                'schedule.teacher',
+                'schedule.sessions'
             ])
-            ->where('student_id', $student->id)
-            ->whereHas('schedule.sessions', fn($q) => $q->where('day_of_week', $todayDow))
-            ->get()
-            ->map(function ($enrollment) use ($todayDow) {
-                $s = $enrollment->schedule;
-                if (!$s) return null;
-                $session = $s->sessions->firstWhere('day_of_week', $todayDow);
-                return [
-                    'subject_name' => $s->subject?->name ?? '—',
-                    'teacher_name' => $s->teacher?->name ?? '—',
-                    'room'         => $s->room ? (($s->room->block ? $s->room->block.'.' : '').$s->room->name) : '—',
-                    'start_time'   => substr($session?->start_time ?? '', 0, 5),
-                    'end_time'     => substr($session?->end_time ?? '', 0, 5),
-                ];
-            })
-            ->filter()
-            ->sortBy('start_time')
-            ->values()
-            ->toArray();
+                ->where('student_id', $student->id)
+                ->whereHas('schedule.sessions', fn($q) => $q->where('day_of_week', $todayDow))
+                ->get()
+                ->map(function ($enrollment) use ($todayDow) {
+                    $s = $enrollment->schedule;
+                    if (!$s) return null;
+                    $session = $s->sessions->firstWhere('day_of_week', $todayDow);
+                    return [
+                        'subject_name' => $s->subject?->name ?? '—',
+                        'teacher_name' => $s->teacher?->name ?? '—',
+                        'room'         => $session?->room ? (($session->room->block ? $session->room->block . '.' : '') . $session->room->name) : '—',
+                        'start_time'   => substr($session?->start_time ?? '', 0, 5),
+                        'end_time'     => substr($session?->end_time ?? '', 0, 5),
+                    ];
+                })
+                ->filter()
+                ->sortBy('start_time')
+                ->values()
+                ->toArray();
         }
+
 
         $news = News::where('is_published', true)
             ->whereIn('target_audience', ['student', 'all'])
@@ -169,7 +173,7 @@ class StudentHomeController extends Controller
         /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        
+
         $stats = $this->getStudentStats($account->student);
         $stats['student'] = $account->student;
 
@@ -189,34 +193,33 @@ class StudentHomeController extends Controller
         if ($student) {
             $schedules = Enrollment::with([
                 'schedule.subject',
-                'schedule.room',
                 'schedule.semester',
                 'schedule.teacher',
-                'schedule.sessions',
+                'schedule.sessions.room',
             ])
-            ->where('student_id', $student->id)
-            ->get()
-            ->map(function ($enrollment) {
-                $s = $enrollment->schedule;
-                if (!$s) return null;
-                return [
-                    'id'           => $s->id,
-                    'semester_id'  => $s->semester_id,
-                    'subject_name' => $s->subject?->name ?? '—',
-                    'group_code'   => $s->group_code ?? '',
-                    'teacher_name' => $s->teacher?->name ?? '—',
-                    'room'         => $s->room ? (($s->room->block ? $s->room->block.'.' : '').$s->room->name) : '—',
-                    'final_score'  => $enrollment->final_score,
-                    'sessions'     => $s->sessions->map(fn($ss) => [
-                        'day_of_week' => $ss->day_of_week,
-                        'start_time'  => substr($ss->start_time ?? '', 0, 5),
-                        'end_time'    => substr($ss->end_time ?? '', 0, 5),
-                    ])->values()->toArray(),
-                ];
-            })
-            ->filter()
-            ->values()
-            ->toArray();
+                ->where('student_id', $student->id)
+                ->get()
+                ->map(function ($enrollment) {
+                    $s = $enrollment->schedule;
+                    if (!$s) return null;
+                    return [
+                        'id'           => $s->id,
+                        'semester_id'  => $s->semester_id,
+                        'subject_name' => $s->subject?->name ?? '—',
+                        'group_code'   => $s->group_code ?? '',
+                        'teacher_name' => $s->teacher?->name ?? '—',
+                        'final_score'  => $enrollment->grade?->final_score,
+                        'sessions'     => $s->sessions->map(fn($ss) => [
+                            'day_of_week' => $ss->day_of_week,
+                            'start_time'  => substr($ss->start_time ?? '', 0, 5),
+                            'end_time'    => substr($ss->end_time ?? '', 0, 5),
+                            'room'        => $ss->room ? (($ss->room->block ? $ss->room->block . '.' : '') . $ss->room->name) : '—',
+                        ])->values()->toArray(),
+                    ];
+                })
+                ->filter()
+                ->values()
+                ->toArray();
         }
 
         return view('user.Student.schedule', compact('semesters', 'schedules', 'student'));
@@ -232,8 +235,9 @@ class StudentHomeController extends Controller
         $stats = $this->getStudentStats($student);
 
         // Fetch active schedules and subjects from database!
-        $dbSchedules = \App\Models\Schedule::with(['subject', 'room', 'teacher', 'sessions'])
-            ->where('semester_id', 1) // Active semester
+        $activeSemester = \App\Models\Semester::where('status', 1)->first() ?? \App\Models\Semester::latest()->first();
+        $dbSchedules = \App\Models\Schedule::with(['subject', 'sessions.room', 'teacher', 'sessions'])
+            ->when($activeSemester, fn($q) => $q->where('semester_id', $activeSemester->id))
             ->get();
 
         // Convert dbSchedules to the array structure expected by the View
@@ -241,7 +245,7 @@ class StudentHomeController extends Controller
         foreach ($dbSchedules as $s) {
             $sub = $s->subject;
             if (!$sub) continue;
-            
+
             $type = 'bb';
             if ($sub->id % 3 == 0) $type = 'cn';
             elseif ($sub->id % 2 == 0) $type = 'tc';
@@ -249,20 +253,9 @@ class StudentHomeController extends Controller
             $mappedSessions = [];
             foreach ($s->sessions as $session) {
                 if ($session && $session->start_time) {
-                    $time = substr($session->start_time, 0, 5);
-                    $endTime = substr($session->end_time ?? '', 0, 5);
-                    $periodsMap = [
-                        '07:00' => 1, '07:50' => 2, '08:40' => 3, '09:35' => 4, '10:25' => 5, '11:15' => 6,
-                        '13:00' => 7, '13:50' => 8, '14:40' => 9, '15:35' => 10, '16:25' => 11, '17:15' => 12
-                    ];
-                    $endPeriodsMap = [
-                        '07:45' => 1, '08:35' => 2, '09:25' => 3, '10:20' => 4, '11:10' => 5, '12:00' => 6,
-                        '13:45' => 7, '14:35' => 8, '15:25' => 9, '16:20' => 10, '17:10' => 11, '18:00' => 12
-                    ];
-                    
-                    $startPeriod = $periodsMap[$time] ?? 1;
-                    $endPeriod = $endPeriodsMap[$endTime] ?? ($startPeriod + 1);
-                    
+                    $startPeriod = $this->parseTimeSlot($session->start_time);
+                    $endPeriod = $session->end_time ? $this->parseTimeSlot($session->end_time, true) : ($startPeriod + 1);
+
                     $mappedSessions[] = [
                         'day' => $session->day_of_week,
                         'period' => $startPeriod,
@@ -272,30 +265,31 @@ class StudentHomeController extends Controller
             }
 
             $subjects[] = [
-                $s->id,                    // schedule_id instead of subject code for uniqueness
-                $sub->name,                // name
-                $sub->credits,             // credits
-                $type,                     // type (bb, tc, cn)
-                $mappedSessions,           // array of sessions instead of single day/period
-                $s->max_capacity,          // max
-                $s->current_capacity,      // cur
-                null,                      // prereq
-                $sub->id                   // subject_code
+                $s->id,                    // 0: schedule_id
+                $sub->name,                // 1: name
+                $sub->credits,             // 2: credits
+                $type,                     // 3: type (bb, tc, cn)
+                $mappedSessions,           // 4: sessions
+                $s->max_capacity,          // 5: max
+                $s->current_capacity,      // 6: cur
+                $s->group_code ?? 'N01',   // 7: group_code
+                $sub->code ?? $sub->id     // 8: subject_code
             ];
         }
 
+
         // Fetch student's already enrolled schedules for active semester (status = 1)
         $enrolledSchedules = \App\Models\Enrollment::where('student_id', $student->id)
-            ->with(['schedule.subject', 'schedule.semester', 'schedule.teacher', 'schedule.room', 'schedule.sessions'])
+            ->with(['schedule.subject', 'schedule.semester', 'schedule.teacher', 'schedule.sessions.room', 'schedule.sessions'])
             ->get()
             ->filter(fn($e) => $e->schedule?->semester?->status == 1)
             ->map(fn($e) => [
                 'id' => $e->schedule->id,
-                'subject_code' => $e->schedule->subject->id ?? $e->schedule->subject->code ?? '',
+                'subject_code' => $e->schedule->subject->code ?? $e->schedule->subject->id ?? '',
                 'subject_name' => $e->schedule->subject->name ?? '',
                 'credits' => $e->schedule->subject->credits ?? 0,
                 'teacher_name' => $e->schedule->teacher->name ?? '—',
-                'room' => $e->schedule->room ? (($e->schedule->room->block ? $e->schedule->room->block.'.' : '').$e->schedule->room->name) : '—',
+                'room' => $e->schedule->room_names,
                 'sessions' => $e->schedule->sessions->map(fn($ss) => [
                     'day_of_week' => $ss->day_of_week,
                     'start_time' => substr($ss->start_time ?? '', 0, 5),
@@ -312,6 +306,73 @@ class StudentHomeController extends Controller
         ]));
     }
 
+    public function submitEnrollment(Request $request)
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('student.classroom.faculty.facultyGeneral');
+        $student = $account->student;
+
+        if (!$student) {
+            return response()->json(['success' => false, 'message' => 'Lỗi xác thực sinh viên.'], 403);
+        }
+
+        $scheduleIds = $request->input('schedule_ids', []);
+
+        if (empty($scheduleIds)) {
+            return response()->json(['success' => false, 'message' => 'Chưa chọn học phần nào.'], 400);
+        }
+
+        // Lấy học kỳ hiện tại đang active
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+        if (!$activeSemester) {
+            return response()->json(['success' => false, 'message' => 'Không có học kỳ nào đang mở.'], 400);
+        }
+
+        // Tạo bản ghi Enrollment cho từng môn
+        foreach ($scheduleIds as $scheduleId) {
+            // Kiểm tra xem đã đăng ký chưa
+            $exists = Enrollment::where('student_id', $student->id)
+                ->where('schedule_id', $scheduleId)
+                ->exists();
+
+            if (!$exists) {
+                // Tăng sĩ số lớp học lên 1
+                $schedule = \App\Models\Schedule::find($scheduleId);
+                if ($schedule && $schedule->current_capacity < $schedule->max_capacity) {
+                    $schedule->current_capacity += 1;
+                    $schedule->save();
+
+                    Enrollment::create([
+                        'student_id' => $student->id,
+                        'schedule_id' => $scheduleId,
+                        'status' => 'registered'
+                    ]);
+                }
+            }
+        }
+
+        // Cập nhật lại số tiền học phí nếu đang có bản ghi học phí
+        $tuition = Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id)
+            ->first();
+
+        if ($tuition) {
+            $feePerCredit = $student->classroom?->faculty?->facultyGeneral?->tuition_fee_per_credit ?? 480000;
+            $allEnrollments = Enrollment::where('student_id', $student->id)
+                ->whereHas('schedule', function ($q) use ($activeSemester) {
+                    $q->where('semester_id', $activeSemester->id);
+                })
+                ->with(['schedule.subject'])
+                ->get();
+            $totalCredits = $allEnrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
+            $tuition->total_amount = $totalCredits * $feePerCredit;
+            $tuition->save();
+        }
+
+        return response()->json(['success' => true, 'message' => 'Đăng ký thành công!']);
+    }
+
     private function convertTo4Scale($score10)
     {
         if ($score10 >= 8.5) return 4.0;
@@ -326,25 +387,63 @@ class StudentHomeController extends Controller
 
     public function grades()
     {
+        /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        $stats = $this->getStudentStats($account->student);
-        return view('user.Student.grade', $stats);
+        $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
+        $stats = $this->getStudentStats($student);
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->with(['schedule.subject', 'schedule.semester', 'grade'])
+            ->get();
+
+        $enrollmentsBySemester = $enrollments->groupBy(function ($e) {
+            $sem = $e->schedule?->semester;
+            return $sem ? $sem->name . ($sem->academic_year ? ' – ' . $sem->academic_year : '') : 'Khác';
+        });
+
+        return view('user.Student.grade', array_merge($stats, [
+            'enrollmentsBySemester' => $enrollmentsBySemester,
+            'enrollments' => $enrollments
+        ]));
     }
 
     public function attendance()
     {
+        /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        $stats = $this->getStudentStats($account->student);
-        return view('user.Student.attendance_list', $stats);
+        $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
+        $stats = $this->getStudentStats($student);
+        $enrollments = Enrollment::where('student_id', $student->id)
+            ->with(['schedule.subject', 'schedule.teacher', 'attendances'])
+            ->get();
+
+        return view('user.Student.attendance_list', array_merge($stats, [
+            'enrollments' => $enrollments
+        ]));
     }
 
     public function tuition()
     {
+        /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
         $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
         $stats = $this->getStudentStats($student);
 
         // Lấy học kỳ hiện tại đang active
@@ -358,42 +457,183 @@ class StudentHomeController extends Controller
             ->with(['schedule.subject'])
             ->get();
 
-        // Tìm bản ghi Công nợ học phí thực tế
+        // Tìm bản ghi học phí thực tế (chỉ lấy, không tự động tạo)
         $tuition = Tuition::where('student_id', $student->id)
             ->where('semester_id', $activeSemester->id ?? 1)
             ->first();
 
-        // Nếu chưa tồn tại, khởi tạo một bản ghi động
-        if (!$tuition && $student) {
-            $feePerCredit = $student->classroom->faculty->facultyGeneral->tuition_fee_per_credit ?? 480000;
-            $totalCredits = $enrollments->sum(fn($e) => $e->schedule->subject->credits ?? 0);
-            if ($totalCredits == 0) $totalCredits = 15; // Mặc định nếu chưa học môn nào
-            
-            $tuition = Tuition::create([
-                'student_id' => $student->id,
-                'semester_id' => $activeSemester->id ?? 1,
-                'total_amount' => $totalCredits * $feePerCredit,
-                'paid_amount' => 0
-            ]);
-        }
-
         // Lấy lịch sử giao dịch từ bảng payments liên kết
         $payments = $tuition ? \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get() : collect();
 
+        // Lấy tất cả phiếu học phí qua các học kỳ để hiển thị lịch sử
+        $allTuitions = Tuition::where('student_id', $student->id)
+            ->with(['semester', 'payments'])
+            ->orderByDesc('id')
+            ->get();
+
         return view('user.Student.tuition_fee', array_merge($stats, [
-            'student' => $student,
+            'student'        => $student,
             'activeSemester' => $activeSemester,
-            'enrollments' => $enrollments,
-            'tuition' => $tuition,
-            'payments' => $payments
+            'enrollments'    => $enrollments,
+            'tuition'        => $tuition,
+            'payments'       => $payments,
+            'allTuitions'    => $allTuitions,
         ]));
     }
 
     public function feedback()
     {
+        /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
-        $stats = $this->getStudentStats($account->student);
+        $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
+        $stats = $this->getStudentStats($student);
         return view('user.Student.feedback', $stats);
+    }
+
+    public function payment()
+    {
+        /** @var \App\Models\Account $account */
+        $account = Auth::user();
+        $account->load('student.classroom.faculty.facultyGeneral');
+        $student = $account->student;
+
+        if (!$student) {
+            return redirect()->route('user.login')->with('error', 'Tài khoản chưa được cấu hình thông tin sinh viên.');
+        }
+
+        $stats = $this->getStudentStats($student);
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+
+        $tuition = Tuition::where('student_id', $student->id)
+            ->where('semester_id', $activeSemester->id ?? 1)
+            ->first();
+
+        // Nếu chưa có tuition, redirect về trang học phí
+        if (!$tuition) {
+            return redirect()->route('student.tuition')->with('info', 'Vui lòng xem lại thông tin học phí trước khi thanh toán.');
+        }
+
+        $payments = \App\Models\Payment::where('tuition_id', $tuition->id)->orderByDesc('id')->get();
+
+        return view('user.Student.payment', array_merge($stats, [
+            'student'        => $student,
+            'activeSemester' => $activeSemester,
+            'tuition'        => $tuition,
+            'payments'       => $payments,
+        ]));
+    }
+
+    public function searchSchedules(Request $request)
+    {
+        $code = $request->input('code', '');
+        $name = $request->input('name', '');
+        
+        $activeSemester = Semester::where('status', 1)->first() ?? Semester::latest()->first();
+        
+        $query = \App\Models\Schedule::with(['subject', 'sessions.room', 'teacher', 'sessions'])
+            ->when($activeSemester, fn($q) => $q->where('semester_id', $activeSemester->id));
+            
+        if ($code || $name) {
+            $query->whereHas('subject', function($q) use ($code, $name) {
+                if ($code) {
+                    $q->where(function($q1) use ($code) {
+                        $q1->where('code', 'like', '%' . $code . '%')
+                           ->orWhere('id', 'like', '%' . $code . '%');
+                    });
+                }
+                if ($name) {
+                    $q->where('name', 'like', '%' . $name . '%');
+                }
+            });
+        }
+        
+        $dbSchedules = $query->get();
+        
+        $subjects = [];
+        foreach ($dbSchedules as $s) {
+            $sub = $s->subject;
+            if (!$sub) continue;
+
+            $type = 'bb';
+            if ($sub->id % 3 == 0) $type = 'cn';
+            elseif ($sub->id % 2 == 0) $type = 'tc';
+
+            $mappedSessions = [];
+            foreach ($s->sessions as $session) {
+                if ($session && $session->start_time) {
+                    $startPeriod = $this->parseTimeSlot($session->start_time);
+                    $endPeriod = $session->end_time ? $this->parseTimeSlot($session->end_time, true) : ($startPeriod + 1);
+
+                    $mappedSessions[] = [
+                        'day' => $session->day_of_week,
+                        'period' => $startPeriod,
+                        'duration' => max(1, $endPeriod - $startPeriod + 1)
+                    ];
+                }
+            }
+
+            $subjects[] = [
+                $s->id,                    // 0: schedule_id
+                $sub->name,                // 1: name
+                $sub->credits,             // 2: credits
+                $type,                     // 3: type (bb, tc, cn)
+                $mappedSessions,           // 4: sessions
+                $s->max_capacity,          // 5: max
+                $s->current_capacity,      // 6: cur
+                $s->group_code ?? 'N01',   // 7: group_code
+                $sub->code ?? $sub->id     // 8: subject_code
+            ];
+        }
+        
+        return response()->json(['success' => true, 'subjects' => $subjects]);
+    }
+
+    private function parseTimeSlot($timeStr, $isEnd = false)
+    {
+        if (!$timeStr) return 1;
+        $slots = [
+            ['start' => '06:45', 'end' => '07:35'],
+            ['start' => '07:45', 'end' => '08:35'],
+            ['start' => '08:45', 'end' => '09:35'],
+            ['start' => '09:45', 'end' => '10:35'],
+            ['start' => '10:45', 'end' => '11:35'],
+            ['start' => '12:30', 'end' => '13:20'],
+            ['start' => '13:30', 'end' => '14:20'],
+            ['start' => '14:30', 'end' => '15:20'],
+            ['start' => '15:30', 'end' => '16:20'],
+            ['start' => '16:30', 'end' => '17:20'],
+            ['start' => '17:30', 'end' => '18:20'],
+            ['start' => '18:30', 'end' => '19:20'],
+            ['start' => '19:30', 'end' => '20:20'],
+        ];
+
+        $p = explode(':', substr($timeStr, 0, 5));
+        $tm = (intval($p[0] ?? 0) * 60) + intval($p[1] ?? 0);
+
+        if (!$isEnd) {
+            foreach ($slots as $idx => $slot) {
+                $sp = explode(':', $slot['end']);
+                $endTm = (intval($sp[0]) * 60) + intval($sp[1]);
+                if ($tm <= $endTm + 5) {
+                    return $idx + 1;
+                }
+            }
+            return 1;
+        } else {
+            for ($i = count($slots) - 1; $i >= 0; $i--) {
+                $sp = explode(':', $slots[$i]['end']);
+                $endTm = (intval($sp[0]) * 60) + intval($sp[1]);
+                if ($endTm <= $tm + 5) {
+                    return $i + 1;
+                }
+            }
+            return 1;
+        }
     }
 }

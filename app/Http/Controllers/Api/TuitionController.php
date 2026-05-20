@@ -10,7 +10,7 @@ class TuitionController extends Controller
 {
     public function index()
     {
-        $tuitions = Tuition::with(['student.classroom', 'semester', 'payments'])->get();
+        $tuitions = Tuition::with(['student.classroom', 'semester', 'payments', 'enrollments.schedule.subject'])->get();
         return response()->json($tuitions);
     }
 
@@ -29,7 +29,7 @@ class TuitionController extends Controller
 
     public function show($id)
     {
-        $tuition = Tuition::with(['student.classroom', 'semester', 'payments'])->findOrFail($id);
+        $tuition = Tuition::with(['student.classroom', 'semester', 'payments', 'enrollments.schedule.subject'])->findOrFail($id);
         return response()->json($tuition);
     }
 
@@ -42,7 +42,7 @@ class TuitionController extends Controller
         ]);
 
         $tuition->update($validated);
-        return response()->json($tuition->fresh(['student.classroom', 'semester', 'payments']));
+        return response()->json($tuition->fresh(['student.classroom', 'semester', 'payments', 'enrollments.schedule.subject']));
     }
 
     public function destroy($id)

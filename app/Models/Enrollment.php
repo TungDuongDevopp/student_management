@@ -9,10 +9,7 @@ class Enrollment extends Model
     protected $fillable = [
         'student_id',
         'schedule_id',
-        'score_c',
-        'score_b',
-        'score_a',
-        'final_score',
+        'tuition_id',
         'status'
     ];
 
@@ -29,5 +26,15 @@ class Enrollment extends Model
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function grade()
+    {
+        return $this->hasOne(Grade::class);
+    }
+
+    public function tuition()
+    {
+        return $this->belongsTo(Tuition::class, 'tuition_id');
     }
 }

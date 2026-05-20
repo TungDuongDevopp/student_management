@@ -1,0 +1,2174 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 18, 2026 lúc 10:24 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `qldt`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `accounts`
+--
+
+CREATE TABLE `accounts` (
+  `id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `accounts`
+--
+
+INSERT INTO `accounts` (`id`, `role_id`, `username`, `password`, `created_at`, `updated_at`) VALUES
+(2, 1, 'admin', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 10:55:06', '2026-05-16 03:11:57'),
+(3, 2, 'GV_001', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:08:31', '2026-05-16 03:11:57'),
+(4, 2, 'GV_002', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:08:51', '2026-05-16 03:11:57'),
+(5, 2, 'GV_003', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:09:12', '2026-05-16 03:11:57'),
+(6, 2, 'GV_004', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:09:29', '2026-05-16 03:11:57'),
+(7, 2, 'GV_005', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:09:45', '2026-05-16 03:11:57'),
+(8, 2, 'GV_006', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:10:05', '2026-05-16 03:11:57'),
+(9, 2, 'GV_007', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:10:23', '2026-05-16 03:11:57'),
+(10, 2, 'GV_008', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:10:40', '2026-05-16 03:11:57'),
+(11, 2, 'GV_009', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:10:57', '2026-05-16 03:11:57'),
+(12, 2, 'GV_010', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:11:13', '2026-05-16 03:11:57'),
+(13, 3, 'SV_001', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:18:03', '2026-05-16 03:11:57'),
+(14, 3, 'SV_002', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:18:25', '2026-05-16 03:11:57'),
+(15, 3, 'SV_003', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:18:41', '2026-05-16 03:11:57'),
+(16, 3, 'SV_004', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:18:55', '2026-05-16 03:11:57'),
+(17, 3, 'SV_005', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:19:10', '2026-05-16 03:11:57'),
+(18, 3, 'SV_006', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:19:24', '2026-05-16 03:11:57'),
+(19, 3, 'SV_007', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:21:24', '2026-05-16 03:11:57'),
+(20, 3, 'SV_008', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:21:41', '2026-05-16 03:11:57'),
+(21, 3, 'SV_009', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:21:56', '2026-05-16 03:11:57'),
+(22, 3, 'SV_010', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:22:10', '2026-05-16 03:11:57'),
+(23, 2, 'GV_011', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:38:51', '2026-05-16 03:11:57'),
+(24, 2, 'GV_012', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:39:09', '2026-05-16 03:11:57'),
+(25, 2, 'GV_013', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:39:36', '2026-05-16 03:11:57'),
+(26, 2, 'GV_014', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:39:50', '2026-05-16 03:11:57'),
+(27, 2, 'GV_015', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:40:08', '2026-05-16 03:11:57'),
+(28, 2, 'GV_016', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:40:22', '2026-05-16 03:11:57'),
+(29, 2, 'GV_017', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:40:34', '2026-05-16 03:11:57'),
+(30, 2, 'GV_018', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:40:47', '2026-05-16 03:11:57'),
+(31, 2, 'GV_019', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:41:05', '2026-05-16 03:11:57'),
+(32, 2, 'GV_020', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-05 11:41:19', '2026-05-16 03:11:57'),
+(33, 2, 'GV_021', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-06 04:19:52', '2026-05-16 03:11:57'),
+(34, 2, 'GV_022', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-06 04:20:08', '2026-05-16 03:11:57'),
+(35, 2, 'GV_023', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-06 04:20:24', '2026-05-16 03:11:57'),
+(36, 2, 'GV_024', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-06 04:20:41', '2026-05-16 03:11:57'),
+(37, 3, 'SV_011', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(38, 3, 'SV_012', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(39, 3, 'SV_013', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(40, 3, 'SV_014', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(41, 3, 'SV_015', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(42, 3, 'SV_016', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(43, 3, 'SV_017', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(44, 3, 'SV_018', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(45, 3, 'SV_019', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(46, 3, 'SV_020', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(47, 3, 'SV_021', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(48, 3, 'SV_022', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(49, 3, 'SV_023', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(50, 3, 'SV_024', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(51, 3, 'SV_025', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(52, 3, 'SV_026', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(53, 3, 'SV_027', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(54, 3, 'SV_028', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(55, 3, 'SV_029', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(56, 3, 'SV_030', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(57, 3, 'SV_031', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(58, 3, 'SV_032', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(59, 3, 'SV_033', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(60, 3, 'SV_034', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(61, 3, 'SV_035', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(62, 3, 'SV_036', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(63, 3, 'SV_037', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(64, 3, 'SV_038', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(65, 3, 'SV_039', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(66, 3, 'SV_040', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(67, 3, 'SV_041', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(68, 3, 'SV_042', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(69, 3, 'SV_043', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(70, 3, 'SV_044', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(71, 3, 'SV_045', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(72, 3, 'SV_046', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(73, 3, 'SV_047', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(74, 3, 'SV_048', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(75, 3, 'SV_049', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(76, 3, 'SV_050', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(77, 3, 'SV_051', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(78, 3, 'SV_052', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(79, 3, 'SV_053', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(80, 3, 'SV_054', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(81, 3, 'SV_055', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(82, 3, 'SV_056', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(83, 3, 'SV_057', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(84, 3, 'SV_058', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(85, 3, 'SV_059', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(86, 3, 'SV_060', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(87, 3, 'SV_061', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(88, 3, 'SV_062', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(89, 3, 'SV_063', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(90, 3, 'SV_064', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(91, 3, 'SV_065', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(92, 3, 'SV_066', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(93, 3, 'SV_067', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(94, 3, 'SV_068', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(95, 3, 'SV_069', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(96, 3, 'SV_070', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(97, 3, 'SV_071', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(98, 3, 'SV_072', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(99, 3, 'SV_073', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(100, 3, 'SV_074', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(101, 3, 'SV_075', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(102, 3, 'SV_076', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(103, 3, 'SV_077', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(104, 3, 'SV_078', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(105, 3, 'SV_079', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(106, 3, 'SV_080', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(107, 3, 'SV_081', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(108, 3, 'SV_082', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(109, 3, 'SV_083', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(110, 3, 'SV_084', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(111, 3, 'SV_085', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(112, 3, 'SV_086', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(113, 3, 'SV_087', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(114, 3, 'SV_088', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(115, 3, 'SV_089', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(116, 3, 'SV_090', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(117, 3, 'SV_091', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(118, 3, 'SV_092', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(119, 3, 'SV_093', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(120, 3, 'SV_094', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(121, 3, 'SV_095', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(122, 3, 'SV_096', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(123, 3, 'SV_097', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(124, 3, 'SV_098', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(125, 3, 'SV_099', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(126, 3, 'SV_100', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(127, 3, 'SV_101', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(128, 3, 'SV_102', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(129, 3, 'SV_103', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:21', '2026-05-16 03:11:57'),
+(130, 3, 'SV_104', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(131, 3, 'SV_105', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(132, 3, 'SV_106', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(133, 3, 'SV_107', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(134, 3, 'SV_108', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(135, 3, 'SV_109', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(136, 3, 'SV_110', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(137, 3, 'SV_111', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(138, 3, 'SV_112', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(139, 3, 'SV_113', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(140, 3, 'SV_114', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(141, 3, 'SV_115', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(142, 3, 'SV_116', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(143, 3, 'SV_117', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(144, 3, 'SV_118', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(145, 3, 'SV_119', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(146, 3, 'SV_120', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(147, 3, 'SV_121', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(148, 3, 'SV_122', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(149, 3, 'SV_123', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(150, 3, 'SV_124', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(151, 3, 'SV_125', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(152, 3, 'SV_126', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(153, 3, 'SV_127', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(154, 3, 'SV_128', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(155, 3, 'SV_129', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(156, 3, 'SV_130', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(157, 3, 'SV_131', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(158, 3, 'SV_132', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(159, 3, 'SV_133', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(160, 3, 'SV_134', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(161, 3, 'SV_135', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(162, 3, 'SV_136', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(163, 3, 'SV_137', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(164, 3, 'SV_138', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(165, 3, 'SV_139', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(166, 3, 'SV_140', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(167, 3, 'SV_141', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(168, 3, 'SV_142', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(169, 3, 'SV_143', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(170, 3, 'SV_144', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(171, 3, 'SV_145', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(172, 3, 'SV_146', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(173, 3, 'SV_147', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(174, 3, 'SV_148', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(175, 3, 'SV_149', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(176, 3, 'SV_150', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(177, 3, 'SV_151', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(178, 3, 'SV_152', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(179, 3, 'SV_153', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(180, 3, 'SV_154', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(181, 3, 'SV_155', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(182, 3, 'SV_156', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(183, 3, 'SV_157', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(184, 3, 'SV_158', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(185, 3, 'SV_159', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(186, 3, 'SV_160', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(187, 3, 'SV_161', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(188, 3, 'SV_162', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(189, 3, 'SV_163', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(190, 3, 'SV_164', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(191, 3, 'SV_165', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(192, 3, 'SV_166', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(193, 3, 'SV_167', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(194, 3, 'SV_168', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(195, 3, 'SV_169', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(196, 3, 'SV_170', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(197, 3, 'SV_171', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(198, 3, 'SV_172', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(199, 3, 'SV_173', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(200, 3, 'SV_174', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(201, 3, 'SV_175', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(202, 3, 'SV_176', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(203, 3, 'SV_177', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(204, 3, 'SV_178', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(205, 3, 'SV_179', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(206, 3, 'SV_180', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(207, 3, 'SV_181', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(208, 3, 'SV_182', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(209, 3, 'SV_183', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(210, 3, 'SV_184', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(211, 3, 'SV_185', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(212, 3, 'SV_186', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(213, 3, 'SV_187', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(214, 3, 'SV_188', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(215, 3, 'SV_189', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(216, 3, 'SV_190', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(217, 3, 'SV_191', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(218, 3, 'SV_192', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(219, 3, 'SV_193', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(220, 3, 'SV_194', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(221, 3, 'SV_195', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(222, 3, 'SV_196', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(223, 3, 'SV_197', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(224, 3, 'SV_198', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(225, 3, 'SV_199', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(226, 3, 'SV_200', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(227, 3, 'SV_201', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(228, 3, 'SV_202', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(229, 3, 'SV_203', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(230, 3, 'SV_204', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(231, 3, 'SV_205', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(232, 3, 'SV_206', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(233, 3, 'SV_207', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(234, 3, 'SV_208', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(235, 3, 'SV_209', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(236, 3, 'SV_210', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(237, 3, 'SV_211', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(238, 3, 'SV_212', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(239, 3, 'SV_213', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(240, 3, 'SV_214', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(241, 3, 'SV_215', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(242, 3, 'SV_216', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(243, 3, 'SV_217', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(244, 3, 'SV_218', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(245, 3, 'SV_219', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(246, 3, 'SV_220', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(247, 3, 'SV_221', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(248, 3, 'SV_222', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(249, 3, 'SV_223', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(250, 3, 'SV_224', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(251, 3, 'SV_225', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(252, 3, 'SV_226', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(253, 3, 'SV_227', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(254, 3, 'SV_228', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(255, 3, 'SV_229', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(256, 3, 'SV_230', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(257, 3, 'SV_231', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(258, 3, 'SV_232', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(259, 3, 'SV_233', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(260, 3, 'SV_234', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(261, 3, 'SV_235', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(262, 3, 'SV_236', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(263, 3, 'SV_237', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(264, 3, 'SV_238', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(265, 3, 'SV_239', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(266, 3, 'SV_240', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(267, 3, 'SV_241', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(268, 3, 'SV_242', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(269, 3, 'SV_243', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(270, 3, 'SV_244', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(271, 3, 'SV_245', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(272, 3, 'SV_246', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(273, 3, 'SV_247', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(274, 3, 'SV_248', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(275, 3, 'SV_249', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(276, 3, 'SV_250', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(277, 3, 'SV_251', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(278, 3, 'SV_252', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(279, 3, 'SV_253', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(280, 3, 'SV_254', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(281, 3, 'SV_255', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(282, 3, 'SV_256', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(283, 3, 'SV_257', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(284, 3, 'SV_258', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(285, 3, 'SV_259', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(286, 3, 'SV_260', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(287, 3, 'SV_261', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(288, 3, 'SV_262', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(289, 3, 'SV_263', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(290, 3, 'SV_264', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(291, 3, 'SV_265', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(292, 3, 'SV_266', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(293, 3, 'SV_267', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(294, 3, 'SV_268', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(295, 3, 'SV_269', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(296, 3, 'SV_270', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(297, 3, 'SV_271', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(298, 3, 'SV_272', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(299, 3, 'SV_273', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(300, 3, 'SV_274', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(301, 3, 'SV_275', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(302, 3, 'SV_276', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(303, 3, 'SV_277', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(304, 3, 'SV_278', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(305, 3, 'SV_279', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(306, 3, 'SV_280', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(307, 3, 'SV_281', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(308, 3, 'SV_282', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(309, 3, 'SV_283', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(310, 3, 'SV_284', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(311, 3, 'SV_285', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(312, 3, 'SV_286', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(313, 3, 'SV_287', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(314, 3, 'SV_288', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(315, 3, 'SV_289', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(316, 3, 'SV_290', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(317, 3, 'SV_291', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(318, 3, 'SV_292', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(319, 3, 'SV_293', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(320, 3, 'SV_294', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(321, 3, 'SV_295', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(322, 3, 'SV_296', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(323, 3, 'SV_297', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(324, 3, 'SV_298', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(325, 3, 'SV_299', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(326, 3, 'SV_300', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(327, 3, 'SV_301', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(328, 3, 'SV_302', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(329, 3, 'SV_303', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(330, 3, 'SV_304', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(331, 3, 'SV_305', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(332, 3, 'SV_306', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(333, 3, 'SV_307', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(334, 3, 'SV_308', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(335, 3, 'SV_309', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(336, 3, 'SV_310', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(337, 3, 'SV_311', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(338, 3, 'SV_312', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(339, 3, 'SV_313', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(340, 3, 'SV_314', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(341, 3, 'SV_315', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(342, 3, 'SV_316', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(343, 3, 'SV_317', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(344, 3, 'SV_318', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(345, 3, 'SV_319', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(346, 3, 'SV_320', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(347, 3, 'SV_321', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(348, 3, 'SV_322', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(349, 3, 'SV_323', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(350, 3, 'SV_324', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(351, 3, 'SV_325', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(352, 3, 'SV_326', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(353, 3, 'SV_327', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(354, 3, 'SV_328', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(355, 3, 'SV_329', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(356, 3, 'SV_330', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(357, 3, 'SV_331', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(358, 3, 'SV_332', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(359, 3, 'SV_333', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(360, 3, 'SV_334', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(361, 3, 'SV_335', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(362, 3, 'SV_336', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(363, 3, 'SV_337', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(364, 3, 'SV_338', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(365, 3, 'SV_339', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(366, 3, 'SV_340', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(367, 3, 'SV_341', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(368, 3, 'SV_342', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(369, 3, 'SV_343', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(370, 3, 'SV_344', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(371, 3, 'SV_345', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(372, 3, 'SV_346', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(373, 3, 'SV_347', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(374, 3, 'SV_348', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(375, 3, 'SV_349', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(376, 3, 'SV_350', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(377, 3, 'SV_351', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(378, 3, 'SV_352', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(379, 3, 'SV_353', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(380, 3, 'SV_354', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(381, 3, 'SV_355', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(382, 3, 'SV_356', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(383, 3, 'SV_357', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(384, 3, 'SV_358', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(385, 3, 'SV_359', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(386, 3, 'SV_360', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(387, 3, 'SV_361', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(388, 3, 'SV_362', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(389, 3, 'SV_363', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(390, 3, 'SV_364', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(391, 3, 'SV_365', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57');
+INSERT INTO `accounts` (`id`, `role_id`, `username`, `password`, `created_at`, `updated_at`) VALUES
+(392, 3, 'SV_366', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(393, 3, 'SV_367', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(394, 3, 'SV_368', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(395, 3, 'SV_369', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(396, 3, 'SV_370', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(397, 3, 'SV_371', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(398, 3, 'SV_372', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(399, 3, 'SV_373', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(400, 3, 'SV_374', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(401, 3, 'SV_375', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(402, 3, 'SV_376', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(403, 3, 'SV_377', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(404, 3, 'SV_378', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(405, 3, 'SV_379', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(406, 3, 'SV_380', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(407, 3, 'SV_381', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(408, 3, 'SV_382', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(409, 3, 'SV_383', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(410, 3, 'SV_384', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(411, 3, 'SV_385', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(412, 3, 'SV_386', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(413, 3, 'SV_387', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(414, 3, 'SV_388', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(415, 3, 'SV_389', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(416, 3, 'SV_390', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(417, 3, 'SV_391', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(418, 3, 'SV_392', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(419, 3, 'SV_393', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(420, 3, 'SV_394', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(421, 3, 'SV_395', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(422, 3, 'SV_396', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(423, 3, 'SV_397', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(424, 3, 'SV_398', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(425, 3, 'SV_399', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(426, 3, 'SV_400', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:15:22', '2026-05-16 03:11:57'),
+(427, 3, 'SV_401', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(428, 3, 'SV_402', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(429, 3, 'SV_403', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(430, 3, 'SV_404', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(431, 3, 'SV_405', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(432, 3, 'SV_406', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(433, 3, 'SV_407', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(434, 3, 'SV_408', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(435, 3, 'SV_409', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(436, 3, 'SV_410', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(437, 3, 'SV_411', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(438, 3, 'SV_412', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(439, 3, 'SV_413', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(440, 3, 'SV_414', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(441, 3, 'SV_415', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(442, 3, 'SV_416', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(443, 3, 'SV_417', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(444, 3, 'SV_418', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(445, 3, 'SV_419', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(446, 3, 'SV_420', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(447, 3, 'SV_421', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(448, 3, 'SV_422', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(449, 3, 'SV_423', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(450, 3, 'SV_424', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(451, 3, 'SV_425', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(452, 3, 'SV_426', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(453, 3, 'SV_427', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(454, 3, 'SV_428', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(455, 3, 'SV_429', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(456, 3, 'SV_430', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(457, 3, 'SV_431', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(458, 3, 'SV_432', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(459, 3, 'SV_433', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(460, 3, 'SV_434', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(461, 3, 'SV_435', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(462, 3, 'SV_436', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(463, 3, 'SV_437', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(464, 3, 'SV_438', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(465, 3, 'SV_439', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(466, 3, 'SV_440', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(467, 3, 'SV_441', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(468, 3, 'SV_442', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(469, 3, 'SV_443', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(470, 3, 'SV_444', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(471, 3, 'SV_445', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(472, 3, 'SV_446', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(473, 3, 'SV_447', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(474, 3, 'SV_448', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(475, 3, 'SV_449', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(476, 3, 'SV_450', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(477, 3, 'SV_451', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(478, 3, 'SV_452', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(479, 3, 'SV_453', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(480, 3, 'SV_454', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(481, 3, 'SV_455', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(482, 3, 'SV_456', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(483, 3, 'SV_457', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(484, 3, 'SV_458', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(485, 3, 'SV_459', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(486, 3, 'SV_460', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(487, 3, 'SV_461', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(488, 3, 'SV_462', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(489, 3, 'SV_463', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(490, 3, 'SV_464', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(491, 3, 'SV_465', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(492, 3, 'SV_466', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(493, 3, 'SV_467', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(494, 3, 'SV_468', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(495, 3, 'SV_469', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(496, 3, 'SV_470', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(497, 3, 'SV_471', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(498, 3, 'SV_472', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(499, 3, 'SV_473', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(500, 3, 'SV_474', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(501, 3, 'SV_475', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(502, 3, 'SV_476', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(503, 3, 'SV_477', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(504, 3, 'SV_478', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(505, 3, 'SV_479', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(506, 3, 'SV_480', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(507, 3, 'SV_481', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(508, 3, 'SV_482', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(509, 3, 'SV_483', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(510, 3, 'SV_484', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(511, 3, 'SV_485', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(512, 3, 'SV_486', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(513, 3, 'SV_487', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(514, 3, 'SV_488', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(515, 3, 'SV_489', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(516, 3, 'SV_490', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(517, 3, 'SV_491', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(518, 3, 'SV_492', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(519, 3, 'SV_493', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(520, 3, 'SV_494', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(521, 3, 'SV_495', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(522, 3, 'SV_496', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(523, 3, 'SV_497', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(524, 3, 'SV_498', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(525, 3, 'SV_499', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57'),
+(526, 3, 'SV_500', '$2y$12$hGRHKy1tQFNNoL/1K7HxoOoEcfi0qyIruB9WqRfsdy4uuejVb.hR6', '2026-05-13 12:32:15', '2026-05-16 03:11:57');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `attendances`
+--
+
+CREATE TABLE `attendances` (
+  `id` int(11) NOT NULL,
+  `enrollment_id` int(11) DEFAULT NULL,
+  `attendance_date` date DEFAULT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `classrooms`
+--
+
+CREATE TABLE `classrooms` (
+  `id` int(11) NOT NULL,
+  `faculty_id` int(11) NOT NULL,
+  `teacher_id` int(11) DEFAULT NULL,
+  `code` varchar(50) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `classrooms`
+--
+
+INSERT INTO `classrooms` (`id`, `faculty_id`, `teacher_id`, `code`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'CNTT01', 35, '2026-05-10 17:13:09', '2026-05-10 17:13:09'),
+(2, 1, 2, 'CNTT02', 36, '2026-05-10 17:19:32', '2026-05-10 17:19:32'),
+(3, 2, 3, 'DK01', 36, '2026-05-10 17:19:59', '2026-05-10 17:19:59'),
+(4, 2, 4, 'DK02', 36, '2026-05-10 17:20:22', '2026-05-10 17:20:22'),
+(5, 3, 5, 'MO01', 36, '2026-05-10 17:20:42', '2026-05-10 17:20:57'),
+(6, 3, 6, 'MO02', 36, '2026-05-10 17:21:23', '2026-05-10 17:21:23'),
+(7, 4, 7, 'TDBD01', 36, '2026-05-10 17:21:46', '2026-05-10 17:22:18'),
+(8, 4, 8, 'TDBD02', 36, '2026-05-10 17:23:03', '2026-05-10 17:23:03'),
+(9, 5, 9, 'KHKTDC01', 36, '2026-05-10 17:23:39', '2026-05-10 17:23:39'),
+(10, 5, 10, 'KHKTDC02', 36, '2026-05-10 17:23:58', '2026-05-10 17:24:10'),
+(11, 6, 11, 'KT01', 36, '2026-05-10 17:24:46', '2026-05-10 17:24:46'),
+(12, 6, 12, 'KT02', 35, '2026-05-10 17:25:05', '2026-05-10 17:25:05'),
+(13, 7, 13, 'CD01', 35, '2026-05-10 17:25:32', '2026-05-10 17:25:32'),
+(14, 7, 14, 'CD02', 35, '2026-05-10 17:25:50', '2026-05-10 17:25:50');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `enrollments`
+--
+
+CREATE TABLE `enrollments` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  `final_score` float DEFAULT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `score_c` decimal(4,2) DEFAULT NULL COMMENT 'Điểm C (10%)',
+  `score_b` decimal(4,2) DEFAULT NULL COMMENT 'Điểm B (30%)',
+  `score_a` decimal(4,2) DEFAULT NULL COMMENT 'Điểm A (60%)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `faculties`
+--
+
+CREATE TABLE `faculties` (
+  `id` int(11) NOT NULL,
+  `faculty_general_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `code` varchar(50) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `faculties`
+--
+
+INSERT INTO `faculties` (`id`, `faculty_general_id`, `code`, `name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'CNTT', 'Công nghệ thông tin', '2026-05-05 18:32:43', '2026-05-15 09:17:17'),
+(2, 1, 'Daukhi', 'Dầu khí', '2026-05-05 18:32:43', '2026-05-15 09:17:51'),
+(3, 1, 'Mo', 'Mỏ', '2026-05-05 18:32:43', '2026-05-15 09:17:58'),
+(4, 1, 'Tradiachinh', 'Trắc địa - Bản đồ và Quản lý đất đai', '2026-05-05 18:32:43', '2026-05-15 09:18:04'),
+(5, 1, 'Diachat', 'Khoa học và Kỹ thuật Địa chất', '2026-05-05 18:32:43', '2026-05-15 09:18:11'),
+(6, 2, 'KT-QTKD', 'Kinh tế và Quản trị kinh doanh', '2026-05-05 18:32:43', '2026-05-15 09:18:23'),
+(7, 1, 'Co-Dien', 'Cơ - Điện', '2026-05-05 18:32:43', '2026-05-15 09:18:33'),
+(8, NULL, 'NN', 'Ngoại ngữ', '2026-05-05 18:34:09', '2026-05-05 18:34:09'),
+(9, NULL, 'GDTC', 'Giáo dục Thể chất', '2026-05-05 18:34:09', '2026-05-05 18:34:09'),
+(10, NULL, 'GDQP', 'Giáo dục Quốc phòng và An Ninh', '2026-05-05 18:34:09', '2026-05-06 04:16:55'),
+(11, NULL, 'ChinhChi', 'Lý luận chính chị', '2026-05-06 04:17:50', '2026-05-06 04:18:24'),
+(12, NULL, 'KHCB', 'Khoa Học Cơ Bản', '2026-05-06 04:18:34', '2026-05-06 04:18:34');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `faculty_generals`
+--
+
+CREATE TABLE `faculty_generals` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL COMMENT 'Tên nhóm khoa (VD: Khối Kỹ thuật)',
+  `max_credits` int(11) NOT NULL DEFAULT 150 COMMENT 'Số tín chỉ tối đa',
+  `tuition_fee_per_credit` int(11) NOT NULL DEFAULT 500000 COMMENT 'Học phí 1 tín chỉ',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `faculty_generals`
+--
+
+INSERT INTO `faculty_generals` (`id`, `name`, `max_credits`, `tuition_fee_per_credit`, `created_at`, `updated_at`) VALUES
+(1, 'Khối kỹ thuật', 153, 578100, '2026-05-15 09:09:12', '2026-05-15 09:12:35'),
+(2, 'Khối kinh tế', 125, 454100, '2026-05-15 09:10:41', '2026-05-15 09:10:41');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `feedbacks`
+--
+
+CREATE TABLE `feedbacks` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `reply` text DEFAULT NULL COMMENT 'Phản hồi từ admin',
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0: chưa xem, 1: đã xem',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `feedbacks`
+--
+
+INSERT INTO `feedbacks` (`id`, `account_id`, `content`, `reply`, `status`, `created_at`, `updated_at`) VALUES
+(1, 3, 'Tôi muốn nhà trường cải thiện chất lượng của máy chiếu. Một số phòng máy chiếu quá mờ hoặc cáp máy chiếu quá lỏng dẫn đến việc khó khăn trong kết nối máy chiếu. Mong nhà trường gửi hồi đáp sớm. Xin cảm ơn vì đã lắng nghe', NULL, 0, '2026-05-16 12:04:10', '2026-05-16 12:04:10');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2026_05_06_102550_add_block_to_rooms_table', 1),
+(2, '2026_05_06_103016_add_description_to_rooms_table', 2),
+(3, '2026_05_07_113529_add_status_to_semesters_table', 3),
+(4, '0001_01_01_000000_create_users_table', 0),
+(5, '2026_05_04_003114_add_timestamps_to_all_tables', 0),
+(6, '2026_05_09_090000_add_reply_status_to_feedbacks_table', 4),
+(7, '2026_05_09_150000_remove_semester_id_from_classrooms_table', 5),
+(8, '2026_05_11_080000_add_profile_fields_to_students_table', 6),
+(9, '2026_05_11_090000_add_profile_fields_to_teachers_table', 7),
+(10, '2026_05_14_190000_update_schedules_and_subjects_table', 8),
+(11, '2026_05_15_070000_replace_shift_with_time_and_group_in_schedules', 9),
+(12, '2026_05_15_080000_create_schedule_sessions_table', 10),
+(13, '2026_05_15_090000_add_max_capacity_to_schedules_table', 11),
+(14, '2026_05_15_100000_create_system_configs_table', 12),
+(15, '2026_05_15_100001_add_max_credits_to_faculties_table', 12),
+(17, '2026_05_15_100003_create_faculty_generals_table', 14),
+(18, '2026_05_15_100004_add_faculty_general_id_to_faculties_table', 14),
+(19, '2026_05_16_100000_add_current_capacity_to_schedules_table', 15),
+(20, '2026_05_16_100001_add_dates_to_schedule_sessions_table', 15),
+(21, '2026_05_16_100002_move_dates_to_semesters_table', 16),
+(22, '2026_05_16_100003_add_dates_to_schedules_table', 17),
+(23, '2026_05_18_010000_add_component_scores_to_enrollments_table', 18),
+(24, '2026_05_18_010806_create_news_table', 18);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `news`
+--
+
+CREATE TABLE `news` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) DEFAULT NULL,
+  `content` text NOT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `target_audience` enum('student','teacher','all') NOT NULL DEFAULT 'all',
+  `category` varchar(255) DEFAULT NULL,
+  `is_published` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` int(11) NOT NULL,
+  `tuition_id` int(11) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `payment_date` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'Quản trị viên hệ thống', '2026-05-05 17:53:38', '2026-05-05 17:53:38'),
+(2, 'Teacher', 'Giáo viên', '2026-05-05 17:53:38', '2026-05-05 17:53:38'),
+(3, 'Student', 'Học sinh/Sinh viên', '2026-05-05 17:53:38', '2026-05-05 17:53:38');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `id` int(11) NOT NULL,
+  `block` varchar(10) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `block`, `name`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'A', 'A101', 'Nhà A Phòng 101', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(2, 'A', 'A102', 'Nhà A Phòng 102', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(3, 'A', 'A103', 'Nhà A Phòng 103', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(4, 'A', 'A104', 'Nhà A Phòng 104', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(5, 'A', 'A105', 'Nhà A Phòng 105', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(6, 'B', 'B101', 'Nhà B Phòng 101', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(7, 'B', 'B102', 'Nhà B Phòng 102', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(8, 'B', 'B103', 'Nhà B Phòng 103', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(9, 'B', 'B104', 'Nhà B Phòng 104', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(10, 'B', 'B105', 'Nhà B Phòng 105', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(11, 'C', 'C101', 'Nhà C Phòng 101', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(12, 'C', 'C102', 'Nhà C Phòng 102', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(13, 'C', 'C103', 'Nhà C Phòng 103', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(14, 'C', 'C104', 'Nhà C Phòng 104', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(15, 'C', 'C105', 'Nhà C Phòng 105', '2026-05-05 18:29:09', '2026-05-05 18:29:09'),
+(17, 'G', 'G101', 'Phòng thí nghiệm Hóa học Nhà G Phòng 101', '2026-05-06 03:47:32', '2026-05-06 03:47:32'),
+(18, 'G', 'G102', 'Phòng thí nghiệm Vật Lý Nhà G Phòng 102', '2026-05-06 03:48:00', '2026-05-06 03:48:08'),
+(19, 'G', 'G103', 'Phòng thí nghiệm khai thác mỏ Nhà G Phòng 103', '2026-05-06 03:57:39', '2026-05-06 03:57:39'),
+(20, 'C', 'C201', 'Trung Tâm Ngoại Ngữ - Tin Học Nhà C Phòng 201', '2026-05-06 04:00:08', '2026-05-06 04:01:53'),
+(21, 'C', 'C202', 'Thư Viện Nhà C Phòng 202', '2026-05-06 04:00:31', '2026-05-06 04:01:59'),
+(22, 'C', 'C301', 'Phòng Máy Nhà C Phòng 301', '2026-05-06 04:01:20', '2026-05-06 04:02:06'),
+(23, 'C', 'C302', 'Phòng Máy Nhà C Phòng 302', '2026-05-06 04:01:43', '2026-05-06 04:01:43'),
+(24, 'H', 'H101', 'Phòng quân sự Nhà H Phòng 101', '2026-05-06 04:07:55', '2026-05-06 04:08:47'),
+(25, 'H', 'H102', 'Phòng quân sự Nhà H Phòng 102', '2026-05-06 04:08:13', '2026-05-06 04:08:56'),
+(26, 'H', 'H103', 'Phòng quân sự Nhà H Phòng 103', '2026-05-06 04:08:14', '2026-05-06 04:09:14'),
+(27, 'H', 'H104', 'Phòng quân sự nhà H Phòng 104', '2026-05-06 04:08:31', '2026-05-06 04:09:25'),
+(28, 'G', 'G104', 'Phòng TDTT  Nhà G Phòng 104', '2026-05-06 04:09:59', '2026-05-06 04:10:07'),
+(29, 'G', 'G105', 'Căng tin Nhà G Phòng 105', '2026-05-06 04:10:31', '2026-05-06 04:10:31'),
+(30, 'H', '105', 'Phòng Y tế Nhà H Phòng 105', '2026-05-06 04:10:54', '2026-05-06 04:10:54'),
+(31, 'A', 'A106', 'Phòng nghỉ Giảng viên nhà A Phòng 106', '2026-05-06 04:11:27', '2026-05-06 04:11:35'),
+(32, 'B', 'B106', 'Phòng nghỉ giảng viên Nhà B Phòng 106', '2026-05-06 04:12:02', '2026-05-06 04:12:02'),
+(33, 'C', 'C106', 'Phòng nghỉ giảng viên Nhà C Phòng 106', '2026-05-06 04:12:38', '2026-05-06 04:13:05'),
+(34, 'B', 'Sân TDTT 2', 'Sân thể dục thể thao khu 2 Khu B', '2026-05-17 18:13:57', '2026-05-17 18:13:57'),
+(35, 'A', 'Sân TDTT 1', 'Sân Thể dục thể thao 1 Khu A', '2026-05-17 18:14:42', '2026-05-17 18:14:42'),
+(36, 'A1', 'Sân TDTT 3', 'Sân Thể dục thể thao 3 khu A1', '2026-05-17 18:15:22', '2026-05-17 18:15:22');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `schedules`
+--
+
+CREATE TABLE `schedules` (
+  `id` int(11) NOT NULL,
+  `subject_id` int(11) DEFAULT NULL,
+  `teacher_id` int(11) DEFAULT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `semester_id` int(11) DEFAULT NULL,
+  `group_code` varchar(20) DEFAULT NULL COMMENT 'Mã nhóm học phần (VD: N01, Nhóm 1)',
+  `max_capacity` int(11) NOT NULL DEFAULT 40,
+  `current_capacity` int(11) NOT NULL DEFAULT 0,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `schedules`
+--
+
+INSERT INTO `schedules` (`id`, `subject_id`, `teacher_id`, `room_id`, `semester_id`, `group_code`, `max_capacity`, `current_capacity`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 5, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-25', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
+(2, 4, 1, 1, 2, 'Nhóm 02', 35, 0, '2026-04-08', '2026-05-29', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
+(3, 1, 2, 28, 2, 'Nhóm 200', 35, 0, '2026-01-01', '2026-05-28', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
+(4, 2, 2, 10, 2, 'Nhóm 01', 40, 0, '2026-01-06', '2026-05-30', '2026-05-17 17:56:44', '2026-05-17 17:56:44'),
+(5, 3, 1, 10, 2, 'Nhóm 01', 40, 0, '2026-01-09', '2026-05-29', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
+(6, 24, 15, 6, 2, 'Nhóm 01', 40, 0, '2026-01-07', '2026-05-28', '2026-05-17 18:02:31', '2026-05-17 18:02:31'),
+(7, 24, 16, 11, 2, 'Nhóm 200', 40, 0, '2026-01-05', '2026-05-25', '2026-05-17 18:03:46', '2026-05-17 18:03:46'),
+(8, 37, 24, 33, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-26', '2026-05-17 18:05:29', '2026-05-17 18:05:29'),
+(9, 39, 23, 10, 2, 'Nhóm 05', 60, 0, '2026-01-09', '2026-05-30', '2026-05-17 18:08:09', '2026-05-17 18:08:09'),
+(10, 32, 21, 2, 2, 'Nhóm 01', 60, 0, '2026-01-08', '2026-05-29', '2026-05-17 18:09:59', '2026-05-17 18:09:59'),
+(11, 34, 22, 5, 2, 'Nhóm 01', 40, 0, '2026-01-05', '2026-05-26', '2026-05-17 18:12:19', '2026-05-17 18:12:19'),
+(12, 21, 18, 35, 2, 'Nhóm 01', 40, 2, '2026-01-01', '2026-02-26', '2026-05-17 18:16:59', '2026-05-18 13:07:55');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `schedule_sessions`
+--
+
+CREATE TABLE `schedule_sessions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  `day_of_week` tinyint(4) DEFAULT NULL COMMENT '2=Thứ 2 … 8=CN',
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `schedule_sessions`
+--
+
+INSERT INTO `schedule_sessions` (`id`, `schedule_id`, `day_of_week`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
+(2, 1, 4, '06:45:00', '09:30:00', '2026-05-16 08:26:20', '2026-05-16 08:26:20'),
+(3, 2, 4, '13:30:00', '15:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
+(4, 2, 6, '14:30:00', '16:20:00', '2026-05-17 17:18:11', '2026-05-17 17:18:11'),
+(5, 3, 5, '07:45:00', '10:30:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
+(6, 3, 2, '12:30:00', '15:20:00', '2026-05-17 17:45:27', '2026-05-17 17:45:27'),
+(7, 4, 3, '07:45:00', '10:30:00', '2026-05-17 17:56:44', '2026-05-17 17:56:44'),
+(8, 5, 7, '15:30:00', '17:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
+(9, 5, 5, '16:30:00', '18:30:00', '2026-05-17 17:59:01', '2026-05-17 17:59:01'),
+(11, 7, 3, '17:30:00', '20:20:00', '2026-05-17 18:03:46', '2026-05-17 18:03:46'),
+(12, 8, 3, '12:30:00', '15:20:00', '2026-05-17 18:05:29', '2026-05-17 18:05:29'),
+(16, 11, 4, '07:30:00', '10:30:00', '2026-05-17 18:12:19', '2026-05-17 18:12:19'),
+(17, 12, 5, '06:45:00', '08:30:00', '2026-05-17 18:16:59', '2026-05-17 18:16:59'),
+(18, 6, 6, '12:30:00', '15:20:00', '2026-05-18 11:17:48', '2026-05-18 11:17:48'),
+(19, 9, 7, '07:45:00', '10:30:00', '2026-05-18 11:18:09', '2026-05-18 11:18:09'),
+(20, 10, 4, '13:30:00', '15:20:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20'),
+(21, 10, 6, '07:45:00', '09:30:00', '2026-05-18 11:18:20', '2026-05-18 11:18:20');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `semesters`
+--
+
+CREATE TABLE `semesters` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `academic_year` varchar(20) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `semesters`
+--
+
+INSERT INTO `semesters` (`id`, `name`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Học kỳ 1', '2025-2026', 0, '2026-05-16 08:14:01', '2026-05-16 08:14:01'),
+(2, 'Học kỳ 2', '2025-2026', 1, '2026-05-16 08:14:13', '2026-05-16 08:16:04'),
+(3, 'Học kỳ 1', '2026-2027', 0, '2026-05-16 08:14:29', '2026-05-16 08:14:29'),
+(4, 'Học kỳ 2', '2026-2027', 0, '2026-05-16 08:14:39', '2026-05-16 08:14:39'),
+(5, 'Học kỳ 1', '2027-2028', 0, '2026-05-16 08:15:01', '2026-05-16 08:15:01'),
+(6, 'Học kỳ 2', '2027-2028', 0, '2026-05-16 08:15:07', '2026-05-16 08:15:07'),
+(7, 'Học kỳ 1', '2028-2029', 0, '2026-05-16 08:15:15', '2026-05-16 08:15:15'),
+(8, 'Học kỳ 2', '2028-2029', 0, '2026-05-16 08:15:22', '2026-05-16 08:15:22'),
+(9, 'Học kỳ 1', '2029-2030', 0, '2026-05-16 08:15:39', '2026-05-16 08:15:39'),
+(10, 'Học kỳ 2', '2029-2030', 0, '2026-05-16 08:15:45', '2026-05-16 08:15:45');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('8XS71LFIb3jAo1Z7YwvCAakCOxmunGX4Wb9y15RI', 13, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZ0xDOVZWdXJjYXphNkN3QVRQYTlNWFUyRGZYZ285TDJqcFdKM0hWdSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9zdHVkZW50L3R1aXRpb24iO3M6NToicm91dGUiO3M6MTU6InN0dWRlbnQudHVpdGlvbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjEzO30=', 1779135550),
+('i1eCiehXQbKoyvxe5uAJErWxs0YVnTsNwSJOShvS', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNVFyUlN6MGxYR1FyYVMyQmxUNUN4UU5xdkM4RUdrMjRqMVhoV0lpZyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6NDg6Imh0dHA6Ly9sb2NhbGhvc3Qvc3R1ZGVudF9tYW5hZ2VtZW50L3B1YmxpYy9sb2dpbiI7czo1OiJyb3V0ZSI7czoxMDoidXNlci5sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1779127898);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `students`
+--
+
+CREATE TABLE `students` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `classroom_id` int(11) DEFAULT NULL,
+  `student_code` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` tinyint(4) DEFAULT NULL COMMENT '0: Nam, 1: Nữ',
+  `phone_number` varchar(20) DEFAULT NULL,
+  `specialization` varchar(100) DEFAULT NULL COMMENT 'Chuyên ngành',
+  `address` text DEFAULT NULL,
+  `images` varchar(255) DEFAULT 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `students`
+--
+
+INSERT INTO `students` (`id`, `account_id`, `classroom_id`, `student_code`, `name`, `email`, `date_of_birth`, `gender`, `phone_number`, `specialization`, `address`, `images`, `created_at`, `updated_at`) VALUES
+(1, 13, 2, 'SV001', 'Le Van Hai', 'sv001@school.edu.vn', '2003-05-16', 0, '0921345316', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-14 04:59:03'),
+(2, 14, 3, 'SV002', 'Le Hoang An', 'sv002@school.edu.vn', '2003-01-14', 0, '0968923661', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(3, 15, 4, 'SV003', 'Vu Anh Chinh', 'sv003@school.edu.vn', '2003-09-22', 1, '0918452639', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(4, 16, 5, 'SV004', 'Nguyen Hoang Chinh', 'sv004@school.edu.vn', '2003-08-16', 0, '0963344200', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(5, 17, 6, 'SV005', 'Tran Van Chinh', 'sv005@school.edu.vn', '2003-03-15', 1, '0967566529', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(6, 18, 7, 'SV006', 'Le Hoang Chinh', 'sv006@school.edu.vn', '2003-11-21', 0, '0980418484', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(7, 19, 8, 'SV007', 'Pham Anh Hai', 'sv007@school.edu.vn', '2003-03-21', 1, '0938819426', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(8, 20, 9, 'SV008', 'Nguyen Anh Hai', 'sv008@school.edu.vn', '2003-03-21', 1, '0939278299', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(9, 21, 10, 'SV009', 'Le Anh An', 'sv009@school.edu.vn', '2003-05-01', 1, '0945964066', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(10, 22, 11, 'SV010', 'Tran Minh Hai', 'sv010@school.edu.vn', '2003-08-13', 1, '0967277353', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(11, 37, 12, 'SV011', 'Pham Anh An', 'sv011@school.edu.vn', '2003-02-04', 1, '0944819597', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(12, 38, 13, 'SV012', 'Le Anh Binh', 'sv012@school.edu.vn', '2003-01-16', 0, '0913625874', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(13, 39, 14, 'SV013', 'Nguyen Anh Binh', 'sv013@school.edu.vn', '2003-08-09', 0, '0994123348', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(14, 40, 1, 'SV014', 'Vu Hoang Chinh', 'sv014@school.edu.vn', '2003-11-14', 0, '0998337572', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(15, 41, 2, 'SV015', 'Vu Anh Hai', 'sv015@school.edu.vn', '2003-06-08', 1, '0949757065', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(16, 42, 3, 'SV016', 'Tran Anh Dat', 'sv016@school.edu.vn', '2003-09-17', 0, '0932467835', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(17, 43, 4, 'SV017', 'Vu Anh An', 'sv017@school.edu.vn', '2003-05-06', 1, '0945628652', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(18, 44, 5, 'SV018', 'Vu Hoang Chinh', 'sv018@school.edu.vn', '2003-03-16', 1, '0943287107', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(19, 45, 6, 'SV019', 'Pham Van Binh', 'sv019@school.edu.vn', '2003-08-28', 0, '0924693593', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(20, 46, 7, 'SV020', 'Nguyen Anh Hai', 'sv020@school.edu.vn', '2003-07-23', 1, '0999746853', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(21, 47, 8, 'SV021', 'Vu Hoang Dat', 'sv021@school.edu.vn', '2003-08-15', 1, '0923028918', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(22, 48, 9, 'SV022', 'Pham Van Dat', 'sv022@school.edu.vn', '2003-10-20', 1, '0998314206', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(23, 49, 10, 'SV023', 'Tran Van Chinh', 'sv023@school.edu.vn', '2003-11-07', 1, '0995272156', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(24, 50, 11, 'SV024', 'Vu Thi Dat', 'sv024@school.edu.vn', '2003-04-16', 0, '0963152853', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(25, 51, 12, 'SV025', 'Vu Anh An', 'sv025@school.edu.vn', '2003-04-01', 1, '0988529889', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(26, 52, 13, 'SV026', 'Le Van Binh', 'sv026@school.edu.vn', '2003-08-17', 0, '0953426076', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(27, 53, 14, 'SV027', 'Le Hoang Chinh', 'sv027@school.edu.vn', '2003-04-06', 0, '0974233112', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(28, 54, 1, 'SV028', 'Le Van Dat', 'sv028@school.edu.vn', '2003-07-01', 1, '0942398143', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(29, 55, 2, 'SV029', 'Tran Thi Binh', 'sv029@school.edu.vn', '2003-08-22', 0, '0943558065', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(30, 56, 3, 'SV030', 'Tran Thi Chinh', 'sv030@school.edu.vn', '2003-08-26', 1, '0988306243', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(31, 57, 4, 'SV031', 'Pham Minh Binh', 'sv031@school.edu.vn', '2003-02-27', 0, '0980591495', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(32, 58, 5, 'SV032', 'Nguyen Anh An', 'sv032@school.edu.vn', '2003-05-30', 1, '0985114866', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(33, 59, 6, 'SV033', 'Tran Anh Binh', 'sv033@school.edu.vn', '2003-12-13', 0, '0967914962', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(34, 60, 7, 'SV034', 'Le Hoang Binh', 'sv034@school.edu.vn', '2003-03-27', 1, '0951929630', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(35, 61, 8, 'SV035', 'Pham Anh Hai', 'sv035@school.edu.vn', '2003-06-14', 1, '0968610976', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(36, 62, 9, 'SV036', 'Nguyen Minh Dat', 'sv036@school.edu.vn', '2003-01-23', 1, '0912700675', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(37, 63, 10, 'SV037', 'Pham Anh Dat', 'sv037@school.edu.vn', '2003-11-11', 1, '0919807420', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(38, 64, 11, 'SV038', 'Le Hoang Binh', 'sv038@school.edu.vn', '2003-10-05', 0, '0985301822', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(39, 65, 12, 'SV039', 'Tran Hoang Hai', 'sv039@school.edu.vn', '2003-03-31', 0, '0947518082', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(40, 66, 13, 'SV040', 'Le Anh Chinh', 'sv040@school.edu.vn', '2003-04-05', 1, '0976223252', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(41, 67, 14, 'SV041', 'Vu Minh Chinh', 'sv041@school.edu.vn', '2003-01-05', 0, '0973959564', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(42, 68, 1, 'SV042', 'Pham Van An', 'sv042@school.edu.vn', '2003-02-03', 0, '0945749110', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(43, 69, 2, 'SV043', 'Pham Thi Chinh', 'sv043@school.edu.vn', '2003-05-30', 0, '0969982886', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(44, 70, 3, 'SV044', 'Tran Anh An', 'sv044@school.edu.vn', '2003-05-18', 1, '0949483615', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(45, 71, 4, 'SV045', 'Pham Hoang Hai', 'sv045@school.edu.vn', '2003-01-02', 1, '0937624535', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(46, 72, 5, 'SV046', 'Vu Anh Chinh', 'sv046@school.edu.vn', '2003-05-24', 1, '0957362784', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(47, 73, 6, 'SV047', 'Vu Hoang Chinh', 'sv047@school.edu.vn', '2003-06-17', 1, '0916065732', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(48, 74, 7, 'SV048', 'Nguyen Minh Binh', 'sv048@school.edu.vn', '2003-10-28', 1, '0942487089', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(49, 75, 8, 'SV049', 'Vu Van Dat', 'sv049@school.edu.vn', '2003-12-19', 1, '0984301345', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(50, 76, 9, 'SV050', 'Pham Minh Binh', 'sv050@school.edu.vn', '2003-11-30', 1, '0979064185', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(51, 77, 10, 'SV051', 'Le Thi Hai', 'sv051@school.edu.vn', '2003-04-04', 0, '0980632790', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(52, 78, 11, 'SV052', 'Le Anh Chinh', 'sv052@school.edu.vn', '2003-09-16', 0, '0995057524', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(53, 79, 12, 'SV053', 'Nguyen Anh Binh', 'sv053@school.edu.vn', '2003-08-19', 0, '0921881021', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(54, 80, 13, 'SV054', 'Vu Van Hai', 'sv054@school.edu.vn', '2003-10-29', 0, '0970559374', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(55, 81, 14, 'SV055', 'Tran Minh Dat', 'sv055@school.edu.vn', '2003-06-06', 0, '0940010095', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(56, 82, 1, 'SV056', 'Le Minh Hai', 'sv056@school.edu.vn', '2003-12-08', 1, '0922383060', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(57, 83, 2, 'SV057', 'Tran Hoang Hai', 'sv057@school.edu.vn', '2003-07-11', 0, '0967454150', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(58, 84, 3, 'SV058', 'Vu Thi Hai', 'sv058@school.edu.vn', '2003-05-04', 0, '0913913152', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(59, 85, 4, 'SV059', 'Vu Thi Chinh', 'sv059@school.edu.vn', '2003-01-28', 1, '0916465907', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(60, 86, 5, 'SV060', 'Pham Minh Dat', 'sv060@school.edu.vn', '2003-04-15', 0, '0963616016', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(61, 87, 6, 'SV061', 'Pham Thi Binh', 'sv061@school.edu.vn', '2003-11-27', 1, '0944479909', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(62, 88, 7, 'SV062', 'Pham Anh Binh', 'sv062@school.edu.vn', '2003-10-20', 1, '0995786642', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(63, 89, 8, 'SV063', 'Le Van An', 'sv063@school.edu.vn', '2003-07-30', 1, '0986797551', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(64, 90, 9, 'SV064', 'Nguyen Anh Hai', 'sv064@school.edu.vn', '2003-08-30', 0, '0991853836', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(65, 91, 10, 'SV065', 'Pham Thi An', 'sv065@school.edu.vn', '2003-06-29', 0, '0942864428', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(66, 92, 11, 'SV066', 'Tran Minh Dat', 'sv066@school.edu.vn', '2003-09-21', 1, '0968948342', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(67, 93, 12, 'SV067', 'Le Anh Binh', 'sv067@school.edu.vn', '2003-07-23', 1, '0970062276', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(68, 94, 13, 'SV068', 'Pham Van Hai', 'sv068@school.edu.vn', '2003-05-04', 0, '0980529892', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(69, 95, 14, 'SV069', 'Nguyen Hoang Hai', 'sv069@school.edu.vn', '2003-01-11', 0, '0952611387', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(70, 96, 1, 'SV070', 'Nguyen Van Dat', 'sv070@school.edu.vn', '2003-03-27', 1, '0995152311', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(71, 97, 2, 'SV071', 'Le Minh An', 'sv071@school.edu.vn', '2003-07-27', 0, '0982841219', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(72, 98, 3, 'SV072', 'Tran Van Hai', 'sv072@school.edu.vn', '2003-07-20', 0, '0911493814', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(73, 99, 4, 'SV073', 'Tran Hoang Hai', 'sv073@school.edu.vn', '2003-07-21', 0, '0924938139', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(74, 100, 5, 'SV074', 'Tran Anh Binh', 'sv074@school.edu.vn', '2003-07-18', 0, '0978988299', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(75, 101, 6, 'SV075', 'Vu Minh Hai', 'sv075@school.edu.vn', '2003-10-14', 1, '0935899903', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(76, 102, 7, 'SV076', 'Pham Thi Dat', 'sv076@school.edu.vn', '2003-06-20', 1, '0939532119', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(77, 103, 8, 'SV077', 'Tran Anh Dat', 'sv077@school.edu.vn', '2003-09-25', 0, '0941502148', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(78, 104, 9, 'SV078', 'Vu Thi Chinh', 'sv078@school.edu.vn', '2003-08-16', 1, '0979494328', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(79, 105, 10, 'SV079', 'Nguyen Hoang An', 'sv079@school.edu.vn', '2003-09-19', 1, '0937539675', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(80, 106, 11, 'SV080', 'Vu Thi Dat', 'sv080@school.edu.vn', '2003-06-27', 1, '0956809271', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(81, 107, 12, 'SV081', 'Tran Anh Binh', 'sv081@school.edu.vn', '2003-01-04', 0, '0927979820', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(82, 108, 13, 'SV082', 'Le Thi Hai', 'sv082@school.edu.vn', '2003-01-20', 0, '0947199311', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(83, 109, 14, 'SV083', 'Pham Hoang Binh', 'sv083@school.edu.vn', '2003-10-10', 0, '0995425314', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(84, 110, 1, 'SV084', 'Nguyen Hoang Hai', 'sv084@school.edu.vn', '2003-12-25', 0, '0923401487', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(85, 111, 2, 'SV085', 'Le Thi Chinh', 'sv085@school.edu.vn', '2003-01-18', 1, '0912515763', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(86, 112, 3, 'SV086', 'Le Van Hai', 'sv086@school.edu.vn', '2003-01-18', 1, '0963930836', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(87, 113, 4, 'SV087', 'Pham Van Dat', 'sv087@school.edu.vn', '2003-12-29', 0, '0989613221', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(88, 114, 5, 'SV088', 'Le Minh Binh', 'sv088@school.edu.vn', '2003-04-12', 1, '0932362075', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(89, 115, 6, 'SV089', 'Tran Anh An', 'sv089@school.edu.vn', '2003-01-28', 0, '0982420747', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(90, 116, 7, 'SV090', 'Le Hoang Hai', 'sv090@school.edu.vn', '2003-01-08', 1, '0932747193', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(91, 117, 8, 'SV091', 'Pham Minh An', 'sv091@school.edu.vn', '2003-08-01', 0, '0948024677', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(92, 118, 9, 'SV092', 'Pham Hoang Binh', 'sv092@school.edu.vn', '2003-08-28', 1, '0955773870', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(93, 119, 10, 'SV093', 'Vu Anh Chinh', 'sv093@school.edu.vn', '2003-10-17', 0, '0935635772', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(94, 120, 11, 'SV094', 'Pham Thi Binh', 'sv094@school.edu.vn', '2003-05-25', 0, '0937392108', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(95, 121, 12, 'SV095', 'Pham Anh Hai', 'sv095@school.edu.vn', '2003-06-05', 1, '0956176264', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(96, 122, 13, 'SV096', 'Pham Minh Hai', 'sv096@school.edu.vn', '2003-06-10', 1, '0976441171', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(97, 123, 14, 'SV097', 'Nguyen Thi Binh', 'sv097@school.edu.vn', '2003-06-08', 1, '0948792818', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(98, 124, 1, 'SV098', 'Tran Minh Chinh', 'sv098@school.edu.vn', '2003-10-26', 1, '0981148738', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(99, 125, 2, 'SV099', 'Nguyen Minh Dat', 'sv099@school.edu.vn', '2003-01-05', 0, '0916513054', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(100, 126, 3, 'SV100', 'Nguyen Thi An', 'sv100@school.edu.vn', '2003-11-29', 0, '0916726936', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(101, 127, 4, 'SV101', 'Vu Anh Chinh', 'sv101@school.edu.vn', '2003-11-12', 1, '0965010371', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(102, 128, 5, 'SV102', 'Nguyen Hoang An', 'sv102@school.edu.vn', '2003-11-13', 0, '0916471561', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(103, 129, 6, 'SV103', 'Le Thi Binh', 'sv103@school.edu.vn', '2003-02-24', 1, '0968381438', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(104, 130, 7, 'SV104', 'Pham Hoang Dat', 'sv104@school.edu.vn', '2003-04-01', 0, '0911966798', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(105, 131, 8, 'SV105', 'Pham Hoang Hai', 'sv105@school.edu.vn', '2003-04-22', 1, '0913308087', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(106, 132, 9, 'SV106', 'Tran Van Binh', 'sv106@school.edu.vn', '2003-05-12', 0, '0986013505', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(107, 133, 10, 'SV107', 'Le Hoang Chinh', 'sv107@school.edu.vn', '2003-02-07', 0, '0934060683', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(108, 134, 11, 'SV108', 'Pham Thi Chinh', 'sv108@school.edu.vn', '2003-03-01', 0, '0965510679', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(109, 135, 12, 'SV109', 'Pham Minh Binh', 'sv109@school.edu.vn', '2003-09-03', 0, '0968479471', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(110, 136, 13, 'SV110', 'Tran Anh An', 'sv110@school.edu.vn', '2003-01-27', 0, '0920200597', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(111, 137, 14, 'SV111', 'Nguyen Hoang Dat', 'sv111@school.edu.vn', '2003-01-07', 0, '0972789009', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(112, 138, 1, 'SV112', 'Nguyen Van Chinh', 'sv112@school.edu.vn', '2003-06-25', 0, '0965295159', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(113, 139, 2, 'SV113', 'Pham Thi Dat', 'sv113@school.edu.vn', '2003-09-04', 0, '0924852996', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(114, 140, 3, 'SV114', 'Nguyen Anh Binh', 'sv114@school.edu.vn', '2003-09-23', 0, '0960640840', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(115, 141, 4, 'SV115', 'Le Anh Dat', 'sv115@school.edu.vn', '2003-10-06', 0, '0994728408', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(116, 142, 5, 'SV116', 'Nguyen Minh Chinh', 'sv116@school.edu.vn', '2003-06-17', 0, '0917772445', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(117, 143, 6, 'SV117', 'Vu Anh Chinh', 'sv117@school.edu.vn', '2003-10-10', 0, '0925667538', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(118, 144, 7, 'SV118', 'Le Anh Hai', 'sv118@school.edu.vn', '2003-06-04', 0, '0953871746', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(119, 145, 8, 'SV119', 'Tran Anh An', 'sv119@school.edu.vn', '2003-04-25', 0, '0953207765', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(120, 146, 9, 'SV120', 'Vu Hoang Dat', 'sv120@school.edu.vn', '2003-07-02', 1, '0970621325', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(121, 147, 10, 'SV121', 'Vu Anh Dat', 'sv121@school.edu.vn', '2003-05-24', 0, '0989997821', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:14', '2026-05-13 12:41:14'),
+(122, 148, 11, 'SV122', 'Le Thi Chinh', 'sv122@school.edu.vn', '2003-05-16', 1, '0941775939', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(123, 149, 12, 'SV123', 'Vu Thi Chinh', 'sv123@school.edu.vn', '2003-05-13', 0, '0956881133', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(124, 150, 13, 'SV124', 'Le Hoang Binh', 'sv124@school.edu.vn', '2003-03-18', 0, '0915442116', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(125, 151, 14, 'SV125', 'Vu Hoang Dat', 'sv125@school.edu.vn', '2003-03-30', 0, '0988023987', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(126, 152, 1, 'SV126', 'Tran Minh Hai', 'sv126@school.edu.vn', '2003-05-17', 0, '0943160618', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(127, 153, 2, 'SV127', 'Tran Thi An', 'sv127@school.edu.vn', '2003-07-16', 1, '0962307949', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(128, 154, 3, 'SV128', 'Pham Minh Binh', 'sv128@school.edu.vn', '2003-05-29', 1, '0986375112', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(129, 155, 4, 'SV129', 'Pham Thi Hai', 'sv129@school.edu.vn', '2003-05-05', 1, '0935064425', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(130, 156, 5, 'SV130', 'Vu Minh Dat', 'sv130@school.edu.vn', '2003-02-04', 1, '0941836979', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(131, 157, 6, 'SV131', 'Tran Hoang Hai', 'sv131@school.edu.vn', '2003-05-14', 0, '0992916322', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(132, 158, 7, 'SV132', 'Le Anh Binh', 'sv132@school.edu.vn', '2003-03-17', 1, '0932791801', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(133, 159, 8, 'SV133', 'Tran Thi Dat', 'sv133@school.edu.vn', '2003-11-09', 0, '0992231177', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(134, 160, 9, 'SV134', 'Tran Thi An', 'sv134@school.edu.vn', '2003-07-03', 0, '0926735322', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(135, 161, 10, 'SV135', 'Tran Thi Dat', 'sv135@school.edu.vn', '2003-09-06', 1, '0918463820', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(136, 162, 11, 'SV136', 'Vu Van Hai', 'sv136@school.edu.vn', '2003-06-03', 1, '0924527033', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(137, 163, 12, 'SV137', 'Pham Minh Binh', 'sv137@school.edu.vn', '2003-07-28', 0, '0970362088', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(138, 164, 13, 'SV138', 'Nguyen Minh Binh', 'sv138@school.edu.vn', '2003-03-26', 0, '0926279014', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(139, 165, 14, 'SV139', 'Vu Anh Hai', 'sv139@school.edu.vn', '2003-10-20', 0, '0916677246', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(140, 166, 1, 'SV140', 'Nguyen Hoang An', 'sv140@school.edu.vn', '2003-02-27', 1, '0930076247', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(141, 167, 2, 'SV141', 'Pham Van Dat', 'sv141@school.edu.vn', '2003-12-16', 1, '0968867136', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(142, 168, 3, 'SV142', 'Vu Anh Binh', 'sv142@school.edu.vn', '2003-04-16', 0, '0980487673', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(143, 169, 4, 'SV143', 'Tran Anh Hai', 'sv143@school.edu.vn', '2003-04-15', 1, '0973590217', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(144, 170, 5, 'SV144', 'Tran Anh Binh', 'sv144@school.edu.vn', '2003-09-28', 0, '0974420962', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(145, 171, 6, 'SV145', 'Nguyen Minh Hai', 'sv145@school.edu.vn', '2003-03-16', 1, '0942662544', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(146, 172, 7, 'SV146', 'Vu Hoang Dat', 'sv146@school.edu.vn', '2003-10-29', 1, '0912220811', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(147, 173, 8, 'SV147', 'Vu Hoang Hai', 'sv147@school.edu.vn', '2003-12-25', 0, '0916345147', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(148, 174, 9, 'SV148', 'Vu Anh Hai', 'sv148@school.edu.vn', '2003-02-07', 1, '0917399409', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(149, 175, 10, 'SV149', 'Nguyen Thi Dat', 'sv149@school.edu.vn', '2003-10-26', 0, '0974118406', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(150, 176, 11, 'SV150', 'Pham Thi Binh', 'sv150@school.edu.vn', '2003-10-20', 0, '0910673949', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(151, 177, 12, 'SV151', 'Vu Hoang Chinh', 'sv151@school.edu.vn', '2003-06-06', 0, '0945315692', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(152, 178, 13, 'SV152', 'Vu Van Dat', 'sv152@school.edu.vn', '2003-03-24', 0, '0911143595', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(153, 179, 14, 'SV153', 'Tran Anh Binh', 'sv153@school.edu.vn', '2003-07-08', 1, '0980533328', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(154, 180, 1, 'SV154', 'Le Anh An', 'sv154@school.edu.vn', '2003-10-02', 1, '0931569542', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(155, 181, 2, 'SV155', 'Nguyen Hoang Dat', 'sv155@school.edu.vn', '2003-01-10', 0, '0910043215', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(156, 182, 3, 'SV156', 'Tran Minh Dat', 'sv156@school.edu.vn', '2003-01-06', 1, '0997478781', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(157, 183, 4, 'SV157', 'Tran Van Chinh', 'sv157@school.edu.vn', '2003-07-20', 0, '0913711929', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(158, 184, 5, 'SV158', 'Pham Van Chinh', 'sv158@school.edu.vn', '2003-12-07', 1, '0948214423', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(159, 185, 6, 'SV159', 'Vu Hoang Chinh', 'sv159@school.edu.vn', '2003-08-22', 0, '0966920537', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(160, 186, 7, 'SV160', 'Pham Van Dat', 'sv160@school.edu.vn', '2003-07-08', 0, '0950423181', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(161, 187, 8, 'SV161', 'Pham Anh Chinh', 'sv161@school.edu.vn', '2003-09-07', 0, '0979841479', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(162, 188, 9, 'SV162', 'Pham Anh Dat', 'sv162@school.edu.vn', '2003-08-19', 1, '0986177484', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(163, 189, 10, 'SV163', 'Pham Van Binh', 'sv163@school.edu.vn', '2003-06-17', 0, '0932983870', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(164, 190, 11, 'SV164', 'Vu Minh An', 'sv164@school.edu.vn', '2003-05-28', 1, '0994489726', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(165, 191, 12, 'SV165', 'Le Anh Binh', 'sv165@school.edu.vn', '2003-11-18', 1, '0976348773', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(166, 192, 13, 'SV166', 'Vu Van An', 'sv166@school.edu.vn', '2003-08-06', 1, '0944309732', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(167, 193, 14, 'SV167', 'Vu Minh Binh', 'sv167@school.edu.vn', '2003-02-28', 0, '0992563927', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(168, 194, 1, 'SV168', 'Le Thi Dat', 'sv168@school.edu.vn', '2003-08-27', 1, '0932742881', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(169, 195, 2, 'SV169', 'Pham Anh Binh', 'sv169@school.edu.vn', '2003-07-17', 1, '0967151769', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(170, 196, 3, 'SV170', 'Pham Anh Binh', 'sv170@school.edu.vn', '2003-09-18', 1, '0960478892', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(171, 197, 4, 'SV171', 'Nguyen Hoang Hai', 'sv171@school.edu.vn', '2003-12-08', 1, '0995309329', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(172, 198, 5, 'SV172', 'Tran Hoang Dat', 'sv172@school.edu.vn', '2003-08-27', 1, '0934000454', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(173, 199, 6, 'SV173', 'Tran Hoang An', 'sv173@school.edu.vn', '2003-07-17', 0, '0950971075', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(174, 200, 7, 'SV174', 'Le Van An', 'sv174@school.edu.vn', '2003-01-23', 1, '0996303732', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(175, 201, 8, 'SV175', 'Nguyen Hoang Chinh', 'sv175@school.edu.vn', '2003-12-12', 0, '0999755918', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(176, 202, 9, 'SV176', 'Tran Van Dat', 'sv176@school.edu.vn', '2003-08-20', 1, '0979200606', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(177, 203, 10, 'SV177', 'Tran Hoang Hai', 'sv177@school.edu.vn', '2003-06-03', 0, '0966441950', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(178, 204, 11, 'SV178', 'Vu Anh Hai', 'sv178@school.edu.vn', '2003-11-07', 0, '0935809804', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(179, 205, 12, 'SV179', 'Nguyen Anh Chinh', 'sv179@school.edu.vn', '2003-04-11', 1, '0988245172', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(180, 206, 13, 'SV180', 'Le Van Binh', 'sv180@school.edu.vn', '2003-01-28', 1, '0958494605', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(181, 207, 14, 'SV181', 'Tran Hoang Dat', 'sv181@school.edu.vn', '2003-08-29', 1, '0943082172', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(182, 208, 1, 'SV182', 'Le Anh Hai', 'sv182@school.edu.vn', '2003-11-08', 0, '0941088808', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(183, 209, 2, 'SV183', 'Le Thi Dat', 'sv183@school.edu.vn', '2003-05-25', 1, '0919291617', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(184, 210, 3, 'SV184', 'Pham Van Hai', 'sv184@school.edu.vn', '2003-01-17', 0, '0956456085', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(185, 211, 4, 'SV185', 'Nguyen Minh Chinh', 'sv185@school.edu.vn', '2003-01-13', 1, '0952737106', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(186, 212, 5, 'SV186', 'Vu Anh An', 'sv186@school.edu.vn', '2003-01-22', 1, '0917325927', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(187, 213, 6, 'SV187', 'Pham Van Binh', 'sv187@school.edu.vn', '2003-03-16', 1, '0918481046', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(188, 214, 7, 'SV188', 'Le Van Chinh', 'sv188@school.edu.vn', '2003-02-14', 0, '0913230613', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(189, 215, 8, 'SV189', 'Le Thi Dat', 'sv189@school.edu.vn', '2003-04-12', 1, '0913931528', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(190, 216, 9, 'SV190', 'Pham Thi Binh', 'sv190@school.edu.vn', '2003-11-14', 1, '0935109665', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(191, 217, 10, 'SV191', 'Nguyen Hoang Chinh', 'sv191@school.edu.vn', '2003-10-19', 0, '0951228274', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(192, 218, 11, 'SV192', 'Vu Anh Binh', 'sv192@school.edu.vn', '2003-08-22', 0, '0913281321', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(193, 219, 12, 'SV193', 'Tran Anh Dat', 'sv193@school.edu.vn', '2003-02-11', 0, '0970326219', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(194, 220, 13, 'SV194', 'Nguyen Minh Binh', 'sv194@school.edu.vn', '2003-02-16', 0, '0961252862', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(195, 221, 14, 'SV195', 'Pham Hoang Chinh', 'sv195@school.edu.vn', '2003-11-10', 1, '0966055813', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(196, 222, 1, 'SV196', 'Le Anh Hai', 'sv196@school.edu.vn', '2003-08-03', 1, '0934054022', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(197, 223, 2, 'SV197', 'Pham Hoang Chinh', 'sv197@school.edu.vn', '2003-10-20', 0, '0961104280', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(198, 224, 3, 'SV198', 'Nguyen Van Binh', 'sv198@school.edu.vn', '2003-03-08', 0, '0996324071', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(199, 225, 4, 'SV199', 'Nguyen Thi Chinh', 'sv199@school.edu.vn', '2003-06-30', 0, '0993801772', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(200, 226, 5, 'SV200', 'Vu Hoang An', 'sv200@school.edu.vn', '2003-05-18', 0, '0986735971', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(201, 227, 6, 'SV201', 'Nguyen Van Binh', 'sv201@school.edu.vn', '2003-04-15', 0, '0951322945', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(202, 228, 7, 'SV202', 'Pham Van Binh', 'sv202@school.edu.vn', '2003-09-08', 1, '0931527566', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(203, 229, 8, 'SV203', 'Le Thi Hai', 'sv203@school.edu.vn', '2003-03-20', 1, '0917010817', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(204, 230, 9, 'SV204', 'Tran Anh Chinh', 'sv204@school.edu.vn', '2003-03-23', 0, '0989666177', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(205, 231, 10, 'SV205', 'Tran Van Chinh', 'sv205@school.edu.vn', '2003-05-30', 0, '0952413523', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(206, 232, 11, 'SV206', 'Pham Van An', 'sv206@school.edu.vn', '2003-01-01', 0, '0991419402', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(207, 233, 12, 'SV207', 'Vu Hoang Chinh', 'sv207@school.edu.vn', '2003-09-05', 1, '0918489762', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(208, 234, 13, 'SV208', 'Tran Thi An', 'sv208@school.edu.vn', '2003-07-05', 1, '0928791509', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(209, 235, 14, 'SV209', 'Tran Thi An', 'sv209@school.edu.vn', '2003-12-20', 1, '0985122479', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(210, 236, 1, 'SV210', 'Tran Minh An', 'sv210@school.edu.vn', '2003-12-23', 1, '0972359915', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(211, 237, 2, 'SV211', 'Tran Anh Hai', 'sv211@school.edu.vn', '2003-02-01', 1, '0984710473', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(212, 238, 3, 'SV212', 'Nguyen Anh Hai', 'sv212@school.edu.vn', '2003-07-13', 1, '0998433224', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(213, 239, 4, 'SV213', 'Le Hoang Dat', 'sv213@school.edu.vn', '2003-09-04', 1, '0927493368', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15');
+INSERT INTO `students` (`id`, `account_id`, `classroom_id`, `student_code`, `name`, `email`, `date_of_birth`, `gender`, `phone_number`, `specialization`, `address`, `images`, `created_at`, `updated_at`) VALUES
+(214, 240, 5, 'SV214', 'Vu Van Dat', 'sv214@school.edu.vn', '2003-11-02', 0, '0943046655', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(215, 241, 6, 'SV215', 'Pham Hoang Dat', 'sv215@school.edu.vn', '2003-05-16', 1, '0991016035', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(216, 242, 7, 'SV216', 'Nguyen Anh Chinh', 'sv216@school.edu.vn', '2003-02-28', 0, '0939917013', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(217, 243, 8, 'SV217', 'Nguyen Minh An', 'sv217@school.edu.vn', '2003-03-25', 1, '0982065538', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(218, 244, 9, 'SV218', 'Vu Minh An', 'sv218@school.edu.vn', '2003-01-03', 0, '0991106439', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(219, 245, 10, 'SV219', 'Nguyen Minh An', 'sv219@school.edu.vn', '2003-09-29', 1, '0964099305', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(220, 246, 11, 'SV220', 'Nguyen Hoang Dat', 'sv220@school.edu.vn', '2003-11-28', 0, '0931830444', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(221, 247, 12, 'SV221', 'Nguyen Van An', 'sv221@school.edu.vn', '2003-02-14', 1, '0955189497', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(222, 248, 13, 'SV222', 'Pham Minh Dat', 'sv222@school.edu.vn', '2003-02-25', 0, '0956136602', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(223, 249, 14, 'SV223', 'Pham Minh Binh', 'sv223@school.edu.vn', '2003-04-03', 0, '0930587449', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(224, 250, 1, 'SV224', 'Nguyen Anh An', 'sv224@school.edu.vn', '2003-06-06', 0, '0989641670', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(225, 251, 2, 'SV225', 'Pham Hoang Hai', 'sv225@school.edu.vn', '2003-07-04', 0, '0921148573', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(226, 252, 3, 'SV226', 'Tran Thi Chinh', 'sv226@school.edu.vn', '2003-07-02', 0, '0915546324', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(227, 253, 4, 'SV227', 'Vu Hoang An', 'sv227@school.edu.vn', '2003-05-22', 1, '0980534062', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(228, 254, 5, 'SV228', 'Vu Hoang Dat', 'sv228@school.edu.vn', '2003-05-13', 0, '0952843529', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(229, 255, 6, 'SV229', 'Nguyen Hoang An', 'sv229@school.edu.vn', '2003-09-20', 0, '0934671450', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(230, 256, 7, 'SV230', 'Pham Thi Chinh', 'sv230@school.edu.vn', '2003-09-07', 0, '0995237475', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(231, 257, 8, 'SV231', 'Pham Van Chinh', 'sv231@school.edu.vn', '2003-01-07', 1, '0962887138', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(232, 258, 9, 'SV232', 'Pham Van An', 'sv232@school.edu.vn', '2003-11-17', 1, '0919042419', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(233, 259, 10, 'SV233', 'Pham Van Chinh', 'sv233@school.edu.vn', '2003-02-16', 0, '0929152383', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(234, 260, 11, 'SV234', 'Pham Minh Binh', 'sv234@school.edu.vn', '2003-09-23', 1, '0990140993', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(235, 261, 12, 'SV235', 'Pham Van An', 'sv235@school.edu.vn', '2003-07-06', 1, '0953670086', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(236, 262, 13, 'SV236', 'Le Thi Dat', 'sv236@school.edu.vn', '2003-12-14', 0, '0963429217', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(237, 263, 14, 'SV237', 'Le Van An', 'sv237@school.edu.vn', '2003-03-11', 1, '0968395974', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(238, 264, 1, 'SV238', 'Nguyen Hoang Binh', 'sv238@school.edu.vn', '2003-08-13', 0, '0942477024', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(239, 265, 2, 'SV239', 'Pham Anh Hai', 'sv239@school.edu.vn', '2003-05-03', 1, '0923240471', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(240, 266, 3, 'SV240', 'Vu Anh Chinh', 'sv240@school.edu.vn', '2003-11-23', 0, '0983901786', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(241, 267, 4, 'SV241', 'Vu Hoang Dat', 'sv241@school.edu.vn', '2003-11-22', 1, '0931467252', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(242, 268, 5, 'SV242', 'Vu Anh Binh', 'sv242@school.edu.vn', '2003-10-02', 1, '0920200630', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(243, 269, 6, 'SV243', 'Nguyen Anh Dat', 'sv243@school.edu.vn', '2003-04-04', 0, '0919418967', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(244, 270, 7, 'SV244', 'Vu Minh Dat', 'sv244@school.edu.vn', '2003-07-05', 0, '0976212297', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(245, 271, 8, 'SV245', 'Tran Van An', 'sv245@school.edu.vn', '2003-09-29', 1, '0927576353', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(246, 272, 9, 'SV246', 'Le Van Dat', 'sv246@school.edu.vn', '2003-04-24', 0, '0956111222', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(247, 273, 10, 'SV247', 'Nguyen Anh An', 'sv247@school.edu.vn', '2003-02-12', 1, '0957531962', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(248, 274, 11, 'SV248', 'Le Van Hai', 'sv248@school.edu.vn', '2003-03-06', 1, '0925072585', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(249, 275, 12, 'SV249', 'Tran Minh Binh', 'sv249@school.edu.vn', '2003-02-23', 0, '0984617612', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(250, 276, 13, 'SV250', 'Nguyen Thi Dat', 'sv250@school.edu.vn', '2003-12-14', 0, '0990259312', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(251, 277, 14, 'SV251', 'Vu Minh Chinh', 'sv251@school.edu.vn', '2003-03-21', 0, '0961902747', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(252, 278, 1, 'SV252', 'Tran Anh Hai', 'sv252@school.edu.vn', '2003-01-28', 0, '0947483153', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(253, 279, 2, 'SV253', 'Le Hoang Chinh', 'sv253@school.edu.vn', '2003-08-08', 0, '0976269099', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(254, 280, 3, 'SV254', 'Tran Van Dat', 'sv254@school.edu.vn', '2003-08-29', 0, '0952196607', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(255, 281, 4, 'SV255', 'Nguyen Hoang Chinh', 'sv255@school.edu.vn', '2003-11-05', 0, '0967928060', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(256, 282, 5, 'SV256', 'Tran Thi An', 'sv256@school.edu.vn', '2003-12-11', 0, '0941786783', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(257, 283, 6, 'SV257', 'Tran Minh Dat', 'sv257@school.edu.vn', '2003-10-25', 1, '0919527560', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(258, 284, 7, 'SV258', 'Nguyen Anh Hai', 'sv258@school.edu.vn', '2003-05-12', 0, '0922414912', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(259, 285, 8, 'SV259', 'Tran Hoang Chinh', 'sv259@school.edu.vn', '2003-06-20', 1, '0912472698', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(260, 286, 9, 'SV260', 'Pham Hoang An', 'sv260@school.edu.vn', '2003-03-13', 1, '0955686316', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(261, 287, 10, 'SV261', 'Tran Minh Dat', 'sv261@school.edu.vn', '2003-09-10', 0, '0967176932', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(262, 288, 11, 'SV262', 'Pham Thi Dat', 'sv262@school.edu.vn', '2003-04-26', 1, '0970256003', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(263, 289, 12, 'SV263', 'Pham Minh Dat', 'sv263@school.edu.vn', '2003-12-17', 1, '0964301781', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(264, 290, 13, 'SV264', 'Vu Thi An', 'sv264@school.edu.vn', '2003-03-01', 1, '0940350439', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(265, 291, 14, 'SV265', 'Tran Thi Chinh', 'sv265@school.edu.vn', '2003-01-09', 1, '0950845169', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(266, 292, 1, 'SV266', 'Pham Thi Chinh', 'sv266@school.edu.vn', '2003-01-18', 1, '0951019084', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(267, 293, 2, 'SV267', 'Nguyen Thi Dat', 'sv267@school.edu.vn', '2003-06-21', 0, '0927797532', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(268, 294, 3, 'SV268', 'Pham Van Dat', 'sv268@school.edu.vn', '2003-05-15', 0, '0982950481', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(269, 295, 4, 'SV269', 'Pham Minh Chinh', 'sv269@school.edu.vn', '2003-04-30', 0, '0989787960', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(270, 296, 5, 'SV270', 'Le Van An', 'sv270@school.edu.vn', '2003-02-03', 1, '0917662032', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(271, 297, 6, 'SV271', 'Nguyen Minh Hai', 'sv271@school.edu.vn', '2003-09-05', 0, '0975584605', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(272, 298, 7, 'SV272', 'Le Hoang Binh', 'sv272@school.edu.vn', '2003-06-14', 1, '0950884033', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(273, 299, 8, 'SV273', 'Tran Van Dat', 'sv273@school.edu.vn', '2003-04-07', 0, '0915073419', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(274, 300, 9, 'SV274', 'Vu Minh Dat', 'sv274@school.edu.vn', '2003-12-08', 0, '0976395352', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(275, 301, 10, 'SV275', 'Tran Anh Hai', 'sv275@school.edu.vn', '2003-06-04', 0, '0939628905', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(276, 302, 11, 'SV276', 'Le Thi Binh', 'sv276@school.edu.vn', '2003-12-20', 1, '0970709427', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(277, 303, 12, 'SV277', 'Tran Van Hai', 'sv277@school.edu.vn', '2003-01-15', 0, '0962598009', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(278, 304, 13, 'SV278', 'Vu Hoang An', 'sv278@school.edu.vn', '2003-04-26', 0, '0947204106', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(279, 305, 14, 'SV279', 'Tran Anh Chinh', 'sv279@school.edu.vn', '2003-10-17', 0, '0926367883', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(280, 306, 1, 'SV280', 'Vu Van Dat', 'sv280@school.edu.vn', '2003-08-13', 0, '0979761423', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(281, 307, 2, 'SV281', 'Vu Minh Chinh', 'sv281@school.edu.vn', '2003-09-03', 1, '0919183737', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(282, 308, 3, 'SV282', 'Tran Minh Hai', 'sv282@school.edu.vn', '2003-05-13', 0, '0913794807', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(283, 309, 4, 'SV283', 'Nguyen Hoang Chinh', 'sv283@school.edu.vn', '2003-09-28', 0, '0922449410', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(284, 310, 5, 'SV284', 'Tran Minh Dat', 'sv284@school.edu.vn', '2003-09-28', 1, '0981994388', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(285, 311, 6, 'SV285', 'Nguyen Anh Binh', 'sv285@school.edu.vn', '2003-01-29', 0, '0980004743', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(286, 312, 7, 'SV286', 'Pham Van An', 'sv286@school.edu.vn', '2003-07-19', 1, '0927872630', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(287, 313, 8, 'SV287', 'Vu Anh Binh', 'sv287@school.edu.vn', '2003-01-03', 0, '0931878876', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(288, 314, 9, 'SV288', 'Le Van An', 'sv288@school.edu.vn', '2003-09-20', 0, '0955365292', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(289, 315, 10, 'SV289', 'Tran Van An', 'sv289@school.edu.vn', '2003-03-03', 0, '0970298063', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(290, 316, 11, 'SV290', 'Le Anh Hai', 'sv290@school.edu.vn', '2003-05-25', 0, '0944803670', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(291, 317, 12, 'SV291', 'Pham Anh Chinh', 'sv291@school.edu.vn', '2003-04-01', 1, '0982428595', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(292, 318, 13, 'SV292', 'Nguyen Anh Hai', 'sv292@school.edu.vn', '2003-05-19', 1, '0937260671', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(293, 319, 14, 'SV293', 'Pham Anh An', 'sv293@school.edu.vn', '2003-10-23', 1, '0961380889', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(294, 320, 1, 'SV294', 'Vu Van Hai', 'sv294@school.edu.vn', '2003-05-11', 0, '0996173294', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(295, 321, 2, 'SV295', 'Tran Anh Dat', 'sv295@school.edu.vn', '2003-02-05', 1, '0951894901', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(296, 322, 3, 'SV296', 'Pham Thi Chinh', 'sv296@school.edu.vn', '2003-08-08', 1, '0949381996', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(297, 323, 4, 'SV297', 'Pham Van Chinh', 'sv297@school.edu.vn', '2003-05-10', 1, '0911357434', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(298, 324, 5, 'SV298', 'Nguyen Thi Hai', 'sv298@school.edu.vn', '2003-12-01', 0, '0986386975', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(299, 325, 6, 'SV299', 'Nguyen Anh Chinh', 'sv299@school.edu.vn', '2003-11-04', 1, '0997747690', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(300, 326, 7, 'SV300', 'Vu Minh Hai', 'sv300@school.edu.vn', '2003-05-20', 1, '0952471175', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(301, 327, 8, 'SV301', 'Pham Van Hai', 'sv301@school.edu.vn', '2003-02-28', 1, '0911321703', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(302, 328, 9, 'SV302', 'Vu Minh Hai', 'sv302@school.edu.vn', '2003-05-19', 1, '0994724587', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(303, 329, 10, 'SV303', 'Le Thi Hai', 'sv303@school.edu.vn', '2003-08-08', 0, '0944378252', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(304, 330, 11, 'SV304', 'Le Minh An', 'sv304@school.edu.vn', '2003-08-30', 0, '0925582615', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(305, 331, 12, 'SV305', 'Pham Hoang Binh', 'sv305@school.edu.vn', '2003-01-17', 1, '0928162945', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(306, 332, 13, 'SV306', 'Tran Hoang Binh', 'sv306@school.edu.vn', '2003-05-16', 1, '0980107821', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(307, 333, 14, 'SV307', 'Le Van Hai', 'sv307@school.edu.vn', '2003-07-05', 1, '0961788945', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(308, 334, 1, 'SV308', 'Nguyen Thi An', 'sv308@school.edu.vn', '2003-07-20', 0, '0961446705', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(309, 335, 2, 'SV309', 'Vu Hoang Dat', 'sv309@school.edu.vn', '2003-07-30', 0, '0989962574', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(310, 336, 3, 'SV310', 'Tran Anh Hai', 'sv310@school.edu.vn', '2003-06-29', 1, '0964243507', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(311, 337, 4, 'SV311', 'Pham Hoang Dat', 'sv311@school.edu.vn', '2003-07-29', 1, '0980918147', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(312, 338, 5, 'SV312', 'Vu Anh Dat', 'sv312@school.edu.vn', '2003-02-16', 1, '0969546713', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(313, 339, 6, 'SV313', 'Le Minh Binh', 'sv313@school.edu.vn', '2003-08-29', 1, '0955100180', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(314, 340, 7, 'SV314', 'Nguyen Hoang An', 'sv314@school.edu.vn', '2003-01-21', 0, '0991861449', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(315, 341, 8, 'SV315', 'Pham Thi Chinh', 'sv315@school.edu.vn', '2003-01-13', 0, '0992870532', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(316, 342, 9, 'SV316', 'Nguyen Minh Hai', 'sv316@school.edu.vn', '2003-02-01', 1, '0978991442', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(317, 343, 10, 'SV317', 'Nguyen Hoang Hai', 'sv317@school.edu.vn', '2003-04-13', 1, '0953565687', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(318, 344, 11, 'SV318', 'Le Hoang Binh', 'sv318@school.edu.vn', '2003-12-28', 0, '0986885614', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(319, 345, 12, 'SV319', 'Vu Minh Hai', 'sv319@school.edu.vn', '2003-01-27', 1, '0963647098', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(320, 346, 13, 'SV320', 'Vu Minh Chinh', 'sv320@school.edu.vn', '2003-01-01', 0, '0965280155', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(321, 347, 14, 'SV321', 'Tran Anh Dat', 'sv321@school.edu.vn', '2003-05-10', 0, '0978516081', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(322, 348, 1, 'SV322', 'Vu Hoang Binh', 'sv322@school.edu.vn', '2003-07-05', 0, '0974006853', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(323, 349, 2, 'SV323', 'Nguyen Van An', 'sv323@school.edu.vn', '2003-06-23', 0, '0912546905', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(324, 350, 3, 'SV324', 'Tran Van An', 'sv324@school.edu.vn', '2003-10-05', 0, '0940324782', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(325, 351, 4, 'SV325', 'Pham Anh Chinh', 'sv325@school.edu.vn', '2003-05-19', 1, '0938178301', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(326, 352, 5, 'SV326', 'Pham Van Chinh', 'sv326@school.edu.vn', '2003-05-13', 0, '0918307481', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(327, 353, 6, 'SV327', 'Pham Van An', 'sv327@school.edu.vn', '2003-05-31', 1, '0969898865', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(328, 354, 7, 'SV328', 'Vu Anh An', 'sv328@school.edu.vn', '2003-08-11', 0, '0980152351', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(329, 355, 8, 'SV329', 'Pham Anh Dat', 'sv329@school.edu.vn', '2003-12-24', 1, '0991215289', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(330, 356, 9, 'SV330', 'Nguyen Anh Dat', 'sv330@school.edu.vn', '2003-10-14', 0, '0920379920', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(331, 357, 10, 'SV331', 'Nguyen Thi Chinh', 'sv331@school.edu.vn', '2003-03-15', 1, '0965951534', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(332, 358, 11, 'SV332', 'Pham Anh Dat', 'sv332@school.edu.vn', '2003-03-14', 1, '0985841985', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(333, 359, 12, 'SV333', 'Nguyen Thi Chinh', 'sv333@school.edu.vn', '2003-09-19', 1, '0999511735', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(334, 360, 13, 'SV334', 'Tran Anh Dat', 'sv334@school.edu.vn', '2003-05-22', 0, '0991596828', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(335, 361, 14, 'SV335', 'Le Minh Hai', 'sv335@school.edu.vn', '2003-08-02', 0, '0949334593', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(336, 362, 1, 'SV336', 'Vu Thi Binh', 'sv336@school.edu.vn', '2003-03-19', 1, '0988896446', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(337, 363, 2, 'SV337', 'Nguyen Anh Hai', 'sv337@school.edu.vn', '2003-09-02', 0, '0952809099', 'Công nghệ phần mềm', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(338, 364, 3, 'SV338', 'Vu Anh An', 'sv338@school.edu.vn', '2003-01-12', 0, '0966015846', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(339, 365, 4, 'SV339', 'Nguyen Anh Hai', 'sv339@school.edu.vn', '2003-01-23', 0, '0939278524', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(340, 366, 5, 'SV340', 'Vu Anh Dat', 'sv340@school.edu.vn', '2003-04-25', 0, '0963527416', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(341, 367, 6, 'SV341', 'Vu Van Dat', 'sv341@school.edu.vn', '2003-01-01', 0, '0924059500', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(342, 368, 7, 'SV342', 'Pham Anh An', 'sv342@school.edu.vn', '2003-03-09', 0, '0980286823', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(343, 369, 8, 'SV343', 'Vu Anh Chinh', 'sv343@school.edu.vn', '2003-03-09', 0, '0963684441', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(344, 370, 9, 'SV344', 'Le Thi Binh', 'sv344@school.edu.vn', '2003-06-09', 0, '0936463365', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(345, 371, 10, 'SV345', 'Nguyen Hoang Hai', 'sv345@school.edu.vn', '2003-07-07', 1, '0924397572', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(346, 372, 11, 'SV346', 'Tran Thi Chinh', 'sv346@school.edu.vn', '2003-04-06', 1, '0910409163', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(347, 373, 12, 'SV347', 'Tran Anh Binh', 'sv347@school.edu.vn', '2003-02-02', 0, '0934783629', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(348, 374, 13, 'SV348', 'Tran Van Binh', 'sv348@school.edu.vn', '2003-08-16', 1, '0922239830', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(349, 375, 14, 'SV349', 'Vu Thi Binh', 'sv349@school.edu.vn', '2003-12-19', 1, '0926855087', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(350, 376, 1, 'SV350', 'Nguyen Anh Binh', 'sv350@school.edu.vn', '2003-12-26', 1, '0929715529', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(351, 377, 2, 'SV351', 'Vu Hoang Binh', 'sv351@school.edu.vn', '2003-10-11', 0, '0990531906', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(352, 378, 3, 'SV352', 'Pham Minh Hai', 'sv352@school.edu.vn', '2003-06-09', 0, '0945945703', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(353, 379, 4, 'SV353', 'Nguyen Anh Binh', 'sv353@school.edu.vn', '2003-04-15', 0, '0964240350', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(354, 380, 5, 'SV354', 'Tran Minh Hai', 'sv354@school.edu.vn', '2003-04-15', 1, '0949610081', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(355, 381, 6, 'SV355', 'Vu Van An', 'sv355@school.edu.vn', '2003-11-14', 0, '0929698323', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(356, 382, 7, 'SV356', 'Tran Minh Binh', 'sv356@school.edu.vn', '2003-02-17', 1, '0975555299', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(357, 383, 8, 'SV357', 'Le Minh Dat', 'sv357@school.edu.vn', '2003-01-08', 0, '0917300339', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(358, 384, 9, 'SV358', 'Le Anh Hai', 'sv358@school.edu.vn', '2003-04-06', 0, '0986403779', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(359, 385, 10, 'SV359', 'Tran Thi Dat', 'sv359@school.edu.vn', '2003-04-28', 1, '0969436635', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(360, 386, 11, 'SV360', 'Le Hoang Dat', 'sv360@school.edu.vn', '2003-05-09', 1, '0982365562', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(361, 387, 12, 'SV361', 'Nguyen Thi Hai', 'sv361@school.edu.vn', '2003-05-27', 0, '0963850085', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(362, 388, 13, 'SV362', 'Tran Van Binh', 'sv362@school.edu.vn', '2003-08-13', 0, '0913194317', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(363, 389, 14, 'SV363', 'Pham Van Binh', 'sv363@school.edu.vn', '2003-04-25', 1, '0960782983', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(364, 390, 1, 'SV364', 'Vu Minh Dat', 'sv364@school.edu.vn', '2003-05-05', 1, '0943476504', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(365, 391, 2, 'SV365', 'Vu Van Dat', 'sv365@school.edu.vn', '2003-10-02', 0, '0943656463', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(366, 392, 3, 'SV366', 'Vu Anh Binh', 'sv366@school.edu.vn', '2003-02-21', 1, '0956705249', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(367, 393, 4, 'SV367', 'Vu Hoang Chinh', 'sv367@school.edu.vn', '2003-11-26', 0, '0910228153', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(368, 394, 5, 'SV368', 'Pham Van Hai', 'sv368@school.edu.vn', '2003-05-21', 1, '0935416562', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(369, 395, 6, 'SV369', 'Tran Anh Binh', 'sv369@school.edu.vn', '2003-04-11', 0, '0960335460', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(370, 396, 7, 'SV370', 'Nguyen Minh Dat', 'sv370@school.edu.vn', '2003-06-29', 0, '0963806315', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(371, 397, 8, 'SV371', 'Tran Minh An', 'sv371@school.edu.vn', '2003-07-10', 1, '0917866532', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(372, 398, 9, 'SV372', 'Vu Hoang Binh', 'sv372@school.edu.vn', '2003-05-17', 0, '0921342296', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(373, 399, 10, 'SV373', 'Tran Anh Chinh', 'sv373@school.edu.vn', '2003-12-09', 0, '0997369866', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(374, 400, 11, 'SV374', 'Tran Minh Binh', 'sv374@school.edu.vn', '2003-06-30', 0, '0948685082', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(375, 401, 12, 'SV375', 'Nguyen Minh An', 'sv375@school.edu.vn', '2003-12-15', 0, '0958356759', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(376, 402, 13, 'SV376', 'Nguyen Anh An', 'sv376@school.edu.vn', '2003-05-28', 0, '0987127008', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(377, 403, 14, 'SV377', 'Pham Van An', 'sv377@school.edu.vn', '2003-02-04', 1, '0946822149', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(378, 404, 1, 'SV378', 'Pham Minh Binh', 'sv378@school.edu.vn', '2003-01-03', 1, '0932106609', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(379, 405, 2, 'SV379', 'Vu Minh An', 'sv379@school.edu.vn', '2003-11-22', 0, '0921008298', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(380, 406, 3, 'SV380', 'Pham Minh Dat', 'sv380@school.edu.vn', '2003-06-29', 0, '0964507420', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(381, 407, 4, 'SV381', 'Nguyen Thi Binh', 'sv381@school.edu.vn', '2003-06-07', 1, '0950066540', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(382, 408, 5, 'SV382', 'Pham Hoang Binh', 'sv382@school.edu.vn', '2003-05-17', 0, '0929240374', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(383, 409, 6, 'SV383', 'Pham Van Dat', 'sv383@school.edu.vn', '2003-03-08', 0, '0972972814', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(384, 410, 7, 'SV384', 'Le Thi Binh', 'sv384@school.edu.vn', '2003-07-13', 1, '0974094283', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(385, 411, 8, 'SV385', 'Pham Thi Dat', 'sv385@school.edu.vn', '2003-09-18', 1, '0932952035', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(386, 412, 9, 'SV386', 'Nguyen Hoang Dat', 'sv386@school.edu.vn', '2003-06-13', 1, '0991209975', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(387, 413, 10, 'SV387', 'Nguyen Van An', 'sv387@school.edu.vn', '2003-02-18', 0, '0952359470', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(388, 414, 11, 'SV388', 'Vu Hoang Binh', 'sv388@school.edu.vn', '2003-12-27', 0, '0999218145', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(389, 415, 12, 'SV389', 'Nguyen Thi Chinh', 'sv389@school.edu.vn', '2003-02-24', 0, '0951385639', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(390, 416, 13, 'SV390', 'Vu Anh An', 'sv390@school.edu.vn', '2003-01-06', 1, '0994881554', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(391, 417, 14, 'SV391', 'Le Van Binh', 'sv391@school.edu.vn', '2003-11-10', 1, '0950542033', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(392, 418, 1, 'SV392', 'Nguyen Anh Dat', 'sv392@school.edu.vn', '2003-12-10', 0, '0944347574', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(393, 419, 2, 'SV393', 'Nguyen Anh Hai', 'sv393@school.edu.vn', '2003-11-17', 0, '0955167089', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(394, 420, 3, 'SV394', 'Pham Hoang Binh', 'sv394@school.edu.vn', '2003-08-29', 1, '0959307340', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(395, 421, 4, 'SV395', 'Le Van Chinh', 'sv395@school.edu.vn', '2003-11-26', 0, '0976594355', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(396, 422, 5, 'SV396', 'Pham Anh Dat', 'sv396@school.edu.vn', '2003-10-19', 1, '0983819894', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(397, 423, 6, 'SV397', 'Nguyen Anh Binh', 'sv397@school.edu.vn', '2003-05-22', 0, '0990452793', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(398, 424, 7, 'SV398', 'Tran Hoang Chinh', 'sv398@school.edu.vn', '2003-04-15', 1, '0969512742', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(399, 425, 8, 'SV399', 'Vu Van Chinh', 'sv399@school.edu.vn', '2003-08-29', 0, '0955254194', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(400, 426, 9, 'SV400', 'Tran Hoang Hai', 'sv400@school.edu.vn', '2003-11-13', 0, '0951506612', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(401, 427, 10, 'SV401', 'Le Minh Chinh', 'sv401@school.edu.vn', '2003-01-30', 0, '0997218430', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(402, 428, 11, 'SV402', 'Pham Thi Binh', 'sv402@school.edu.vn', '2003-09-09', 0, '0954377981', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(403, 429, 12, 'SV403', 'Le Minh Chinh', 'sv403@school.edu.vn', '2003-10-07', 1, '0944156709', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(404, 430, 13, 'SV404', 'Le Anh An', 'sv404@school.edu.vn', '2003-02-02', 1, '0944378252', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(405, 431, 14, 'SV405', 'Le Thi Dat', 'sv405@school.edu.vn', '2003-10-27', 0, '0997534926', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(406, 432, 1, 'SV406', 'Tran Hoang An', 'sv406@school.edu.vn', '2003-08-11', 0, '0976038718', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(407, 433, 2, 'SV407', 'Le Minh Binh', 'sv407@school.edu.vn', '2003-08-15', 0, '0938409220', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(408, 434, 3, 'SV408', 'Nguyen Thi Chinh', 'sv408@school.edu.vn', '2003-05-03', 1, '0937153338', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(409, 435, 4, 'SV409', 'Le Minh Chinh', 'sv409@school.edu.vn', '2003-08-14', 1, '0971015747', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(410, 436, 5, 'SV410', 'Pham Thi Chinh', 'sv410@school.edu.vn', '2003-11-13', 1, '0970729258', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(411, 437, 6, 'SV411', 'Vu Anh Dat', 'sv411@school.edu.vn', '2003-05-15', 1, '0991036015', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(412, 438, 7, 'SV412', 'Tran Minh Binh', 'sv412@school.edu.vn', '2003-07-25', 0, '0973606039', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(413, 439, 8, 'SV413', 'Vu Thi Dat', 'sv413@school.edu.vn', '2003-06-06', 0, '0927224174', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(414, 440, 9, 'SV414', 'Vu Thi Binh', 'sv414@school.edu.vn', '2003-03-25', 1, '0999749602', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(415, 441, 10, 'SV415', 'Pham Anh Dat', 'sv415@school.edu.vn', '2003-04-27', 1, '0953728977', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(416, 442, 11, 'SV416', 'Nguyen Anh Chinh', 'sv416@school.edu.vn', '2003-04-21', 1, '0997434102', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(417, 443, 12, 'SV417', 'Tran Anh Hai', 'sv417@school.edu.vn', '2003-02-02', 1, '0992984907', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(418, 444, 13, 'SV418', 'Pham Anh Chinh', 'sv418@school.edu.vn', '2003-01-29', 1, '0914601868', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(419, 445, 14, 'SV419', 'Pham Hoang An', 'sv419@school.edu.vn', '2003-07-15', 1, '0966093213', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(420, 446, 1, 'SV420', 'Vu Van An', 'sv420@school.edu.vn', '2003-02-06', 1, '0930992522', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(421, 447, 2, 'SV421', 'Pham Thi Binh', 'sv421@school.edu.vn', '2003-12-22', 1, '0985040322', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(422, 448, 3, 'SV422', 'Vu Van Hai', 'sv422@school.edu.vn', '2003-12-16', 1, '0935445173', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(423, 449, 4, 'SV423', 'Pham Anh Binh', 'sv423@school.edu.vn', '2003-11-20', 1, '0937365317', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(424, 450, 5, 'SV424', 'Le Van Binh', 'sv424@school.edu.vn', '2003-09-27', 0, '0911471333', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(425, 451, 6, 'SV425', 'Vu Van Chinh', 'sv425@school.edu.vn', '2003-12-27', 0, '0946893886', 'Khai thác mỏ lộ thiên', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(426, 452, 7, 'SV426', 'Vu Thi Chinh', 'sv426@school.edu.vn', '2003-03-01', 0, '0949845472', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15');
+INSERT INTO `students` (`id`, `account_id`, `classroom_id`, `student_code`, `name`, `email`, `date_of_birth`, `gender`, `phone_number`, `specialization`, `address`, `images`, `created_at`, `updated_at`) VALUES
+(427, 453, 8, 'SV427', 'Tran Hoang An', 'sv427@school.edu.vn', '2003-11-14', 0, '0923767332', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(428, 454, 9, 'SV428', 'Nguyen Thi Binh', 'sv428@school.edu.vn', '2003-12-10', 0, '0965031652', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(429, 455, 10, 'SV429', 'Vu Anh Binh', 'sv429@school.edu.vn', '2003-11-25', 0, '0950199865', 'Địa chất công trình', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(430, 456, 11, 'SV430', 'Vu Hoang Chinh', 'sv430@school.edu.vn', '2003-11-20', 0, '0993173367', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(431, 457, 12, 'SV431', 'Tran Van Dat', 'sv431@school.edu.vn', '2003-03-21', 0, '0911783821', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(432, 458, 13, 'SV432', 'Le Minh Binh', 'sv432@school.edu.vn', '2003-12-15', 0, '0917162725', 'Hệ thống điện', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(433, 459, 14, 'SV433', 'Le Thi Chinh', 'sv433@school.edu.vn', '2003-04-21', 0, '0977081108', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(434, 460, 1, 'SV434', 'Vu Anh Hai', 'sv434@school.edu.vn', '2003-09-14', 1, '0964878511', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(435, 461, 2, 'SV435', 'Pham Minh Chinh', 'sv435@school.edu.vn', '2003-10-01', 1, '0951450753', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(436, 462, 3, 'SV436', 'Tran Van Chinh', 'sv436@school.edu.vn', '2003-05-13', 1, '0923607904', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(437, 463, 4, 'SV437', 'Le Anh An', 'sv437@school.edu.vn', '2003-01-24', 1, '0931120041', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(438, 464, 5, 'SV438', 'Nguyen Hoang An', 'sv438@school.edu.vn', '2003-08-11', 0, '0992333348', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(439, 465, 6, 'SV439', 'Pham Anh Chinh', 'sv439@school.edu.vn', '2003-01-12', 1, '0982643338', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(440, 466, 7, 'SV440', 'Pham Thi Hai', 'sv440@school.edu.vn', '2003-06-12', 0, '0953413380', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(441, 467, 8, 'SV441', 'Le Minh Binh', 'sv441@school.edu.vn', '2003-03-18', 1, '0991453458', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(442, 468, 9, 'SV442', 'Tran Anh Hai', 'sv442@school.edu.vn', '2003-08-06', 1, '0921723247', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(443, 469, 10, 'SV443', 'Nguyen Minh An', 'sv443@school.edu.vn', '2003-11-25', 1, '0944640981', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(444, 470, 11, 'SV444', 'Nguyen Minh Chinh', 'sv444@school.edu.vn', '2003-02-05', 1, '0983339676', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(445, 471, 12, 'SV445', 'Nguyen Hoang Chinh', 'sv445@school.edu.vn', '2003-05-26', 0, '0970139343', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(446, 472, 13, 'SV446', 'Nguyen Anh An', 'sv446@school.edu.vn', '2003-02-15', 1, '0950983178', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(447, 473, 14, 'SV447', 'Nguyen Hoang An', 'sv447@school.edu.vn', '2003-09-22', 0, '0951030449', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(448, 474, 1, 'SV448', 'Le Thi Dat', 'sv448@school.edu.vn', '2003-11-30', 0, '0936300013', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(449, 475, 2, 'SV449', 'Le Minh Dat', 'sv449@school.edu.vn', '2003-10-17', 1, '0918362517', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(450, 476, 3, 'SV450', 'Le Anh An', 'sv450@school.edu.vn', '2003-03-23', 0, '0910488288', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(451, 477, 4, 'SV451', 'Vu Anh An', 'sv451@school.edu.vn', '2003-09-09', 1, '0993963376', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(452, 478, 5, 'SV452', 'Nguyen Thi An', 'sv452@school.edu.vn', '2003-11-05', 0, '0972204109', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(453, 479, 6, 'SV453', 'Vu Hoang Chinh', 'sv453@school.edu.vn', '2003-04-14', 1, '0975396681', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(454, 480, 7, 'SV454', 'Tran Minh An', 'sv454@school.edu.vn', '2003-01-16', 1, '0916081873', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(455, 481, 8, 'SV455', 'Le Van Binh', 'sv455@school.edu.vn', '2003-03-23', 1, '0913095375', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(456, 482, 9, 'SV456', 'Le Thi Dat', 'sv456@school.edu.vn', '2003-06-06', 0, '0938234187', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(457, 483, 10, 'SV457', 'Le Anh Chinh', 'sv457@school.edu.vn', '2003-06-24', 0, '0974972643', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(458, 484, 11, 'SV458', 'Nguyen Thi Hai', 'sv458@school.edu.vn', '2003-03-02', 1, '0989941977', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(459, 485, 12, 'SV459', 'Le Hoang Binh', 'sv459@school.edu.vn', '2003-03-03', 0, '0970630503', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(460, 486, 13, 'SV460', 'Vu Minh Hai', 'sv460@school.edu.vn', '2003-12-10', 0, '0912869472', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(461, 487, 14, 'SV461', 'Vu Hoang Hai', 'sv461@school.edu.vn', '2003-05-06', 1, '0932094154', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(462, 488, 1, 'SV462', 'Le Van Dat', 'sv462@school.edu.vn', '2003-01-25', 0, '0945417187', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(463, 489, 2, 'SV463', 'Vu Anh Hai', 'sv463@school.edu.vn', '2003-03-10', 1, '0936469588', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(464, 490, 3, 'SV464', 'Pham Van Dat', 'sv464@school.edu.vn', '2003-06-14', 1, '0994793021', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(465, 491, 4, 'SV465', 'Vu Van Binh', 'sv465@school.edu.vn', '2003-10-01', 1, '0914552551', 'Địa chất dầu khí', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(466, 492, 5, 'SV466', 'Le Thi Chinh', 'sv466@school.edu.vn', '2003-09-02', 1, '0975143977', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(467, 493, 6, 'SV467', 'Le Hoang Dat', 'sv467@school.edu.vn', '2003-02-05', 1, '0939965982', 'Khai thác mỏ lộ thiên', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(468, 494, 7, 'SV468', 'Nguyen Van An', 'sv468@school.edu.vn', '2003-11-19', 1, '0941340236', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(469, 495, 8, 'SV469', 'Pham Minh An', 'sv469@school.edu.vn', '2003-11-04', 0, '0919625165', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(470, 496, 9, 'SV470', 'Le Anh Hai', 'sv470@school.edu.vn', '2003-01-07', 1, '0964120141', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(471, 497, 10, 'SV471', 'Vu Anh An', 'sv471@school.edu.vn', '2003-03-05', 1, '0960301065', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(472, 498, 11, 'SV472', 'Pham Thi Dat', 'sv472@school.edu.vn', '2003-07-29', 1, '0969928361', 'Kinh tế mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(473, 499, 12, 'SV473', 'Le Van Hai', 'sv473@school.edu.vn', '2003-03-03', 0, '0935570719', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(474, 500, 13, 'SV474', 'Pham Hoang Hai', 'sv474@school.edu.vn', '2003-01-31', 1, '0965240841', 'Hệ thống điện', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(475, 501, 14, 'SV475', 'Pham Hoang Dat', 'sv475@school.edu.vn', '2003-06-03', 0, '0918109070', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(476, 502, 1, 'SV476', 'Vu Van Binh', 'sv476@school.edu.vn', '2003-03-05', 1, '0986509342', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(477, 503, 2, 'SV477', 'Tran Van Hai', 'sv477@school.edu.vn', '2003-09-13', 0, '0913159811', 'Công nghệ phần mềm', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(478, 504, 3, 'SV478', 'Nguyen Van Hai', 'sv478@school.edu.vn', '2003-06-21', 0, '0952786755', 'Địa chất dầu khí', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(479, 505, 4, 'SV479', 'Nguyen Minh Hai', 'sv479@school.edu.vn', '2003-12-20', 0, '0931925055', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(480, 506, 5, 'SV480', 'Tran Anh Chinh', 'sv480@school.edu.vn', '2003-04-11', 1, '0919087435', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(481, 507, 6, 'SV481', 'Tran Minh Dat', 'sv481@school.edu.vn', '2003-11-16', 0, '0932399716', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(482, 508, 7, 'SV482', 'Vu Minh Binh', 'sv482@school.edu.vn', '2003-08-16', 0, '0910118425', 'Trắc địa mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(483, 509, 8, 'SV483', 'Nguyen Thi Hai', 'sv483@school.edu.vn', '2003-11-12', 1, '0965500859', 'Trắc địa mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(484, 510, 9, 'SV484', 'Le Minh Chinh', 'sv484@school.edu.vn', '2003-05-03', 1, '0952050193', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(485, 511, 10, 'SV485', 'Tran Hoang An', 'sv485@school.edu.vn', '2003-01-13', 0, '0990224423', 'Địa chất công trình', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(486, 512, 11, 'SV486', 'Le Anh Dat', 'sv486@school.edu.vn', '2003-11-10', 0, '0944205795', 'Kinh tế mỏ', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(487, 513, 12, 'SV487', 'Le Van Dat', 'sv487@school.edu.vn', '2003-01-05', 0, '0928509056', 'Kinh tế mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(488, 514, 13, 'SV488', 'Pham Anh Chinh', 'sv488@school.edu.vn', '2003-05-15', 0, '0931790357', 'Hệ thống điện', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(489, 515, 14, 'SV489', 'Pham Thi Chinh', 'sv489@school.edu.vn', '2003-07-22', 1, '0926480721', 'Hệ thống điện', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(490, 516, 1, 'SV490', 'Vu Hoang Binh', 'sv490@school.edu.vn', '2003-09-13', 1, '0960655134', 'Công nghệ phần mềm', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(491, 517, 2, 'SV491', 'Tran Minh Binh', 'sv491@school.edu.vn', '2003-04-08', 1, '0975188369', 'Công nghệ phần mềm', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(492, 518, 3, 'SV492', 'Nguyen Anh Binh', 'sv492@school.edu.vn', '2003-09-25', 1, '0955750443', 'Địa chất dầu khí', 'Hai Phong', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(493, 519, 4, 'SV493', 'Vu Hoang An', 'sv493@school.edu.vn', '2003-12-03', 0, '0918964472', 'Địa chất dầu khí', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(494, 520, 5, 'SV494', 'Le Anh Chinh', 'sv494@school.edu.vn', '2003-06-22', 0, '0998783096', 'Khai thác mỏ lộ thiên', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(495, 521, 6, 'SV495', 'Le Anh Hai', 'sv495@school.edu.vn', '2003-04-25', 1, '0997256559', 'Khai thác mỏ lộ thiên', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(496, 522, 7, 'SV496', 'Tran Van Binh', 'sv496@school.edu.vn', '2003-03-26', 1, '0931816685', 'Trắc địa mỏ', 'Da Nang', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(497, 523, 8, 'SV497', 'Pham Thi Binh', 'sv497@school.edu.vn', '2003-09-25', 1, '0964564299', 'Trắc địa mỏ', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(498, 524, 9, 'SV498', 'Nguyen Hoang Hai', 'sv498@school.edu.vn', '2003-09-27', 0, '0915199279', 'Địa chất công trình', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(499, 525, 10, 'SV499', 'Vu Minh An', 'sv499@school.edu.vn', '2003-03-12', 0, '0954283889', 'Địa chất công trình', 'TP HCM', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15'),
+(500, 526, 11, 'SV500', 'Vu Van Hai', 'sv500@school.edu.vn', '2003-02-22', 1, '0990857397', 'Kinh tế mỏ', 'Ha Noi', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-13 12:41:15', '2026-05-13 12:41:15');
+
+--
+-- Bẫy `students`
+--
+DELIMITER $$
+CREATE TRIGGER `After_Student_Delete` AFTER DELETE ON `students` FOR EACH ROW BEGIN
+    UPDATE `classrooms`
+    SET `quantity` = `quantity` - 1
+    WHERE `id` = OLD.`classroom_id`;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `After_Student_Insert` AFTER INSERT ON `students` FOR EACH ROW BEGIN
+    UPDATE `classrooms`
+    SET `quantity` = `quantity` + 1
+    WHERE `id` = NEW.`classroom_id`;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `After_Student_Update` AFTER UPDATE ON `students` FOR EACH ROW BEGIN
+    -- Chỉ xử lý nếu sinh viên đó bị thay đổi classroom_id
+    IF OLD.`classroom_id` <> NEW.`classroom_id` THEN
+        -- Trừ 1 sĩ số ở lớp cũ
+        UPDATE `classrooms`
+        SET `quantity` = `quantity` - 1
+        WHERE `id` = OLD.`classroom_id`;
+        
+        -- Cộng 1 sĩ số ở lớp mới
+        UPDATE `classrooms`
+        SET `quantity` = `quantity` + 1
+        WHERE `id` = NEW.`classroom_id`;
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `subjects`
+--
+
+CREATE TABLE `subjects` (
+  `id` int(11) NOT NULL,
+  `faculty_id` int(11) DEFAULT NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT 'Mã môn học (VD: CS101)',
+  `name` varchar(100) DEFAULT NULL,
+  `credits` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `subjects`
+--
+
+INSERT INTO `subjects` (`id`, `faculty_id`, `code`, `name`, `credits`, `created_at`, `updated_at`) VALUES
+(1, 1, '7080116', 'Phát triển ứng dụng web + BTL', 4, '2026-05-07 17:51:15', '2026-05-16 07:15:16'),
+(2, 1, '7080114', 'Phân tính hướng đối tượng với UML', 3, '2026-05-07 17:51:46', '2026-05-16 07:16:59'),
+(3, 1, '7080216', 'Lập trình hướng đối tượng với C++ và BTL', 2, '2026-05-07 17:52:35', '2026-05-16 07:17:15'),
+(4, 1, '7080104', 'Công nghệ phần mềm', 2, '2026-05-07 17:53:32', '2026-05-16 07:17:26'),
+(5, 1, '7080208', 'Cơ sở lập trình', 2, '2026-05-07 17:54:33', '2026-05-16 07:17:54'),
+(6, 2, '7070101', 'Địa chất dầu khí', 3, '2026-05-07 17:57:34', '2026-05-16 07:27:24'),
+(7, 2, '7070232', 'Kỹ thuật khoan', 3, '2026-05-07 17:58:04', '2026-05-16 07:32:00'),
+(8, 2, '7070107', 'Vật lý vỉa dầu khí', 2, '2026-05-07 17:58:31', '2026-05-16 07:32:05'),
+(9, 2, '7070116', 'Khoan định hướng', 2, '2026-05-07 17:59:18', '2026-05-16 07:32:10'),
+(10, 2, '7070215', 'Kỹ thuật khai thác khí thiên nhiên', 2, '2026-05-07 17:59:38', '2026-05-16 07:32:30'),
+(11, 3, '7050205', 'Địa chất cơ sở', 2, '2026-05-07 18:00:43', '2026-05-16 07:28:12'),
+(12, 3, '7050225', 'Sức bền vật liệu', 4, '2026-05-07 18:01:11', '2026-05-16 07:32:39'),
+(13, 3, '7050325', 'Trắc địa mỏ', 2, '2026-05-07 18:01:31', '2026-05-16 07:32:46'),
+(14, 3, '7050211', 'Vận tải mỏ', 2, '2026-05-07 18:02:05', '2026-05-16 07:32:53'),
+(15, 3, '7050209', 'Máy và thiết bị mỏ', 3, '2026-05-07 18:03:04', '2026-05-16 07:28:35'),
+(16, 4, '7050216', 'Địa chính', 2, '2026-05-07 18:03:25', '2026-05-16 07:28:47'),
+(17, 4, '7050405', 'Quy hoạch và sử dụng đất', 3, '2026-05-07 18:05:32', '2026-05-16 07:33:04'),
+(18, 4, '7050432', 'Định giá bất động sản', 3, '2026-05-07 18:05:53', '2026-05-16 07:33:13'),
+(19, 4, '7050219', 'Trắc địa mỏ , công trình', 3, '2026-05-07 18:06:24', '2026-05-16 07:29:06'),
+(20, 4, '7050102', 'Hệ thông tin địa lý (GIS)', 3, '2026-05-07 18:07:02', '2026-05-16 07:33:20'),
+(21, 9, '7010701', 'Giáo dục thể chất 1', 2, '2026-05-07 18:07:30', '2026-05-16 07:22:05'),
+(22, 9, '7010702', 'Giáo dục thể chất 2', 2, '2026-05-07 18:07:44', '2026-05-16 07:23:55'),
+(23, 9, '7010703', 'Giáo dục thể chất 3', 2, '2026-05-07 18:08:02', '2026-05-16 07:21:26'),
+(24, 8, '7010601', 'Tiếng Anh 1', 3, '2026-05-07 18:08:18', '2026-05-16 07:26:15'),
+(25, 8, '7010602', 'Tiếng Anh 2', 3, '2026-05-07 18:09:19', '2026-05-16 07:26:22'),
+(26, 8, '7010603', 'Tiếng Anh 3', 2, '2026-05-07 18:09:30', '2026-05-16 07:21:35'),
+(27, 8, '7010604', 'Tiếng Anh 4', 2, '2026-05-07 18:09:48', '2026-05-16 07:26:36'),
+(28, 10, '7300202', 'Quân sự chung', 2, '2026-05-07 18:10:49', '2026-05-16 07:18:20'),
+(29, 10, '7300203', 'Kỹ thuật chiến đấu bộ binh và chiến thuật', 4, '2026-05-07 18:11:22', '2026-05-16 07:18:32'),
+(30, 10, '7300104', 'Công tác quốc phòng và an ninh', 2, '2026-05-07 18:11:50', '2026-05-16 07:18:47'),
+(31, 10, '7300103', 'Đường lối quốc phòng và aninh của Đảng CSVN', 3, '2026-05-07 18:12:29', '2026-05-16 07:18:57'),
+(32, 12, '7010103', 'Giải tích 1', 4, '2026-05-07 18:13:37', '2026-05-17 18:10:31'),
+(33, 12, '7010204', 'Vật lý đại cương', 4, '2026-05-07 18:13:58', '2026-05-16 07:25:56'),
+(34, 12, '7010304', 'Hóa học đại cương', 3, '2026-05-07 18:14:27', '2026-05-16 07:24:27'),
+(35, 12, '7010102', 'Toán cao cấp 1', 3, '2026-05-07 18:14:45', '2026-05-16 07:24:05'),
+(36, 12, '7010120', 'Xác xuất thống kê', 3, '2026-05-07 18:15:00', '2026-05-16 07:22:55'),
+(37, 11, '7020203', 'Lịch sử Đảng cộng sản Việt Nam', 3, '2026-05-07 18:15:57', '2026-05-16 07:21:02'),
+(38, 11, '7020105', 'Triết học Mác - Lê Nin', 3, '2026-05-07 18:16:16', '2026-05-16 07:19:20'),
+(39, 11, '7020302', 'Kinh tế chính trị Mác - Lê Nin', 3, '2026-05-07 18:16:33', '2026-05-16 07:19:52'),
+(40, 11, '7020104', 'Pháp luật đại cương', 3, '2026-05-07 18:16:48', '2026-05-16 07:20:46'),
+(41, 11, '7020201', 'Tư tưởng Hồ Chí Minh', 2, '2026-05-07 18:17:47', '2026-05-16 07:20:32'),
+(42, 11, '7020202', 'Chủ nghĩa xã hội khoa học', 2, '2026-05-07 18:18:07', '2026-05-16 07:20:14'),
+(43, 7, '7650741', 'Hình họa - Vẽ kỹ thuật', 3, '2026-05-07 18:18:47', '2026-05-16 07:31:05'),
+(44, 7, '7650236', 'Sức bền vật liệu', 3, '2026-05-07 18:19:25', '2026-05-16 07:31:19'),
+(45, 7, '7650232', 'Máy Điện', 3, '2026-05-07 18:19:43', '2026-05-16 07:31:25'),
+(46, 7, '7650208', 'Lưới điện thông minh (Smart Grid)', 3, '2026-05-07 18:20:03', '2026-05-16 07:31:33'),
+(47, 7, '7650114', 'An toàn điện', 3, '2026-05-07 18:20:19', '2026-05-16 07:31:39'),
+(48, 7, '7650108', 'Nguyên lý máy', 3, '2026-05-07 18:20:35', '2026-05-16 07:31:45'),
+(49, 6, '7600430', 'Quản trị học', 3, '2026-05-07 18:23:47', '2026-05-16 07:30:11'),
+(50, 6, '7600431', 'Quản trị nhân lực', 3, '2026-05-07 18:24:05', '2026-05-16 07:30:20'),
+(51, 6, '7600505', 'Quản trị chiến lược', 3, '2026-05-07 18:24:25', '2026-05-16 07:30:28'),
+(52, 6, '7600512', 'Nguyên lý kế toán', 3, '2026-05-07 18:24:45', '2026-05-16 07:30:35'),
+(53, 6, '7610702', 'Thuế', 2, '2026-05-07 18:24:56', '2026-05-16 07:30:44'),
+(54, 6, '7670514', 'Kinh tế vi mô', 3, '2026-05-07 18:25:46', '2026-05-16 07:30:52'),
+(55, 5, '7070402', 'Địa chất cơ sở', 3, '2026-05-07 18:26:43', '2026-05-16 07:29:32'),
+(56, 5, '7070422', 'Khoáng vật học', 3, '2026-05-07 18:26:56', '2026-05-16 07:33:33'),
+(57, 5, '7070111', 'Địa hóa học', 2, '2026-05-07 18:27:12', '2026-05-16 07:33:38'),
+(58, 5, '7070206', 'Thủy địa chất đại cương', 2, '2026-05-07 18:27:35', '2026-05-16 07:33:48');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `system_configs`
+--
+
+CREATE TABLE `system_configs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `value` text DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `teachers`
+--
+
+CREATE TABLE `teachers` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `faculty_id` int(11) NOT NULL,
+  `teacher_code` varchar(50) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` tinyint(4) DEFAULT NULL COMMENT '0: Nam, 1: Nữ',
+  `phone` varchar(20) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `department` varchar(100) DEFAULT NULL COMMENT 'Bộ môn',
+  `degree` varchar(50) DEFAULT NULL COMMENT 'Học vị: CN, ThS, TS, PGS, GS',
+  `images` varchar(255) DEFAULT 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `teachers`
+--
+
+INSERT INTO `teachers` (`id`, `account_id`, `faculty_id`, `teacher_code`, `name`, `email`, `date_of_birth`, `gender`, `phone`, `address`, `department`, `degree`, `images`, `created_at`, `updated_at`) VALUES
+(1, 3, 1, 'GV001', 'Ngô Ngọc Anh', 'gv001@teacher.humg.edu.vn', '1997-06-08', 0, '0912345678', 'Hà Nội', 'Công nghệ phần mềm', 'Thạc sĩ', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 11:58:35', '2026-05-13 03:34:07'),
+(2, 4, 1, 'GV002', 'Hoàng Anh Đức', 'gv002@teacher.humg.edu.vn', '1984-03-17', 0, '0989108910', 'Hà Nội', 'Công nghệ phần mềm', 'Tiến sĩ', 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 11:59:08', '2026-05-13 03:37:27'),
+(3, 5, 2, 'GV003', 'Nguyễn Đức Thành', 'gv003@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:01:56', '2026-05-13 03:38:50'),
+(4, 6, 2, 'GV004', 'Kiều Duy Thông', 'gv004@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:02:59', '2026-05-13 03:38:57'),
+(5, 7, 3, 'GV005', 'Lê Văn Quyển', 'gv005@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:04:49', '2026-05-13 03:39:04'),
+(6, 8, 3, 'GV006', 'Dương Đức Hùng', 'gv006@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:06:19', '2026-05-13 03:39:10'),
+(7, 9, 4, 'GV007', 'Phạm Công Khải', 'gv007@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:07:50', '2026-05-13 03:39:18'),
+(8, 10, 4, 'GV008', 'Dương Vân Phong', 'gv008@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:08:35', '2026-05-13 03:39:24'),
+(9, 11, 5, 'GV009', 'Tô Xuân Bản', 'gv009@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:10:43', '2026-05-13 03:39:30'),
+(10, 12, 5, 'GV010', 'Trần Vũ Long', 'gv010@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:11:22', '2026-05-13 03:39:37'),
+(11, 23, 6, 'GV011', 'Lê Thị Thu Hường', 'gv11@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:12:25', '2026-05-13 03:39:58'),
+(12, 24, 6, 'GV012', 'Bùi Thị Thu Thủy', 'gv012@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:13:11', '2026-05-13 03:40:09'),
+(13, 25, 7, 'GV013', 'Đỗ Như Ý', 'gv013@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:14:29', '2026-05-13 03:40:37'),
+(14, 26, 7, 'GV014', 'Phạm Thị Thủy', 'gv014@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:15:04', '2026-05-13 03:40:46'),
+(15, 27, 8, 'GV015', 'Vũ Thị Thảo', 'gv015@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:16:28', '2026-05-13 03:41:04'),
+(16, 28, 8, 'GV016', 'Nguyễn Thị Thu Phúc', 'gv016@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:17:20', '2026-05-13 03:41:18'),
+(17, 29, 9, 'GV017', 'Lương Anh Hùng', 'gv017@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:18:06', '2026-05-13 03:41:29'),
+(18, 30, 9, 'GV018', 'Nguyễn Văn Thuần', 'gv018@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:19:02', '2026-05-13 03:41:40'),
+(19, 31, 10, 'GV019', 'Nguyễn Thanh Tuấn', 'gv019@teacher.humg.edu.vn', NULL, NULL, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:21:55', '2026-05-05 12:21:55'),
+(20, 32, 10, 'GV020', 'Trần Thanh Hanh', 'gv020@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-05 12:22:31', '2026-05-13 03:41:58'),
+(21, 33, 11, 'GV021', 'Nguyễn Tuấn Vương', 'gv021@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-06 04:22:30', '2026-05-13 03:42:07'),
+(22, 35, 12, 'GV023', 'Vũ Thị Kim Thư', 'gv023@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-06 04:26:48', '2026-05-13 03:47:09'),
+(23, 36, 12, 'GV024', 'Phạm Tuấn Cường', 'gv024@teacher.humg.edu.vn', NULL, 0, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-06 04:30:43', '2026-05-13 03:42:28'),
+(24, 34, 11, 'GV022', 'Đào Thị Tuyết', 'gv022@teacher.humg.edu.vn', NULL, 1, NULL, NULL, NULL, NULL, 'images/students/MTI7Kn23nP6KsVPpOLmBjbfV6dDRm03sjdmDA61x.jpg', '2026-05-06 04:31:38', '2026-05-13 03:43:33');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `tuitions`
+--
+
+CREATE TABLE `tuitions` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  `semester_id` int(11) DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `paid_amount` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `tuitions`
+--
+
+INSERT INTO `tuitions` (`id`, `student_id`, `semester_id`, `total_amount`, `paid_amount`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 8671500.00, 0.00, '2026-05-18 10:38:36', '2026-05-18 10:38:36'),
+(2, 2, 2, 8671500.00, 0.00, '2026-05-18 11:20:02', '2026-05-18 11:20:02'),
+(3, 6, 2, 8671500.00, 0.00, '2026-05-18 11:32:50', '2026-05-18 11:32:50'),
+(4, 45, 2, 8671500.00, 0.00, '2026-05-18 13:15:54', '2026-05-18 13:15:54');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `role_id` (`role_id`);
+
+--
+-- Chỉ mục cho bảng `attendances`
+--
+ALTER TABLE `attendances`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `enrollment_id` (`enrollment_id`);
+
+--
+-- Chỉ mục cho bảng `classrooms`
+--
+ALTER TABLE `classrooms`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `faculty_id` (`faculty_id`);
+
+--
+-- Chỉ mục cho bảng `enrollments`
+--
+ALTER TABLE `enrollments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `schedule_id` (`schedule_id`);
+
+--
+-- Chỉ mục cho bảng `faculties`
+--
+ALTER TABLE `faculties`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `faculties_faculty_general_id_foreign` (`faculty_general_id`);
+
+--
+-- Chỉ mục cho bảng `faculty_generals`
+--
+ALTER TABLE `faculty_generals`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `faculty_generals_name_unique` (`name`);
+
+--
+-- Chỉ mục cho bảng `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `account_id` (`account_id`);
+
+--
+-- Chỉ mục cho bảng `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `news`
+--
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `news_slug_unique` (`slug`);
+
+--
+-- Chỉ mục cho bảng `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Chỉ mục cho bảng `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tuition_id` (`tuition_id`);
+
+--
+-- Chỉ mục cho bảng `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `rooms`
+--
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `schedules`
+--
+ALTER TABLE `schedules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `subject_id` (`subject_id`),
+  ADD KEY `teacher_id` (`teacher_id`),
+  ADD KEY `room_id` (`room_id`),
+  ADD KEY `semester_id` (`semester_id`);
+
+--
+-- Chỉ mục cho bảng `schedule_sessions`
+--
+ALTER TABLE `schedule_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `schedule_sessions_schedule_id_foreign` (`schedule_id`);
+
+--
+-- Chỉ mục cho bảng `semesters`
+--
+ALTER TABLE `semesters`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Chỉ mục cho bảng `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `student_code` (`student_code`),
+  ADD KEY `account_id` (`account_id`),
+  ADD KEY `classroom_id` (`classroom_id`);
+
+--
+-- Chỉ mục cho bảng `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `subjects_code_unique` (`code`),
+  ADD KEY `faculty_id` (`faculty_id`);
+
+--
+-- Chỉ mục cho bảng `system_configs`
+--
+ALTER TABLE `system_configs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `system_configs_key_unique` (`key`);
+
+--
+-- Chỉ mục cho bảng `teachers`
+--
+ALTER TABLE `teachers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `teacher_code` (`teacher_code`),
+  ADD KEY `account_id` (`account_id`),
+  ADD KEY `faculty_id` (`faculty_id`);
+
+--
+-- Chỉ mục cho bảng `tuitions`
+--
+ALTER TABLE `tuitions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `semester_id` (`semester_id`);
+
+--
+-- Chỉ mục cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=527;
+
+--
+-- AUTO_INCREMENT cho bảng `attendances`
+--
+ALTER TABLE `attendances`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `classrooms`
+--
+ALTER TABLE `classrooms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT cho bảng `enrollments`
+--
+ALTER TABLE `enrollments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `faculties`
+--
+ALTER TABLE `faculties`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT cho bảng `faculty_generals`
+--
+ALTER TABLE `faculty_generals`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT cho bảng `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT cho bảng `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT cho bảng `news`
+--
+ALTER TABLE `news`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `rooms`
+--
+ALTER TABLE `rooms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT cho bảng `schedules`
+--
+ALTER TABLE `schedules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT cho bảng `schedule_sessions`
+--
+ALTER TABLE `schedule_sessions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT cho bảng `semesters`
+--
+ALTER TABLE `semesters`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT cho bảng `students`
+--
+ALTER TABLE `students`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=501;
+
+--
+-- AUTO_INCREMENT cho bảng `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+
+--
+-- AUTO_INCREMENT cho bảng `system_configs`
+--
+ALTER TABLE `system_configs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT cho bảng `teachers`
+--
+ALTER TABLE `teachers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT cho bảng `tuitions`
+--
+ALTER TABLE `tuitions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `accounts`
+--
+ALTER TABLE `accounts`
+  ADD CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+
+--
+-- Các ràng buộc cho bảng `attendances`
+--
+ALTER TABLE `attendances`
+  ADD CONSTRAINT `attendances_ibfk_1` FOREIGN KEY (`enrollment_id`) REFERENCES `enrollments` (`id`);
+
+--
+-- Các ràng buộc cho bảng `classrooms`
+--
+ALTER TABLE `classrooms`
+  ADD CONSTRAINT `classrooms_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`id`);
+
+--
+-- Các ràng buộc cho bảng `enrollments`
+--
+ALTER TABLE `enrollments`
+  ADD CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`);
+
+--
+-- Các ràng buộc cho bảng `faculties`
+--
+ALTER TABLE `faculties`
+  ADD CONSTRAINT `faculties_faculty_general_id_foreign` FOREIGN KEY (`faculty_general_id`) REFERENCES `faculty_generals` (`id`) ON DELETE SET NULL;
+
+--
+-- Các ràng buộc cho bảng `feedbacks`
+--
+ALTER TABLE `feedbacks`
+  ADD CONSTRAINT `feedbacks_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`);
+
+--
+-- Các ràng buộc cho bảng `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`tuition_id`) REFERENCES `tuitions` (`id`);
+
+--
+-- Các ràng buộc cho bảng `schedules`
+--
+ALTER TABLE `schedules`
+  ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`),
+  ADD CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`),
+  ADD CONSTRAINT `schedules_ibfk_3` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`),
+  ADD CONSTRAINT `schedules_ibfk_4` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`id`);
+
+--
+-- Các ràng buộc cho bảng `schedule_sessions`
+--
+ALTER TABLE `schedule_sessions`
+  ADD CONSTRAINT `schedule_sessions_schedule_id_foreign` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`),
+  ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`classroom_id`) REFERENCES `classrooms` (`id`);
+
+--
+-- Các ràng buộc cho bảng `subjects`
+--
+ALTER TABLE `subjects`
+  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`id`);
+
+--
+-- Các ràng buộc cho bảng `teachers`
+--
+ALTER TABLE `teachers`
+  ADD CONSTRAINT `teachers_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`),
+  ADD CONSTRAINT `teachers_ibfk_2` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`id`);
+
+--
+-- Các ràng buộc cho bảng `tuitions`
+--
+ALTER TABLE `tuitions`
+  ADD CONSTRAINT `tuitions_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `tuitions_ibfk_2` FOREIGN KEY (`semester_id`) REFERENCES `semesters` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

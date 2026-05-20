@@ -339,8 +339,8 @@
 
             <li class="nav-item">
                 <a href="{{ route('admin.enrollments') }}"
-                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Bảng điểm">
-                    <i class="fa-solid fa-star-half-stroke"></i>
+                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}" title="Quản lý đơn đăng ký">
+                    <i class="fa-solid fa-clipboard-list"></i>
                     <span>Quản lý đơn đăng ký</span>
                 </a>
             </li>
@@ -360,7 +360,13 @@
                     <span>Quản lý Lớp học phần</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a href="{{ route('admin.grades') }}"
+                    class="nav-link {{ request()->routeIs('admin.grades') ? 'active' : '' }}" title="Quản lý điểm">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                    <span>Quản lý điểm</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="{{ route('admin.rooms') }}"
                     class="nav-link {{ request()->routeIs('admin.rooms') ? 'active' : '' }}" title="Quản lý phòng học">
@@ -409,7 +415,8 @@
 
             <li class="nav-item">
                 <a href="{{ route('admin.news') }}"
-                    class="nav-link {{ request()->routeIs('admin.news') ? 'active' : '' }}" title="Tin tức & Thông báo">
+                    class="nav-link {{ request()->routeIs('admin.news') ? 'active' : '' }}"
+                    title="Tin tức & Thông báo">
                     <i class="fa-regular fa-newspaper"></i>
                     <span>Tin tức & Thông báo</span>
                 </a>
