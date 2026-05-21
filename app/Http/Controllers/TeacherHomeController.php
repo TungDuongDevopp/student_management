@@ -421,11 +421,19 @@ class TeacherHomeController extends Controller
             return redirect()->route('teacher.grades', ['schedule_id' => $schedules->first()->id]);
         }
 
-        return view('user.Teacher.grade', compact('teacher', 'schedules', 'students', 'currentSchedule'));
+        $isRegistrationOpen = (\App\Models\SystemConfig::getValue('is_registration_open', '1') === '1');
+        $isGradingOpen = (\App\Models\SystemConfig::getValue('is_grading_open', '0') === '1');
+
+        return view('user.Teacher.grade', compact('teacher', 'schedules', 'students', 'currentSchedule', 'isRegistrationOpen', 'isGradingOpen'));
     }
 
     public function saveGrades(\Illuminate\Http\Request $request)
     {
+        $isGradingOpen = (\App\Models\SystemConfig::getValue('is_grading_open', '0') === '1');
+        if (!$isGradingOpen) {
+            return response()->json(['success' => false, 'message' => 'Cổng nhập điểm hiện đang ĐÓNG. Vui lòng liên hệ Admin để mở đợt chấm điểm.'], 403);
+        }
+
         $validated = $request->validate([
             'grades' => 'required|array',
             'grades.*.score_c' => 'nullable|numeric|min:0|max:10',

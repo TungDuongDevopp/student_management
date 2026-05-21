@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EnrollmentController extends Controller
 {
@@ -22,13 +23,18 @@ class EnrollmentController extends Controller
 
     public function store(Request $request)
     {
+        // Check registration status from Database SystemConfig
+        $enabled = (\App\Models\SystemConfig::getValue('is_registration_open', '1') === '1');
+        if (!$enabled) {
+            return response()->json(['success' => false, 'message' => 'Đăng ký môn học đã đóng. Vui lòng thử lại sau.'], 403);
+        }
+
         $validated = $request->validate([
-            'student_id'  => 'required|integer|exists:students,id',
-            'schedule_id' => 'required|integer|exists:schedules,id',
+            'student_id'  => 'required|exists:students,id',
+            'schedule_id' => 'required|exists:schedules,id',
             'score_c'     => 'nullable|numeric|min:0|max:10',
             'score_b'     => 'nullable|numeric|min:0|max:10',
             'score_a'     => 'nullable|numeric|min:0|max:10',
-            'status'      => 'nullable|integer',
         ]);
 
         \Illuminate\Support\Facades\DB::beginTransaction();

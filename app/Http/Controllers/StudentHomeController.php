@@ -301,15 +301,25 @@ class StudentHomeController extends Controller
             ->values()
             ->toArray();
 
+        // Determine registration availability from Database SystemConfig
+        $registrationOpen = (\App\Models\SystemConfig::getValue('is_registration_open', '1') === '1');
+
         return view('user.Student.enrollment', array_merge($stats, [
             'student' => $student,
             'subjects' => $subjects,
-            'enrolledSchedules' => $enrolledSchedules
+            'enrolledSchedules' => $enrolledSchedules,
+            'registrationOpen' => $registrationOpen
         ]));
     }
 
     public function submitEnrollment(Request $request)
     {
+        // Check if enrollment feature is enabled from Database SystemConfig
+        $enabled = (\App\Models\SystemConfig::getValue('is_registration_open', '1') === '1');
+        if (!$enabled) {
+            return response()->json(['success' => false, 'message' => 'Đăng ký môn học đã đóng. Vui lòng thử lại sau.'], 403);
+        }
+
         /** @var \App\Models\Account $account */
         $account = Auth::user();
         $account->load('student.classroom.faculty.facultyGeneral');
@@ -370,6 +380,12 @@ class StudentHomeController extends Controller
                         
                         $schedule->current_capacity = $actualEnrolledCount + 1;
                         $schedule->save();
+                    } else {
+                        // Rollback everything or just return error immediately
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Lớp học phần "' . ($schedule->subject->name ?? 'Không xác định') . '" đã đạt số lượng đăng ký tối đa. Vui lòng chọn môn khác.'
+                        ], 400);
                     }
                 }
             } else {
