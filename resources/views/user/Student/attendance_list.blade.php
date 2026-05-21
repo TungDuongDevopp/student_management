@@ -168,10 +168,39 @@ tr:last-child td {
                                 <td>{{ $teacherName }}</td>
                                 <td><span class="badge-success">{{ $present }}</span></td>
                                 <td><span class="badge-danger">{{ $absent }}</span></td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center; white-space: nowrap;">
+                                    <button class="btn-feedback" onclick="toggleDetails('details-{{ $e->id }}')" style="background: #f1f5f9; color: #475569; border-color: #cbd5e1; margin-right: 4px;">
+                                        <i class="fa-solid fa-list-ul"></i> Chi tiết
+                                    </button>
                                     <a href="{{ $feedbackUrl }}" class="btn-feedback">
                                         <i class="fa-regular fa-comment-dots"></i> Phản hồi
                                     </a>
+                                </td>
+                            </tr>
+                            <tr id="details-{{ $e->id }}" style="display: none; background: #f8fafc;">
+                                <td colspan="7" style="padding: 1rem 2rem;">
+                                    <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #1e40af;"><i class="fa-regular fa-calendar-check" style="margin-right: 5px;"></i> Chi tiết các buổi học</h4>
+                                    @if($e->attendances->count() > 0)
+                                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                            @foreach($e->attendances->sortByDesc('attendance_date') as $att)
+                                                @php
+                                                    $attDate = date('d/m/Y', strtotime($att->attendance_date));
+                                                    $attTime = $att->scheduleSession ? substr($att->scheduleSession->start_time, 0, 5) . ' - ' . substr($att->scheduleSession->end_time, 0, 5) : '—';
+                                                @endphp
+                                                <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px; font-size: 0.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                                    <div style="font-weight: 600; color: #334155; margin-bottom: 4px;">{{ $attDate }}</div>
+                                                    <div style="color: #64748b; margin-bottom: 6px;"><i class="fa-regular fa-clock"></i> {{ $attTime }}</div>
+                                                    @if($att->status == 1)
+                                                        <span class="badge-success" style="font-size: 0.7rem; padding: 2px 6px;">Có mặt</span>
+                                                    @else
+                                                        <span class="badge-danger" style="font-size: 0.7rem; padding: 2px 6px;">Vắng mặt</span>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p style="color: #64748b; font-size: 0.85rem; margin: 0;">Chưa có bản ghi điểm danh nào cho môn học này.</p>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -190,4 +219,15 @@ tr:last-child td {
         </div>
     </div>
 </div>
+
+<script>
+function toggleDetails(id) {
+    const el = document.getElementById(id);
+    if (el.style.display === 'none') {
+        el.style.display = 'table-row';
+    } else {
+        el.style.display = 'none';
+    }
+}
+</script>
 @endsection
