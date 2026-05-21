@@ -383,7 +383,6 @@ class TeacherHomeController extends Controller
                         'class_name' => $student->classroom->name ?? '—',
                         'score_c' => $enrollment->grade->score_c ?? '',
                         'score_b' => $enrollment->grade->score_b ?? '',
-                        'score_a' => $enrollment->grade->score_a ?? '',
                     ];
                 });
             }
@@ -415,13 +414,22 @@ class TeacherHomeController extends Controller
                     })->first();
 
                 if ($enrollment) {
+                    $scoreC = $scores['score_c'] ?? null;
+                    $scoreB = $scores['score_b'] ?? null;
+
+                    $updateData = [
+                        'score_c' => $scoreC,
+                        'score_b' => $scoreB,
+                    ];
+
+                    // Nếu điểm chuyên cần = 0 hoặc null => điểm cuối kỳ mặc định = 0 (cấm thi)
+                    if ($scoreC === null || $scoreC === '' || floatval($scoreC) == 0) {
+                        $updateData['score_a'] = 0;
+                    }
+
                     $enrollment->grade()->updateOrCreate(
                         ['enrollment_id' => $enrollment->id],
-                        [
-                            'score_c' => $scores['score_c'] ?? null,
-                            'score_b' => $scores['score_b'] ?? null,
-                            'score_a' => $scores['score_a'] ?? null,
-                        ]
+                        $updateData
                     );
                 }
             }

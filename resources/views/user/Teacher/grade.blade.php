@@ -234,7 +234,6 @@
                                 <th style="text-align:center;">Điểm chuyên cần</th>
                                 <th style="text-align:center;">Điểm giữa kỳ</th>
                                 <th style="text-align:center;">Điểm cuối kỳ</th>
-                                <th style="text-align:center;">Trạng thái</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -247,7 +246,7 @@
                                                 (count($words) > 1 ? mb_substr(end($words), 0, 1) : '')
                                             : '';
                                 @endphp
-                                <tr>
+                                <tr data-enrollment-id="{{ $sv->enrollment_id }}">
                                     <td style="font-weight:600; color:#94a3b8; text-align: center;">{{ $idx + 1 }}</td>
                                     <td>
                                         <div class="sl-name-cell">
@@ -257,9 +256,10 @@
                                     <td style="font-weight:600;">{{ $sv->code }}</td>
                                     <td>{{ $sv->class_name }}</td>
                                     <td style="text-align:center;">
-                                        <input type="number" class="grade-input" name="score_c[{{ $sv->enrollment_id }}]"
+                                        <input type="number" class="grade-input score-c-input" name="score_c[{{ $sv->enrollment_id }}]"
                                             min="0" max="10" step="0.1" value="{{ $sv->score_c }}"
-                                            placeholder="--">
+                                            placeholder="--" oninput="checkAttendance(this)">
+                                        <div class="banned-badge" style="display:{{ $sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0 ? 'block' : 'none' }}; font-size:0.72rem; color:#ef4444; font-weight:600; margin-top:2px;">🚫 Cấm thi</div>
                                     </td>
                                     <td style="text-align:center;">
                                         <input type="number" class="grade-input" name="score_b[{{ $sv->enrollment_id }}]"
@@ -267,12 +267,11 @@
                                             placeholder="--">
                                     </td>
                                     <td style="text-align:center;">
-                                        <input type="number" class="grade-input" name="score_a[{{ $sv->enrollment_id }}]"
-                                            min="0" max="10" step="0.1" value="{{ $sv->score_a }}"
-                                            placeholder="--">
-                                    </td>
-                                    <td>
-                                        <span class="status-badge">Đã chốt</span>
+                                        @if($sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0)
+                                            <span style="font-size:0.78rem; background:#fee2e2; color:#dc2626; padding:2px 8px; border-radius:4px; font-weight:700;">🚫 0 (Cấm thi)</span>
+                                        @else
+                                            <span class="final-score-display" style="font-size:0.85rem; color:#475569;">{{ isset($sv->score_a) && $sv->score_a !== '' ? number_format((float)$sv->score_a, 1) : '—' }}</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
