@@ -478,7 +478,7 @@ class StudentHomeController extends Controller
 
         $stats = $this->getStudentStats($student);
         $enrollments = Enrollment::where('student_id', $student->id)
-            ->with(['schedule.subject', 'schedule.teacher', 'attendances'])
+            ->with(['schedule.subject', 'schedule.teacher', 'attendances.scheduleSession'])
             ->get();
 
         return view('user.Student.attendance_list', array_merge($stats, [

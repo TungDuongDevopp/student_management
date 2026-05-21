@@ -18,6 +18,7 @@ class AttendanceController extends Controller
     {
         $validated = $request->validate([
             'enrollment_id' => 'nullable|integer|exists:enrollments,id',
+            'schedule_session_id' => 'nullable|integer|exists:schedule_sessions,id',
             'attendance_date' => 'nullable|date',
             'status' => 'nullable|integer',
         ]);
@@ -37,6 +38,7 @@ class AttendanceController extends Controller
         $attendance = Attendance::findOrFail($id);
         $validated = $request->validate([
             'enrollment_id' => 'nullable|integer|exists:enrollments,id',
+            'schedule_session_id' => 'nullable|integer|exists:schedule_sessions,id',
             'attendance_date' => 'nullable|date',
             'status' => 'nullable|integer',
         ]);

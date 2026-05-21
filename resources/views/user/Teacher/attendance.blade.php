@@ -191,28 +191,56 @@
     <div class="sl-wrapper">
         <div class="sl-header">
             <h1><i class="fa-solid fa-user-check" style="color:#d97706; margin-right:0.5rem;"></i>Điểm danh Sinh viên</h1>
-            <div class="sl-filters">
-                <select id="scheduleSelector" onchange="window.location.href=this.value">
+            
+            <form method="GET" action="{{ route('teacher.attendances') }}" id="filterForm" class="sl-filters">
+                <select name="schedule_id" id="scheduleSelector" onchange="document.getElementById('filterForm').submit()">
                     <option value="">-- Chọn lớp học phần --</option>
                     @if ($schedules->count() > 0)
                         @foreach ($schedules as $s)
-                            <option value="{{ route('teacher.attendances', ['schedule_id' => $s->id]) }}"
-                                {{ request('schedule_id') == $s->id ? 'selected' : '' }}>
+                            <option value="{{ $s->id }}" {{ request('schedule_id') == $s->id ? 'selected' : '' }}>
                                 {{ $s->subject->name ?? 'Môn học' }} (Nhóm {{ $s->group_code ?? $s->id }})
                             </option>
                         @endforeach
                     @endif
                 </select>
-                <input type="text" id="searchInput" placeholder="Tìm sinh viên..." style="width:200px;"
-                    onkeyup="filterTable()">
-            </div>
+
+                @if($currentSchedule)
+                    <input type="date" name="date" id="dateSelector" value="{{ $dateStr }}" onchange="document.getElementById('filterForm').submit()">
+                    
+                    @if($sessions->count() > 0)
+                        <select name="session_id" id="sessionSelector" onchange="document.getElementById('filterForm').submit()">
+                            <option value="">-- Chọn ca học --</option>
+                            @foreach($sessions as $sess)
+                                @php
+                                    // 2=Thứ 2, 8=CN
+                                    $dowName = $sess->day_of_week == 8 ? 'Chủ nhật' : 'Thứ ' . $sess->day_of_week;
+                                @endphp
+                                <option value="{{ $sess->id }}" {{ ($currentSession && $currentSession->id == $sess->id) ? 'selected' : '' }}>
+                                    {{ $dowName }} ({{ substr($sess->start_time, 0, 5) }} - {{ substr($sess->end_time, 0, 5) }})
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
+                @endif
+                
+                <input type="text" id="searchInput" placeholder="Tìm sinh viên..." style="width:200px;" onkeyup="filterTable()">
+            </form>
         </div>
 
         @if ($currentSchedule)
-            <div class="sl-card">
-                <div class="sl-card-header">
-                    <h2>Lớp học phần: {{ $currentSchedule->subject->name ?? '' }} (Nhóm {{ $currentSchedule->group_code }})
-                    </h2>
+            @if (!$currentSession)
+                <div class="sl-card">
+                    <div class="empty-state" style="padding: 2rem;">
+                        <i class="fa-solid fa-calendar-xmark" style="color: #f59e0b;"></i>
+                        <p>Không có ca học nào được tìm thấy vào ngày <strong>{{ date('d/m/Y', strtotime($dateStr)) }}</strong>.</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Vui lòng chọn ngày khác hoặc chọn ca học từ danh sách phía trên.</p>
+                    </div>
+                </div>
+            @else
+                <div class="sl-card">
+                    <div class="sl-card-header">
+                        <h2>Lớp học phần: {{ $currentSchedule->subject->name ?? '' }} (Nhóm {{ $currentSchedule->group_code }})
+                        </h2>
                     <div class="sl-stats">
                         <span style="font-size:0.85rem; font-weight: 600; color:#475569;"><i class="fa-solid fa-users"></i>
                             Tổng số: {{ $students->count() }} SV</span>
@@ -275,6 +303,7 @@
                     </table>
                 </div>
             </div>
+            @endif
         @else
             <div class="sl-card">
                 <div class="empty-state">
@@ -319,6 +348,15 @@
                 attendance[enrollmentId] = cb.checked ? 1 : 0;
             });
 
+            const scheduleId = document.getElementById('scheduleSelector').value;
+            const dateStr = document.getElementById('dateSelector').value;
+            const sessionId = document.getElementById('sessionSelector') ? document.getElementById('sessionSelector').value : null;
+
+            if (!scheduleId || !dateStr || !sessionId) {
+                alert('Vui lòng chọn đầy đủ lớp, ngày và ca học!');
+                return;
+            }
+
             const btn = document.querySelector('.btn-save');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...';
@@ -332,7 +370,12 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ attendance })
+                    body: JSON.stringify({ 
+                        attendance, 
+                        schedule_id: scheduleId, 
+                        session_id: sessionId, 
+                        date: dateStr 
+                    })
                 });
                 const resData = await response.json();
                 if (response.ok && resData.success) {

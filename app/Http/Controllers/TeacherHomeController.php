@@ -280,53 +280,81 @@ class TeacherHomeController extends Controller
         $teacher = $account->teacher;
 
         $scheduleId = $request->query('schedule_id');
+        $dateStr = $request->query('date', date('Y-m-d'));
+        $sessionId = $request->query('session_id');
+
         $schedules = Schedule::with('subject')->where('teacher_id', $teacher->id)->get();
 
         $students = collect();
         $currentSchedule = null;
+        $currentSession = null;
+        $sessions = collect();
 
         if ($scheduleId) {
-            $currentSchedule = $schedules->firstWhere('id', $scheduleId);
+            $currentSchedule = Schedule::with('sessions')->where('teacher_id', $teacher->id)->firstWhere('id', $scheduleId);
             if ($currentSchedule) {
-                $todayStr = date('Y-m-d');
-                $enrollments = \App\Models\Enrollment::with([
-                    'student.account',
-                    'student.classroom',
-                    'attendances' => function ($q) use ($todayStr) {
-                        $q->where('attendance_date', $todayStr);
+                $sessions = $currentSchedule->sessions;
+                
+                if ($sessionId) {
+                    $currentSession = $sessions->firstWhere('id', $sessionId);
+                } else {
+                    $timestamp = strtotime($dateStr);
+                    $dow = (int) date('N', $timestamp) + 1;
+                    if ($dow == 8 && date('w', $timestamp) == 0) $dow = 8;
+                    elseif (date('w', $timestamp) == 0) $dow = 8;
+                    
+                    $currentSession = $sessions->firstWhere('day_of_week', $dow);
+                    if ($currentSession) {
+                        $sessionId = $currentSession->id;
                     }
-                ])
-                    ->where('schedule_id', $scheduleId)
-                    ->get();
+                }
 
-                $students = $enrollments->map(function ($enrollment) {
-                    $student = $enrollment->student;
-                    $todayAttendance = $enrollment->attendances->first();
-                    return (object) [
-                        'id' => $student->id,
-                        'enrollment_id' => $enrollment->id,
-                        'name' => $student->name,
-                        'code' => $student->student_code,
-                        'class_name' => $student->classroom->name ?? '—',
-                        'is_present' => $todayAttendance ? ($todayAttendance->status == 1) : true
-                    ];
-                });
+                if ($currentSession) {
+                    $enrollments = \App\Models\Enrollment::with([
+                        'student.account',
+                        'student.classroom',
+                        'attendances' => function ($q) use ($dateStr, $sessionId) {
+                            $q->where('attendance_date', $dateStr)
+                              ->where('schedule_session_id', $sessionId);
+                        }
+                    ])
+                        ->where('schedule_id', $scheduleId)
+                        ->get();
+
+                    $students = $enrollments->map(function ($enrollment) {
+                        $student = $enrollment->student;
+                        $attendance = $enrollment->attendances->first();
+                        return (object) [
+                            'id' => $student->id,
+                            'enrollment_id' => $enrollment->id,
+                            'name' => $student->name,
+                            'code' => $student->student_code,
+                            'class_name' => $student->classroom->name ?? '—',
+                            'is_present' => $attendance ? ($attendance->status == 1) : true
+                        ];
+                    });
+                }
             }
         } elseif ($schedules->count() > 0) {
-            return redirect()->route('teacher.attendances', ['schedule_id' => $schedules->first()->id]);
+            return redirect()->route('teacher.attendances', ['schedule_id' => $schedules->first()->id, 'date' => $dateStr]);
         }
 
-        return view('user.Teacher.attendance', compact('teacher', 'schedules', 'students', 'currentSchedule'));
+        return view('user.Teacher.attendance', compact('teacher', 'schedules', 'students', 'currentSchedule', 'sessions', 'currentSession', 'dateStr'));
     }
 
     public function saveAttendances(\Illuminate\Http\Request $request)
     {
         $validated = $request->validate([
+            'schedule_id' => 'required',
+            'session_id' => 'required',
+            'date' => 'required|date',
             'attendance' => 'required|array',
             'attendance.*' => 'required|in:0,1',
         ]);
 
-        $todayStr = date('Y-m-d');
+        $dateStr = $validated['date'];
+        $sessionId = $validated['session_id'];
+
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             foreach ($validated['attendance'] as $enrollmentId => $statusVal) {
@@ -340,7 +368,10 @@ class TeacherHomeController extends Controller
 
                 if ($enrollment) {
                     $enrollment->attendances()->updateOrCreate(
-                        ['attendance_date' => $todayStr],
+                        [
+                            'attendance_date' => $dateStr,
+                            'schedule_session_id' => $sessionId
+                        ],
                         ['status' => $statusVal]
                     );
                 }
