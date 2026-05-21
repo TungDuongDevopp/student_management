@@ -641,7 +641,7 @@
                 <p class="hero-desc">{{ Auth::user()->student->name ?? 'Sinh viên' }} · Lựa chọn học phần đăng ký, sắp xếp
                     thời khóa biểu và xem lịch sử phê duyệt</p>
             </div>
-            <span class="sem-badge">Học Kỳ Kỳ này – Đang mở</span>
+            <span class="sem-badge">Học Kỳ Kỳ này – {{ $registrationOpen ? 'Đang mở' : 'Đã đóng' }}</span>
         </section>
 
         <!-- ROW 1 (TOP): 5:5 Split (Subject Catalog Left, Timetable Preview Right) -->
@@ -649,11 +649,20 @@
             <!-- Subject List Catalog Card (Left 50%) -->
             <div class="subj-card">
                 <!-- Status Bar inside left card -->
-                <div class="warn-banner green" id="warn-banner" style="border-bottom: 1px solid #cbd5e1;">
-                    <i class="fa-solid fa-circle-check" id="warn-icon"></i>
-                    <span id="warn-text">Chưa chọn học phần nào thêm. Vui lòng rê chuột xem trước hoặc click đăng ký môn
-                        học!</span>
-                </div>
+                @if (!$registrationOpen)
+                    <div class="warn-banner red" id="warn-banner" style="border-bottom: 1px solid #cbd5e1;">
+                        <i class="fa-solid fa-triangle-exclamation" id="warn-icon"></i>
+                        <span id="warn-text"><b>Hệ thống đăng ký môn học hiện đang ĐÓNG.</b> Vui lòng quay lại trong khung
+                            giờ cho phép ({{ config('enrollment.registration_start') }} –
+                            {{ config('enrollment.registration_end') }}).</span>
+                    </div>
+                @else
+                    <div class="warn-banner green" id="warn-banner" style="border-bottom: 1px solid #cbd5e1;">
+                        <i class="fa-solid fa-circle-check" id="warn-icon"></i>
+                        <span id="warn-text">Chưa chọn học phần nào thêm. Vui lòng rê chuột xem trước hoặc click đăng ký môn
+                            học!</span>
+                    </div>
+                @endif
 
                 <div
                     style="padding: 0.5rem 0.75rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
@@ -744,9 +753,10 @@
                                             {{ $remaining }}</td>
                                         <td style="text-align: center;">
                                             <input type="checkbox" class="enroll-checkbox" id="cb-{{ $s[0] }}"
-                                                value="{{ $s[0] }}" {{ $isFull ? 'disabled' : '' }}
+                                                value="{{ $s[0] }}"
+                                                {{ $isFull || !$registrationOpen ? 'disabled' : '' }}
                                                 onchange="toggleSubject('{{ $s[0] }}', event)"
-                                                style="cursor: {{ $isFull ? 'not-allowed' : 'pointer' }}; width: 18px; height: 18px;">
+                                                style="cursor: {{ $isFull || !$registrationOpen ? 'not-allowed' : 'pointer' }}; width: 18px; height: 18px;">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -875,8 +885,9 @@
                                 style="width:0%; height:100%; background:#2563eb; transition:width 0.3s;"></div>
                         </div>
                     </div>
-                    <button class="btn-submit" onclick="triggerEnrollSubmit()">
-                        <i class="fa-solid fa-wallet"></i> Tiến hành xác nhận & Đóng học phí
+                    <button class="btn-submit" onclick="triggerEnrollSubmit()"
+                        {{ $registrationOpen ? '' : 'disabled style=opacity:0.5;cursor:not-allowed;background:#94a3b8;' }}>
+                        {{ $registrationOpen ? '💳 Tiến hành xác nhận & Đóng học phí' : '🔒 Chức năng chưa được mớ' }}
                     </button>
                 </div>
             </div>
@@ -927,22 +938,74 @@
     <script>
         // Load initial data
         let cart = {};
+        const registrationOpen = @json($registrationOpen);
 
         // TKB Slots Configuration
-        const TKB_SLOTS = [
-            { id: 1, start: '06:45', end: '07:35' },
-            { id: 2, start: '07:45', end: '08:35' },
-            { id: 3, start: '08:45', end: '09:35' },
-            { id: 4, start: '09:45', end: '10:35' },
-            { id: 5, start: '10:45', end: '11:35' },
-            { id: 6, start: '12:30', end: '13:20' },
-            { id: 7, start: '13:30', end: '14:20' },
-            { id: 8, start: '14:30', end: '15:20' },
-            { id: 9, start: '15:30', end: '16:20' },
-            { id: 10, start: '16:30', end: '17:20' },
-            { id: 11, start: '17:30', end: '18:20' },
-            { id: 12, start: '18:30', end: '19:20' },
-            { id: 13, start: '19:30', end: '20:20' }
+        const TKB_SLOTS = [{
+                id: 1,
+                start: '06:45',
+                end: '07:35'
+            },
+            {
+                id: 2,
+                start: '07:45',
+                end: '08:35'
+            },
+            {
+                id: 3,
+                start: '08:45',
+                end: '09:35'
+            },
+            {
+                id: 4,
+                start: '09:45',
+                end: '10:35'
+            },
+            {
+                id: 5,
+                start: '10:45',
+                end: '11:35'
+            },
+            {
+                id: 6,
+                start: '12:30',
+                end: '13:20'
+            },
+            {
+                id: 7,
+                start: '13:30',
+                end: '14:20'
+            },
+            {
+                id: 8,
+                start: '14:30',
+                end: '15:20'
+            },
+            {
+                id: 9,
+                start: '15:30',
+                end: '16:20'
+            },
+            {
+                id: 10,
+                start: '16:30',
+                end: '17:20'
+            },
+            {
+                id: 11,
+                start: '17:30',
+                end: '18:20'
+            },
+            {
+                id: 12,
+                start: '18:30',
+                end: '19:20'
+            },
+            {
+                id: 13,
+                start: '19:30',
+                end: '20:20'
+            }
         ];
 
         function toMin(hhmm) {
@@ -1017,7 +1080,8 @@
                 const nameQuery = document.getElementById('nameSearch').value.trim();
 
                 fetch(
-                        `{{ route('student.enrollment.search') }}?code=${encodeURIComponent(codeQuery)}&name=${encodeURIComponent(nameQuery)}`)
+                        `{{ route('student.enrollment.search') }}?code=${encodeURIComponent(codeQuery)}&name=${encodeURIComponent(nameQuery)}`
+                    )
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
@@ -1063,8 +1127,8 @@
 
                 let isChecked = cart[s[0]] ? 'checked' : '';
                 let isAlreadyEnrolled = enrolledSchedules.some(es => es.id === s[0]);
-                let isDisabled = (isFull || isAlreadyEnrolled) ? 'disabled' : '';
-                let cursorStyle = (isFull || isAlreadyEnrolled) ? 'not-allowed' : 'pointer';
+                let isDisabled = (isFull || isAlreadyEnrolled || !registrationOpen) ? 'disabled' : '';
+                let cursorStyle = (isFull || isAlreadyEnrolled || !registrationOpen) ? 'not-allowed' : 'pointer';
                 let rowBg = (isFull || isAlreadyEnrolled) ? 'background-color: #f8fafc;' : '';
                 let rowClass = (isFull || isAlreadyEnrolled) ? 'subject-row row-full' : 'subject-row';
                 let colorSub = (isFull || isAlreadyEnrolled) ? '#94a3b8' : '#475569';
@@ -1130,6 +1194,10 @@
 
         function toggleSubject(code, event) {
             if (event) event.stopPropagation();
+            if (!registrationOpen) {
+                alert('Hệ thống đăng ký môn học hiện đang đóng!');
+                return;
+            }
             const s = subjectsMap[code];
             const cb = document.getElementById(`cb-${code}`);
 
@@ -1480,6 +1548,10 @@
         }
 
         function triggerEnrollSubmit() {
+            if (!registrationOpen) {
+                alert('Hệ thống đăng ký môn học hiện đang đóng!');
+                return;
+            }
             const total = Object.values(cart).reduce((sum, v) => sum + v.credits, 0);
             if (total === 0) {
                 alert('Chưa chọn học phần nào để đăng ký!');

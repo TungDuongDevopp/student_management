@@ -121,6 +121,10 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     })->name('admin.news');
 });
 
+// Admin configuration routes
+Route::get('/admin/config', [App\Http\Controllers\AdminConfigController::class, 'show'])->name('admin.config');
+Route::post('/admin/config/toggle-enrollment', [App\Http\Controllers\AdminConfigController::class, 'toggleEnrollment'])->name('admin.toggleEnrollment');
+
 
 use App\Http\Controllers\StudentHomeController;
 
