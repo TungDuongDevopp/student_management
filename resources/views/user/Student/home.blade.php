@@ -401,7 +401,7 @@
         <div class="section-header">
             <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#2563eb;"></i>Tin
                 tức & Thông báo</h2>
-            <a href="#">Xem tất cả →</a>
+            <a href="{{ route('user.news.index') }}">Xem tất cả →</a>
         </div>
 
         <div class="news-list">
@@ -444,7 +444,7 @@
                 </div>
             </div>
         @empty
-            <div class="no-schedule" style="text-align: center; color: #64748b; padding: 2rem;">
+            <div style="text-align: center; color: #64748b; padding: 2rem; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
                 Hôm nay bạn không có lịch học.
             </div>
         @endforelse

@@ -2,7 +2,7 @@
 @section('title', 'Thanh toán học phí')
 @section('content')
 <style>
-.pay-wrap { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 1rem; box-sizing: border-box; }
+.pay-wrap { width: 100%; box-sizing: border-box; }
 .page-hero { background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);color:#fff;border-radius:10px;padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem;border:1px solid #1d4ed8; }
 .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
 .hero-content { position:relative;z-index:1; }
@@ -11,8 +11,8 @@
 .hero-desc { margin:.3rem 0 0;font-size:.85rem;opacity:.9; }
 .sem-badge { background:#fff;color:#1d4ed8;border-radius:6px;padding:.35rem .75rem;font-size:.75rem;font-weight:700;position:relative;z-index:1; }
 
-.pay-grid { display:grid; grid-template-columns: 1fr 400px; gap:1.5rem; align-items:start; }
-@media (max-width: 700px) { .pay-grid { grid-template-columns: 1fr; } }
+.pay-grid { display:grid; grid-template-columns: 1.2fr 1fr; gap:2rem; align-items:start; }
+@media (max-width: 900px) { .pay-grid { grid-template-columns: 1fr; } }
 
 .pay-card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; }
 .pay-card-head { padding:1rem 1.25rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; }
@@ -33,12 +33,12 @@
 .qr-head h3 { margin:0; font-size:0.95rem; font-weight:700; }
 .qr-head p { margin:0.25rem 0 0; font-size:0.78rem; opacity:0.85; }
 .qr-body { padding:1.25rem; }
-.qr-img-wrap { display:flex; justify-content:center; margin-bottom:1.25rem; }
-.qr-img-wrap img { width:210px; height:210px; border-radius:10px; border:2px solid #e2e8f0; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
-.bank-row { display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0; border-bottom:1px solid #f1f5f9; }
+.qr-img-wrap { display:flex; justify-content:center; margin-bottom:1.5rem; padding: 1rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; }
+.qr-img-wrap img { width:260px; max-width:100%; height:auto; object-fit:contain; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.bank-row { display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px dashed #e2e8f0; }
 .bank-row:last-child { border-bottom:none; }
-.bkey { font-size:0.78rem; color:#64748b; }
-.bval { font-size:0.85rem; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:0.4rem; }
+.bkey { font-size:0.85rem; color:#64748b; font-weight: 600; }
+.bval { font-size:0.95rem; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:0.5rem; text-align: right; }
 .copy-btn { background:#eff6ff; border:none; color:#2563eb; font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; cursor:pointer; font-weight:700; transition:all 0.15s; }
 .copy-btn:hover { background:#2563eb; color:#fff; }
 .notice-box { background:#fffbeb; border:1px solid #fcd34d; border-radius:8px; padding:0.75rem; margin-top:1rem; font-size:0.78rem; color:#92400e; line-height:1.6; }
@@ -58,12 +58,18 @@
     $paid = $tuition->paid_amount ?? 0;
     $remaining = $total_fee - $paid;
 
-    $bank_name = 'MB Bank';
-    $bank_account = '0388123456';
-    $bank_owner = 'TRUONG DAI HOC MO DIA CHAT';
+    $configs = \App\Models\SystemConfig::all()->pluck('value', 'key');
+    $bank_name = trim($configs['bank_name'] ?? 'MB');
+    $bank_account = trim($configs['bank_account'] ?? '0388123456');
+    $bank_owner = mb_strtoupper(trim($configs['bank_owner'] ?? 'TRUONG DAI HOC ABC'));
+    
+    // Tạo nội dung chuyển khoản tự động
     $transfer_content = 'HOCPHI ' . $student_code . ' ' . ($activeSemester->id ?? 1);
 
-    $qr_url = "https://img.vietqr.io/image/MB-{$bank_account}-compact2.jpg?amount={$remaining}&addInfo=" .
+    // Xử lý tạo link VietQR
+    // VietQR hỗ trợ tên ngắn (như MB, VCB, ACB) hoặc mã BIN
+    $bank_id_for_qr = urlencode(str_replace(' ', '', $bank_name)); 
+    $qr_url = "https://img.vietqr.io/image/{$bank_id_for_qr}-{$bank_account}-compact2.jpg?amount={$remaining}&addInfo=" .
         urlencode($transfer_content) . '&accountName=' . urlencode($bank_owner);
 
     $pending_payment = $payments->where('status', 'pending')->first();
@@ -123,17 +129,17 @@
             </div>
             <div class="summary-item">
                 <span class="label">Tổng học phí</span>
-                <span class="value">{{ number_format($total_fee, 0, ',', '.') }}đ</span>
+                <span class="value">{{ number_format($total_fee, 0, ',', '.') }} VNĐ</span>
             </div>
             @if($paid > 0)
             <div class="summary-item">
                 <span class="label">Đã thanh toán</span>
-                <span class="value" style="color:#16a34a;">{{ number_format($paid, 0, ',', '.') }}đ</span>
+                <span class="value" style="color:#16a34a;">{{ number_format($paid, 0, ',', '.') }} VNĐ</span>
             </div>
             @endif
             <div class="summary-total">
-                <div class="label"><i class="fa-solid fa-circle-exclamation" style="margin-right:4px;"></i>Số tiền cần nộp</div>
-                <div class="amount">{{ number_format($remaining, 0, ',', '.') }}đ</div>
+                <div class="label"><i class="fa-solid fa-circle-exclamation" style="margin-right:8px;"></i>Số tiền cần nộp</div>
+                <div class="amount">{{ number_format($remaining, 0, ',', '.') }} VNĐ</div>
             </div>
 
             @if($payments->count() > 0)
@@ -194,18 +200,18 @@
                     </div>
                     <div class="bank-row">
                         <span class="bkey">Số tiền</span>
-                        <span class="bval" style="color:#ef4444;">
-                            {{ number_format($remaining, 0, ',', '.') }}đ
+                        <span class="bval" style="color:#ef4444; gap: 1rem;">
+                            {{ number_format($remaining, 0, ',', '.') }} VNĐ
                             @if($remaining > 0)
-                            <button class="copy-btn" onclick="copyText('{{ $remaining }}', this)">Copy</button>
+                            <button class="copy-btn" onclick="copyText('{{ $remaining }}', this)">Copy Số Tiền</button>
                             @endif
                         </span>
                     </div>
-                    <div class="bank-row" style="align-items:flex-start;">
+                    <div class="bank-row">
                         <span class="bkey">Nội dung CK</span>
-                        <span class="bval" style="flex-direction:column; align-items:flex-end; gap:4px;">
-                            <span style="font-family:monospace; font-size:0.78rem; background:#f1f5f9; padding:3px 8px; border-radius:4px;">{{ $transfer_content }}</span>
-                            <button class="copy-btn" onclick="copyText('{{ $transfer_content }}', this)">Copy</button>
+                        <span class="bval" style="flex-direction:column; align-items:flex-end; gap:6px;">
+                            <span style="font-family:monospace; font-size:1rem; background:#f1f5f9; padding:6px 12px; border-radius:6px; color:#2563eb;">{{ $transfer_content }}</span>
+                            <button class="copy-btn" onclick="copyText('{{ $transfer_content }}', this)" style="align-self: flex-end;">Copy Nội Dung</button>
                         </span>
                     </div>
                 </div>

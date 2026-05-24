@@ -32,6 +32,37 @@ class AuthController extends Controller
         ])->onlyInput('username');
     }
 
+    public function showChangePassword()
+    {
+        return view('admin.change_password');
+    }
+
+    public function showUserChangePassword()
+    {
+        return view('user.change_password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'wrong']);
+        }
+
+        // Eloquent handles the model
+        /** @var \App\Models\Account $user */
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Mật khẩu đã được cập nhật thành công!');
+    }
+
     public function userLogin(Request $request)
     {
         $credentials = $request->validate([

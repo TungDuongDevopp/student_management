@@ -61,10 +61,13 @@
                 <span class="info-value">127.0.0.1</span>
             </div>
         </div>
-        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 1rem;">
             <button class="btn btn-primary" style="padding: 0.75rem 1.5rem; border: none; border-radius: 8px; background: #3b82f6; color: white; cursor: pointer; font-weight: 700;">
                 <i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa thông tin
             </button>
+            <a href="{{ route('admin.change_password') }}" class="btn btn-secondary" style="padding: 0.75rem 1.5rem; border: 1px solid #cbd5e1; border-radius: 8px; background: white; color: #475569; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s;">
+                <i class="fa-solid fa-lock"></i> Đổi mật khẩu
+            </a>
         </div>
     </div>
 </div>

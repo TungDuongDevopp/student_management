@@ -9,6 +9,10 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+        width: calc(100% + 3rem);
+        margin: -1.5rem;
+        padding: 1.5rem;
+        box-sizing: border-box;
     }
     .news-header {
         display: flex;
@@ -27,12 +31,14 @@
     }
     .news-main-col {
         flex: 7;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
     }
     .news-sidebar-col {
         flex: 3;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 1.5rem;

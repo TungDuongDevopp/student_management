@@ -167,13 +167,61 @@
         @keyframes fadeOutToast {
             to { opacity: 0; visibility: hidden; }
         }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        .loading-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
     </style>
 </head>
 
 <body>
-    @if(session('error_popup'))
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Hệ thống đang gửi email, vui lòng chờ trong giây lát...</div>
+    </div>
+    @if($errors->any())
     <div class="toast-notification">
-        {{ session('error_popup') }}
+        {{ $errors->first() }}
     </div>
     @endif
 
@@ -182,45 +230,49 @@
             class="school-logo">
 
         <div class="header-text">
-            <h1>Đăng nhập hệ thống</h1>
-            <p>Vui lòng nhập username và password của bạn</p>
+            <h1>Khôi phục mật khẩu</h1>
+            <p>Vui lòng nhập địa chỉ email đã đăng ký của bạn. Chúng tôi sẽ gửi link đặt lại mật khẩu.</p>
         </div>
 
-        <form action="{{ route('admin.login.post') }}" method="POST">
+        @if (session('status'))
+            <div style="background-color: #dcfce7; color: #166534; padding: 12px; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center;">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <form action="{{ route('password.email') }}" method="POST">
             @csrf
             <div class="input-group">
-                <label for="username">Username</label>
+                <label for="email">Địa chỉ Email</label>
                 <div class="input-wrapper">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://w3.org">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                        </path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Nhập username" required>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Nhập email của bạn" required>
                 </div>
-                @error('username')
+                @error('email')
                     <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem;">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="input-group">
-                <label for="password">Mật khẩu</label>
-                <div class="input-wrapper">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                        </path>
-                    </svg>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
-                <div class="forgot-pass">
-                    <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
-                </div>
+            <button type="submit" class="btn-login" id="submitBtn">Gửi Link Khôi Phục</button>
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="{{ route('user.login') }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">Quay lại trang Đăng Nhập</a>
             </div>
-
-            <button type="submit" class="btn-login">Đăng Nhập</button>
         </form>
     </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function() {
+            // Show overlay
+            document.getElementById('loadingOverlay').classList.add('active');
+            
+            // Disable button as fallback
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Đang gửi...';
+        });
+    </script>
 
 </body>
 

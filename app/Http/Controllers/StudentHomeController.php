@@ -159,7 +159,6 @@ class StudentHomeController extends Controller
         }
 
 
-
         $news = News::where('is_published', true)
             ->whereIn('target_audience', ['student', 'all'])
             ->orderBy('created_at', 'desc')
@@ -277,7 +276,6 @@ class StudentHomeController extends Controller
                 $sub->code ?? $sub->id     // 8: subject_code
             ];
         }
-
 
 
         // Fetch student's already enrolled schedules for active semester (status = 1)

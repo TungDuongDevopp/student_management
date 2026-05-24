@@ -452,6 +452,13 @@
     <div class="main-content" style="display: flex; flex-direction: column; margin: 0; padding: 0;">
         @include('layouts.admin.topbar')
         <main role="main" style="flex: 1; padding: 1.5rem;">
+            @if(request()->route() && request()->route()->getName() !== 'admin.dashboard')
+                <div style="margin-left: 2rem; margin-bottom: 0.5rem; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card, #1e293b); border: 1px solid var(--border, #334155); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    <a href="{{ route('admin.dashboard') }}" style="color: #3b82f6; text-decoration: none; font-weight: 500; font-size: 0.85rem;"><i class="fa-solid fa-house" style="margin-right: 0.2rem;"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.65rem; color: var(--text-muted, #94a3b8);"></i>
+                    <span style="color: var(--text, #f1f5f9); font-weight: 600; font-size: 0.85rem;">@yield('title')</span>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>

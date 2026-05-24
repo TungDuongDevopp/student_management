@@ -358,8 +358,9 @@
                         phí</a>
                     <a href="{{ route('student.feedback') }}" class="btn"><i class="fa-regular fa-message"></i> Gửi phản
                         hồi / Hỗ trợ</a>
+                    <a href="{{ route('user.change_password') }}" class="btn"><i class="fa-solid fa-lock"></i> Đổi mật khẩu</a>
                 </div>
             </aside>
-        </section>
+        </div> <!-- end content-grid -->
     </main>
 @endsection

@@ -448,6 +448,16 @@
                     <p class="form-hint">Vui lòng cung cấp đủ thông tin để chúng tôi xử lý nhanh hơn.</p>
                 </div>
 
+                <div class="form-group">
+                    <label class="file-upload" for="feedback-file">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Nhấp để tải lên tệp đính kèm (nếu có)</p>
+                        <span>Hỗ trợ: JPG, PNG, PDF (Tối đa 5MB)</span>
+                        <input type="file" id="feedback-file" name="file" accept=".jpg,.png,.pdf" onchange="document.getElementById('file-name-display').textContent = this.files[0] ? 'Đã chọn: ' + this.files[0].name : ''; document.getElementById('file-name-display').style.display = this.files[0] ? 'block' : 'none';">
+                    </label>
+                    <p id="file-name-display" style="font-size: 0.8rem; color: #2563eb; margin-top: 0.5rem; display: none;"></p>
+                </div>
+
 
 
                 <div class="form-actions">
@@ -497,7 +507,16 @@
             if (!subject || !detail) return;
 
             // Đóng gói thông tin gửi lên server
-            const content = `[${category}] [Mức độ: ${priority}] Tiêu đề: ${subject}\n\nChi tiết:\n${detail}`;
+            const combinedContent = `[${category}] [Mức độ: ${priority}]\n\nChi tiết:\n${detail}`;
+            const fileInput = document.getElementById('feedback-file');
+
+            const formData = new FormData();
+            formData.append('account_id', ACCOUNT_ID);
+            formData.append('title', subject);
+            formData.append('content', combinedContent);
+            if (fileInput.files[0]) {
+                formData.append('file', fileInput.files[0]);
+            }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
@@ -507,19 +526,15 @@
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ||
-                            '',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        account_id: ACCOUNT_ID,
-                        content
-                    })
+                    body: formData
                 });
                 if (!res.ok) throw new Error((await res.json()).message || 'Lỗi gửi phản hồi');
                 showAlert('Phản hồi đã được gửi thành công!', 'success');
                 this.reset();
+                document.getElementById('file-name-display').style.display = 'none';
                 loadHistory();
             } catch (err) {
                 showAlert('Lỗi: ' + err.message, 'error');
@@ -555,14 +570,25 @@
                 const badge = f.status === 1 ?
                     '<span class="status-badge status-replied">✓ Đã phản hồi</span>' :
                     '<span class="status-badge status-pending">⏳ Đang xử lý</span>';
+                
+                let replyTitleHTML = f.reply_title ? `<strong style="display:block; margin-bottom: 0.25rem; color: #15803d; font-size: 0.85rem;"><i class="fa-solid fa-reply"></i> ${escHtml(f.reply_title)}</strong>` : '';
+                let replyFileHTML = f.reply_file_path ? `<br><a href="/storage/${f.reply_file_path}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: #16a34a; text-decoration: none; margin-top: 0.5rem; background: #dcfce7; padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid #bbf7d0; transition: all 0.2s;"><i class="fa-solid fa-paperclip"></i> Xem tệp đính kèm từ Admin</a>` : '';
+                
                 const reply = f.reply ?
-                    `<div class="history-reply"><strong>Phản hồi từ nhà trường:</strong> ${escHtml(f.reply)}</div>` :
+                    `<div class="history-reply">
+                        ${replyTitleHTML}
+                        <div style="color: #166534;">${escHtml(f.reply).replace(/\n/g, '<br>')}</div>
+                        ${replyFileHTML}
+                    </div>` :
                     '';
+                
+                const userTitle = f.title ? `<strong style="color: #1e40af;">Tiêu đề: ${escHtml(f.title)}</strong><br>` : '';
+
                 return `<div class="history-item">
                 <div style="flex:1">
-                    <p class="history-preview">${escHtml(f.content)}</p>
+                    <div class="history-preview">${userTitle}${escHtml(f.content).replace(/\n/g, '<br>')}</div>
                     ${reply}
-                    <p class="history-date">Gửi lúc: ${date}</p>
+                    <p class="history-date" style="margin-top: 0.5rem;">Gửi lúc: ${date}</p>
                 </div>
                 ${badge}
             </div>`;
@@ -597,6 +623,19 @@
         if (urlParams.has('content')) {
             const contentTextarea = document.getElementById('feedback-content');
             if (contentTextarea) contentTextarea.value = urlParams.get('content');
+        }
+        // Hiển thị tên file khi chọn
+        const fileInput = document.getElementById('feedback-file');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        if (fileInput && fileNameDisplay) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileNameDisplay.innerHTML = `<i class="fa-solid fa-paperclip"></i> Đã đính kèm: ${this.files[0].name}`;
+                    fileNameDisplay.style.display = 'block';
+                } else {
+                    fileNameDisplay.style.display = 'none';
+                }
+            });
         }
     </script>
 @endsection

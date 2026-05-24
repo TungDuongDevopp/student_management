@@ -196,9 +196,9 @@
 
         .sheet-table td {
             border: 1px solid #f1f5f9;
-            height: 120px;
+            height: 38px !important;
             vertical-align: top;
-            padding: .5rem;
+            padding: 2px !important;
             background: #fff;
         }
 
@@ -210,13 +210,13 @@
             font-weight: 800;
             color: #475569;
             border: 1px solid #e2e8f0 !important;
-            font-size: .8rem;
+            font-size: .7rem;
         }
 
         .time-col small {
             display: block;
-            margin-top: .2rem;
-            font-size: .65rem;
+            margin-top: 0px;
+            font-size: .58rem;
             color: #94a3b8;
             font-weight: 500;
         }
@@ -224,41 +224,52 @@
         .course-card {
             height: 100%;
             background: #eff6ff;
-            border-left: 4px solid #2563eb;
-            border-radius: 6px;
-            padding: .65rem;
+            border: 1px solid #bfdbfe;
+            border-left: 3px solid #2563eb;
+            border-radius: 4px;
+            padding: 3px 5px;
             display: flex;
             flex-direction: column;
-            gap: .3rem;
+            gap: 1px;
+            box-sizing: border-box;
             transition: .2s ease;
+            overflow: hidden;
         }
 
         .course-card:hover {
             background: #dbeafe;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, .15);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, .1);
         }
 
         .course-code {
-            font-size: .65rem;
+            font-size: .55rem;
             color: #2563eb;
             font-weight: 800;
             text-transform: uppercase;
+            line-height: 1;
         }
 
         .course-name {
-            font-size: .83rem;
+            font-size: .72rem;
             font-weight: 700;
             color: #1e40af;
-            line-height: 1.3;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .course-info {
-            font-size: .72rem;
+            font-size: .6rem;
             color: #64748b;
             display: flex;
             align-items: center;
-            gap: .35rem;
+            gap: .2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1;
         }
 
         .room-tag {
@@ -266,11 +277,12 @@
             display: inline-block;
             background: #2563eb;
             color: #fff;
-            font-size: .65rem;
-            padding: .18rem .45rem;
-            border-radius: 4px;
+            font-size: .55rem;
+            padding: 1px 3px;
+            border-radius: 3px;
             font-weight: 700;
             width: fit-content;
+            line-height: 1;
         }
 
         .empty-slot {
@@ -279,7 +291,7 @@
             align-items: center;
             justify-content: center;
             color: #e2e8f0;
-            font-size: .75rem;
+            font-size: .65rem;
         }
 
         .lunch-break td {

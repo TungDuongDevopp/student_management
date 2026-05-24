@@ -3,7 +3,8 @@
 @section('content')
     <style>
         .sl-wrapper {
-            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .page-hero {
@@ -189,6 +190,40 @@
             margin-bottom: 1rem;
             display: block;
         }
+        
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            margin: 1.5rem 0;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .page-item .page-link {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+            color: #2563eb;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .page-item.disabled .page-link {
+            color: #94a3b8;
+            pointer-events: none;
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+        }
     </style>
 
     <div class="sl-wrapper">
@@ -240,9 +275,9 @@
                 <div class="sl-card-header">
                     <h2>{{ $title }}</h2>
                     <div class="sl-stats">
-                        <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng số: {{ $students->count() }} SV</span>
+                        <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng số: {{ $students->total() }} SV</span>
                         <span class="sl-stat" style="background:#dcfce7; color:#166534;"><i
-                                class="fa-solid fa-check-circle"></i> Đang học: {{ $students->count() }}</span>
+                                class="fa-solid fa-check-circle"></i> Đang học: {{ $students->total() }}</span>
                     </div>
                 </div>
 
@@ -299,6 +334,12 @@
                         </tbody>
                     </table>
                 </div>
+                
+                @if($students->hasPages())
+                    <div style="padding: 1rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: center;">
+                        {{ $students->appends(request()->query())->links('pagination::bootstrap-4') }}
+                    </div>
+                @endif
             </div>
         @else
             <div class="sl-card">

@@ -14,8 +14,12 @@ class Feedback extends Model
 
     protected $fillable = [
         'account_id',
+        'title',
         'content',
+        'file_path',
+        'reply_title',
         'reply',
+        'reply_file_path',
         'status',
     ];
 

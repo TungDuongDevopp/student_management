@@ -91,7 +91,7 @@
                     </a>
                 @endif
 
-                <a href="#">
+                <a href="{{ route('user.change_password') }}">
                     <i class="fa-solid fa-key"></i> Đổi mật khẩu
                 </a>
                 <div class="topbar-dropdown-divider"></div>

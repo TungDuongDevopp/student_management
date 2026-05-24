@@ -3,7 +3,8 @@
 @section('content')
     <style>
         .sl-wrapper {
-            max-width: 1200px;
+            width: 100%;
+            box-sizing: border-box;
             font-family: 'Inter', sans-serif;
             color: #334155;
         }
