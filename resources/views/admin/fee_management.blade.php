@@ -264,6 +264,7 @@
     <script>
         const API     = '/api/tuitions';
         const SEM_API = '/api/semesters';
+        const ASSET_URL = '{{ asset('') }}';
         const PER_PAGE = 15;
 
         let allData      = [];
@@ -499,6 +500,11 @@
                     const status = p.status || 'completed';
                     let statusBadge = '';
                     let actionButtons = '';
+                    let proofLink = '';
+                    
+                    if (p.proof_image) {
+                        proofLink = ` <a href="${ASSET_URL}${p.proof_image}" target="_blank" style="margin-left:6px; color:#2563eb; text-decoration:underline; font-size:0.75rem;" title="Xem ảnh minh chứng"><i class="fa-regular fa-image"></i> Minh chứng</a>`;
+                    }
                     
                     if (status === 'pending') {
                         statusBadge = `<span class="badge" style="background:rgba(251,191,36,0.15); color:#d97706; font-size:0.7rem; padding:2px 6px; margin-left:6px;">Chờ duyệt</span>`;
@@ -519,6 +525,7 @@
                         <div>
                             <span>${fmtDate(p.payment_date)}</span>
                             ${statusBadge}
+                            ${proofLink}
                         </div>
                         <div style="display:flex; align-items:center;">
                             <strong style="margin-right:4px;">${fmtVnd(p.amount)}</strong>

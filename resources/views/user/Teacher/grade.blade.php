@@ -94,7 +94,7 @@
         }
 
         .sl-table th {
-            padding: 0.85rem 1.25rem;
+            padding: 0.8rem 1.2rem;
             text-align: left;
             font-size: 0.78rem;
             font-weight: 700;
@@ -190,6 +190,14 @@
     </style>
 
     <div class="sl-wrapper">
+        @if (!$isGradingOpen)
+            <div
+                style="background:#fee2e2; border:1px solid #fca5a5; padding:0.75rem 1.25rem; border-radius:8px; color:#b91c1c; font-weight:600; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; font-size:0.88rem;">
+                <i class="fa-solid fa-circle-exclamation" style="font-size:1.1rem;"></i>
+                <span>Cổng nhập điểm hiện đang ĐÓNG (Sẽ được mở vào cuối kỳ). Vui lòng liên hệ Admin!</span>
+            </div>
+        @endif
+
         <div class="sl-header">
             <h1><i class="fa-solid fa-pen-to-square" style="color:#16a34a; margin-right:0.5rem;"></i>Cập nhật Điểm Sinh viên
             </h1>
@@ -218,7 +226,9 @@
                     <div class="sl-stats">
                         <span style="font-size:0.85rem; font-weight: 600; color:#475569;"><i class="fa-solid fa-users"></i>
                             Tổng số: {{ $students->count() }} SV</span>
-                        <button class="btn-save" onclick="saveGrades()"><i class="fa-solid fa-save"></i> Chốt
+                        <button class="btn-save" onclick="saveGrades()"
+                            {{ !$isGradingOpen ? 'disabled style=background:#94a3b8;cursor:not-allowed;opacity:0.75;' : '' }}><i
+                                class="fa-solid fa-save"></i> Chốt
                             & Lưu điểm</button>
                     </div>
                 </div>
@@ -227,13 +237,13 @@
                     <table class="sl-table" id="studentsTable">
                         <thead>
                             <tr>
-                                <th style="width:60px">STT</th>
+                                <th style="text-align:center;">STT</th>
                                 <th>Họ và tên</th>
                                 <th>Mã SV</th>
                                 <th>Lớp hành chính</th>
-                                <th style="text-align:center; width:120px;">Điểm chuyên cần</th>
-                                <th style="text-align:center; width:120px;">Điểm giữa kỳ</th>
-                                <th style="text-align:center; width:120px;">Điểm cuối kỳ</th>
+                                <th style="text-align:center;">Điểm chuyên cần</th>
+                                <th style="text-align:center;">Điểm giữa kỳ</th>
+                                <th style="text-align:center;">Điểm cuối kỳ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,31 +256,40 @@
                                                 (count($words) > 1 ? mb_substr(end($words), 0, 1) : '')
                                             : '';
                                 @endphp
-                                <tr>
+                                <tr data-enrollment-id="{{ $sv->enrollment_id }}">
                                     <td style="font-weight:600; color:#94a3b8; text-align: center;">{{ $idx + 1 }}</td>
                                     <td>
                                         <div class="sl-name-cell">
-                                            <div class="sl-avatar" style="background:#f0fdf4; color:#16a34a;">
-                                                {{ $initials ?: 'SV' }}</div>
                                             <span class="sl-name">{{ $sv->name }}</span>
                                         </div>
                                     </td>
                                     <td style="font-weight:600;">{{ $sv->code }}</td>
                                     <td>{{ $sv->class_name }}</td>
                                     <td style="text-align:center;">
-                                        <input type="number" class="grade-input" name="score_c[{{ $sv->enrollment_id }}]"
-                                            min="0" max="10" step="0.1" value="{{ $sv->score_c }}"
-                                            placeholder="--">
+                                        <input type="number" class="grade-input score-c-input"
+                                            name="score_c[{{ $sv->enrollment_id }}]" min="0" max="10"
+                                            step="0.1" value="{{ $sv->score_c }}" placeholder="--"
+                                            oninput="checkAttendance(this)"
+                                            {{ !$isGradingOpen ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
+                                        <div class="banned-badge"
+                                            style="display:{{ $sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0 ? 'block' : 'none' }}; font-size:0.72rem; color:#ef4444; font-weight:600; margin-top:2px;">
+                                            🚫 Cấm thi</div>
                                     </td>
                                     <td style="text-align:center;">
                                         <input type="number" class="grade-input" name="score_b[{{ $sv->enrollment_id }}]"
                                             min="0" max="10" step="0.1" value="{{ $sv->score_b }}"
-                                            placeholder="--">
+                                            placeholder="--"
+                                            {{ !$isGradingOpen ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
                                     </td>
                                     <td style="text-align:center;">
-                                        <input type="number" class="grade-input" name="score_a[{{ $sv->enrollment_id }}]"
-                                            min="0" max="10" step="0.1" value="{{ $sv->score_a }}"
-                                            placeholder="--">
+                                        @if ($sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0)
+                                            <span
+                                                style="font-size:0.78rem; background:#fee2e2; color:#dc2626; padding:2px 8px; border-radius:4px; font-weight:700;">🚫
+                                                0 (Cấm thi)</span>
+                                        @else
+                                            <span class="final-score-display"
+                                                style="font-size:0.85rem; color:#475569;">{{ isset($sv->score_a) && $sv->score_a !== '' ? number_format((float) $sv->score_a, 1) : '—' }}</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
@@ -345,14 +364,16 @@
             btn.disabled = true;
 
             try {
-                const response = await fetch('{{ route("teacher.grades.save") }}', {
+                const response = await fetch('{{ route('teacher.grades.save') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ grades })
+                    body: JSON.stringify({
+                        grades
+                    })
                 });
                 const resData = await response.json();
                 if (response.ok && resData.success) {

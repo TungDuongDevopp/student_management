@@ -719,7 +719,7 @@
                             `<span class="status-badge status-warning">Chưa chốt điểm</span>` : '';
 
                         // Generate link url manually with template literals to keep it clean
-                        const viewUrl = `{{ route('teacher.students') }}?schedule_id=${sch.id}`;
+                        const attUrl = `{{ route('teacher.attendances') }}?schedule_id=${sch.id}`;
                         const scoreUrl = `{{ route('teacher.grades') }}?schedule_id=${sch.id}`;
 
                         html += `<td rowspan="${rowspan}">
@@ -730,11 +730,11 @@
                             <div class="meta-info"><i class="fa-solid fa-location-dot"></i> Phòng: ${escHtml(ss.room || '—')}</div>
                             <div class="meta-info"><i class="fa-regular fa-clock"></i> Tiết: ${ss.start_time}–${ss.end_time}</div>
                             <div class="status-row">
-                                <span class="status-badge status-normal">Đúng lịch</span>
+                               
                                 ${ungradedBadge}
                             </div>
                             <div class="action-btns">
-                                <a href="${viewUrl}" class="btn-action btn-view">Danh sách</a>
+                                <a href="${attUrl}" class="btn-action btn-view">Điểm danh</a>
                                 <a href="${scoreUrl}" class="btn-action btn-score">Vào điểm</a>
                             </div>
                         </article>

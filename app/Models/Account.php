@@ -9,11 +9,17 @@ class Account extends Authenticatable
     protected $fillable = [
         'role_id',
         'username',
-        'password'
+        'password',
+        'is_locked',
+        'login_attempts',
+        'locked_until'
     ];
 
     protected $hidden = [
-        'password'
+        'password',
+        'is_locked',
+        'login_attempts',
+        'locked_until'
     ];
 
     public function role()

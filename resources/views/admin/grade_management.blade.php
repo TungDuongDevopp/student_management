@@ -171,9 +171,15 @@
                 </select>
             </div>
             <div class="filter-group">
+                <span class="filter-label">Lớp học phần</span>
+                <select class="filter-select" id="classFilter" onchange="applyFilters()" style="min-width:230px">
+                    <option value="all">Tất cả lớp học phần</option>
+                </select>
+            </div>
+            <div class="filter-group">
                 <span class="filter-label">Tìm kiếm</span>
                 <input type="text" class="filter-select" id="searchInput" placeholder="Tên SV, môn học, mã SV..."
-                    oninput="applyFilters()" style="min-width:240px">
+                    oninput="applyFilters()" style="min-width:220px">
             </div>
         </div>
 
@@ -189,7 +195,6 @@
                             <th style="text-align:center">Chuyên cần (10%)</th>
                             <th style="text-align:center">Giữa kỳ (30%)</th>
                             <th style="text-align:center">Cuối kỳ (60%)</th>
-                            <th style="text-align:center">Tổng kết</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -216,10 +221,13 @@
                     <div class="meta-info" id="scoreMeta"
                         style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:0.85rem;color:var(--text-muted)">
                     </div>
+                    <div id="bannedAlert" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:0.5rem 0.75rem;margin-bottom:0.75rem;font-size:0.82rem;color:#f87171;">
+                        🚫 <strong>Cấm thi:</strong> Điểm chuyên cần = 0, điểm cuối kỳ sẽ tự động là 0.
+                    </div>
                     <div class="form-group" style="margin-bottom:0.5rem">
                         <label>Điểm Chuyên cần (10%)</label>
                         <input type="number" id="scoreCInput" min="0" max="10" step="0.1"
-                            placeholder="Nhập điểm..." style="width:100%">
+                            placeholder="Nhập điểm..." style="width:100%" oninput="onScoreCChange()">
                     </div>
                     <div class="form-group" style="margin-bottom:0.5rem">
                         <label>Điểm Giữa kỳ (30%)</label>
@@ -273,6 +281,7 @@
                 allData = enrollRes;
                 allSemesters = semRes;
                 buildSemesterFilter();
+                buildClassFilter();
                 updateStats(allData);
                 applyFilters();
             } catch (e) {
@@ -289,6 +298,25 @@
                 ).join('');
         }
 
+        // ── CLASS SECTION FILTER DROPDOWN ────────────────────────────────────
+        function buildClassFilter() {
+            // Collect unique schedules from loaded enrollments
+            const seen = new Map();
+            allData.forEach(e => {
+                const sch = e.schedule;
+                if (sch && !seen.has(sch.id)) {
+                    const label = (sch.subject?.name || 'Môn học') +
+                        (sch.group_code ? ` (Nhóm ${sch.group_code})` : ` (#${sch.id})`) +
+                        (sch.teacher?.name ? ` – ${sch.teacher.name}` : '');
+                    seen.set(sch.id, label);
+                }
+            });
+            const sel = document.getElementById('classFilter');
+            const sorted = [...seen.entries()].sort((a, b) => a[1].localeCompare(b[1], 'vi'));
+            sel.innerHTML = '<option value="all">Tất cả lớp học phần</option>' +
+                sorted.map(([id, label]) => `<option value="${id}">${escHtml(label)}</option>`).join('');
+        }
+
         // ── STATS ─────────────────────────────────────────────────────────────
         function updateStats(data) {
             document.getElementById('statTotal').textContent = data.length;
@@ -300,17 +328,18 @@
 
         // ── FILTERS ───────────────────────────────────────────────────────────
         function applyFilters() {
-            const semId = document.getElementById('semesterFilter').value;
-            const q = document.getElementById('searchInput').value.toLowerCase();
+            const semId     = document.getElementById('semesterFilter').value;
+            const classId   = document.getElementById('classFilter').value;
+            const q         = document.getElementById('searchInput').value.toLowerCase();
 
             filteredData = allData.filter(e => {
-                const matchSem = semId === 'all' || String(e.schedule?.semester?.id) === semId;
-                const studentName = (e.student?.name || '').toLowerCase();
-                const studentCode = (e.student?.student_code || '').toLowerCase();
-                const subjectName = (e.schedule?.subject?.name || '').toLowerCase();
-                const matchSearch = !q || studentName.includes(q) || studentCode.includes(q) || subjectName
-                    .includes(q);
-                return matchSem && matchSearch;
+                const matchSem   = semId === 'all'   || String(e.schedule?.semester?.id) === semId;
+                const matchClass = classId === 'all' || String(e.schedule?.id) === classId;
+                const studentName  = (e.student?.name || '').toLowerCase();
+                const studentCode  = (e.student?.student_code || '').toLowerCase();
+                const subjectName  = (e.schedule?.subject?.name || '').toLowerCase();
+                const matchSearch  = !q || studentName.includes(q) || studentCode.includes(q) || subjectName.includes(q);
+                return matchSem && matchClass && matchSearch;
             });
 
             updateStats(filteredData);
@@ -333,9 +362,19 @@
             }
 
             tb.innerHTML = pageData.map(e => {
-                const scoreC = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? parseFloat(e.grade.score_c).toFixed(1) : '—';
-                const scoreB = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? parseFloat(e.grade.score_b).toFixed(1) : '—';
-                const scoreA = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? parseFloat(e.grade.score_a).toFixed(1) : '—';
+                const scoreC = e.grade?.score_c !== null && e.grade?.score_c !== undefined ? parseFloat(e.grade
+                    .score_c).toFixed(1) : '—';
+                const scoreB = e.grade?.score_b !== null && e.grade?.score_b !== undefined ? parseFloat(e.grade
+                    .score_b).toFixed(1) : '—';
+                const scoreA = e.grade?.score_a !== null && e.grade?.score_a !== undefined ? parseFloat(e.grade
+                    .score_a).toFixed(1) : '—';
+
+                // Cấm thi: chuyên cần = 0 hoặc chưa có
+                const scoreCVal = e.grade?.score_c;
+                const isBanned = scoreCVal !== null && scoreCVal !== undefined && parseFloat(scoreCVal) === 0;
+                const bannedBadge = isBanned
+                    ? `<span class="badge" style="background:rgba(239,68,68,0.15);color:#f87171;font-size:0.7rem;margin-left:4px;padding:1px 5px;border-radius:4px;">🚫 Cấm thi</span>`
+                    : '';
 
                 const score = e.grade?.final_score;
                 const scoreBadge = (score === null || score === undefined) ?
@@ -348,6 +387,7 @@
                     `${e.schedule.semester.name}${e.schedule.semester.academic_year ? ' – ' + e.schedule.semester.academic_year : ''}` :
                     '—';
 
+                const groupLabel = e.schedule?.group_code ? ` (Nhóm ${escHtml(e.schedule.group_code)})` : '';
                 return `<tr>
                     <td><strong>#${e.id}</strong></td>
                     <td>
@@ -355,15 +395,14 @@
                         <div class="muted">${escHtml(e.student?.student_code || '')} | Lớp: ${escHtml(e.student?.classroom?.code || '—')}</div>
                     </td>
                     <td>
-                        <div class="subject-name">${escHtml(e.schedule?.subject?.name || '—')}</div>
+                        <div class="subject-name">${escHtml(e.schedule?.subject?.name || '—')}${groupLabel}</div>
                         <div class="muted">GV: ${escHtml(e.schedule?.teacher?.name || '—')} | HK: ${escHtml(semName)}</div>
                     </td>
-                    <td style="text-align:center;font-weight:500;">${scoreC}</td>
+                    <td style="text-align:center;font-weight:500;">${scoreC}${bannedBadge}</td>
                     <td style="text-align:center;font-weight:500;">${scoreB}</td>
-                    <td style="text-align:center;font-weight:500;">${scoreA}</td>
-                    <td style="text-align:center">${scoreBadge}</td>
+                    <td style="text-align:center;font-weight:500;">${isBanned ? '<span class="badge badge-score-fail">0.0 🚫</span>' : scoreA}</td>
                     <td><div class="actions">
-                        <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>✏️ Điểm</button>
+                        <button class="btn btn-sm btn-edit" onclick='openScoreModal(${JSON.stringify(e)})'>Sửa điểm</button>
                     </div></td>
                 </tr>`;
             }).join('');
@@ -444,7 +483,22 @@
 
         function closeScoreModal() {
             document.getElementById('scoreModal').classList.remove('active');
+            document.getElementById('bannedAlert').style.display = 'none';
             editId = null;
+        }
+
+        function onScoreCChange() {
+            const val = document.getElementById('scoreCInput').value;
+            const banned = val === '' || parseFloat(val) === 0;
+            document.getElementById('bannedAlert').style.display = banned ? 'block' : 'none';
+            if (banned) {
+                document.getElementById('scoreAInput').value = 0;
+                document.getElementById('scoreAInput').readOnly = true;
+                document.getElementById('scoreAInput').style.background = 'rgba(239,68,68,0.08)';
+            } else {
+                document.getElementById('scoreAInput').readOnly = false;
+                document.getElementById('scoreAInput').style.background = '';
+            }
         }
 
         async function saveScore() {

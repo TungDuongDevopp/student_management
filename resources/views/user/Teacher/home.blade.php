@@ -12,16 +12,60 @@
             color: #334155;
         }
 
-        .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden; }
-        .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
-        .hero-content { position:relative;z-index:1; }
-        .hero-eyebrow { font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700;margin-bottom:.4rem; }
-        .hero-title { margin:0;font-size:1.45rem;font-weight:800; }
-        .hero-desc { margin:.45rem 0 0;font-size:.9rem;opacity:.9;line-height:1.5; }
+        .page-hero {
+            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%);
+            color: #fff;
+            border-radius: 10px;
+            padding: 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::after {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 255, 255, .08);
+            transform: rotate(45deg);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            opacity: .85;
+            font-weight: 700;
+            margin-bottom: .4rem;
+        }
+
+        .hero-title {
+            margin: 0;
+            font-size: 1.45rem;
+            font-weight: 800;
+        }
+
+        .hero-desc {
+            margin: .45rem 0 0;
+            font-size: .9rem;
+            opacity: .9;
+            line-height: 1.5;
+        }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
@@ -53,9 +97,15 @@
             border-radius: 12px 0 0 12px;
         }
 
-        .stat-card:nth-child(2)::before { background: #0284c7; }
-        .stat-card:nth-child(3)::before { background: #f59e0b; }
-        .stat-card:nth-child(4)::before { background: #10b981; }
+        .stat-card:nth-child(2)::before {
+            background: #0284c7;
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: #f59e0b;
+        }
+
+
 
         .stat-card .stat-icon {
             position: absolute;
@@ -65,10 +115,21 @@
             opacity: 0.15;
         }
 
-        .stat-card:nth-child(1) .stat-icon { color: #dc2626; }
-        .stat-card:nth-child(2) .stat-icon { color: #0284c7; }
-        .stat-card:nth-child(3) .stat-icon { color: #f59e0b; }
-        .stat-card:nth-child(4) .stat-icon { color: #10b981; }
+        .stat-card:nth-child(1) .stat-icon {
+            color: #dc2626;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: #0284c7;
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: #f59e0b;
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: #10b981;
+        }
 
         .stat-card .stat-title {
             font-size: 0.75rem;
@@ -93,7 +154,7 @@
             font-weight: 500;
             margin: 0;
         }
-        
+
         .stat-card .stat-desc b {
             color: #334155;
             font-weight: 600;
@@ -298,10 +359,12 @@
         <section class="welcome-banner page-hero" aria-label="Lời chào">
             <div class="hero-content">
                 <div class="hero-eyebrow">Teacher Academic Portal</div>
-                <h1 class="hero-title" style="margin-bottom: 0.35rem;">Xin chào Giảng viên, {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Giảng viên') }}!</h1>
+                <h1 class="hero-title" style="margin-bottom: 0.35rem;">Xin chào Giảng viên,
+                    {{ Auth::user()->teacher?->name ?? (Auth::user()->username ?? 'Giảng viên') }}!</h1>
                 <p class="hero-desc">
                     @if (count($todaySchedules) > 0)
-                        Hôm nay bạn có <strong>{{ count($todaySchedules) }} lớp</strong> cần giảng dạy. Chúc bạn một buổi lên
+                        Hôm nay bạn có <strong>{{ count($todaySchedules) }} lớp</strong> cần giảng dạy. Chúc bạn một buổi
+                        lên
                         lớp hiệu quả!
                     @else
                         Hôm nay bạn không có lớp dạy nào. Chúc bạn nghỉ ngơi vui vẻ!
@@ -317,33 +380,28 @@
                 <div class="stat-value">{{ $stats['assigned_classes'] ?? 0 }}</div>
                 <div class="stat-desc">Học kỳ hiện tại</div>
             </article>
-            
+
             <article class="stat-card">
                 <i class="fa-solid fa-users stat-icon"></i>
                 <div class="stat-title">Sinh viên</div>
                 <div class="stat-value">{{ $stats['total_students'] ?? 0 }}</div>
                 <div class="stat-desc">Đang quản lý</div>
             </article>
-            
+
             <article class="stat-card">
                 <i class="fa-solid fa-clock stat-icon"></i>
                 <div class="stat-title">Lịch học hôm nay</div>
                 <div class="stat-value">{{ count($todaySchedules) }}</div>
                 <div class="stat-desc">
-                    @if(count($todaySchedules) > 0)
+                    @if (count($todaySchedules) > 0)
                         Ca đầu: <b>{{ $todaySchedules[0]['start_time'] ?? '--:--' }}</b>
                     @else
                         Hôm nay trống tiết
                     @endif
                 </div>
             </article>
-            
-            <article class="stat-card">
-                <i class="fa-solid fa-clipboard-check stat-icon"></i>
-                <div class="stat-title">Lớp chưa điểm</div>
-                <div class="stat-value">{{ $stats['ungraded_schedules'] ?? 0 }}</div>
-                <div class="stat-desc">Chưa chốt điểm CK</div>
-            </article>
+
+
         </section>
 
         <section class="news-section" aria-labelledby="news-heading">
@@ -354,22 +412,24 @@
             </div>
             <div class="news-list">
                 @forelse($news ?? [] as $article)
-                <article class="news-item">
-                    <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}" alt="{{ $article->title }}" class="news-thumb" loading="lazy">
-                    <div class="news-body">
-                        <div class="news-meta">
-                            <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
-                            <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock" style="margin-right:4px;"></i>
-                                {{ $article->created_at->format('d/m/Y') }}</time>
+                    <article class="news-item">
+                        <img src="{{ $article->thumbnail ? asset($article->thumbnail) : 'https://upload.wikimedia.org/wikipedia/commons/2/25/Truong_Dai_hoc_Mo_Dia_chat.jpg' }}"
+                            alt="{{ $article->title }}" class="news-thumb" loading="lazy">
+                        <div class="news-body">
+                            <div class="news-meta">
+                                <span class="news-tag">{{ $article->category ?? 'Chung' }}</span>
+                                <time datetime="{{ $article->created_at->format('Y-m-d') }}"><i class="fa-regular fa-clock"
+                                        style="margin-right:4px;"></i>
+                                    {{ $article->created_at->format('d/m/Y') }}</time>
+                            </div>
+                            <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
+                            <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
                         </div>
-                        <h3><a href="{{ route('user.news.show', $article->id) }}">{{ $article->title }}</a></h3>
-                        <p class="news-desc">{{ Str::limit(strip_tags($article->content), 120) }}</p>
-                    </div>
-                </article>
+                    </article>
                 @empty
-                <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
-                    Chưa có thông báo mới.
-                </div>
+                    <div style="grid-column: span 3; text-align: center; color: #64748b; padding: 2rem;">
+                        Chưa có thông báo mới.
+                    </div>
                 @endforelse
             </div>
         </section>

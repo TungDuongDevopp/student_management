@@ -10,7 +10,8 @@ class Payment extends Model
         'tuition_id',
         'amount',
         'payment_date',
-        'status'
+        'status',
+        'proof_image'
     ];
 
     public function tuition()
