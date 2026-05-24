@@ -210,6 +210,7 @@
                 }
                 
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 

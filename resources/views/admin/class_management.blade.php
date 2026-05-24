@@ -219,6 +219,7 @@
                 }
                 
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -230,8 +231,12 @@
             function populateDropdowns(selectedFac, selectedTeach) {
                 document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + allFaculties.map(
                     f => `<option value="${f.id}" ${f.id==selectedFac?'selected':''}>${f.name}</option>`).join('');
+                
+                const usedTeacherIds = allData.map(c => c.teacher_id).filter(id => id && id !== selectedTeach);
+                const availableTeachers = allTeachers.filter(t => !usedTeacherIds.includes(t.id));
+                
                 document.getElementById('teacherId').innerHTML = '<option value="">-- Chọn GV (tùy chọn) --</option>' +
-                    allTeachers.map(t =>
+                    availableTeachers.map(t =>
                         `<option value="${t.id}" ${t.id==selectedTeach?'selected':''}>${t.name} (${t.teacher_code||'N/A'})</option>`
                     ).join('');
             }

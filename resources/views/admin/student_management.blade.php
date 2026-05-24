@@ -277,6 +277,7 @@
                 }
                 
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -285,7 +286,7 @@
                 renderPage();
             }
 
-            async function loadDropdowns() {
+            async function loadDropdowns(currentAccountId = null) {
                 const [accounts, classrooms] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/classrooms').then(r => r.json())]);
                 // Chỉ hiển thị tài khoản có role Student và chưa được gán cho sinh viên nào khác

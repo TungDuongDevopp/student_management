@@ -282,6 +282,7 @@
                 }
                 
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -290,7 +291,7 @@
                 renderPage();
             }
 
-            async function loadDropdowns() {
+            async function loadDropdowns(currentAccountId = null) {
                 const [accounts, faculties] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/faculties').then(r => r.json())]);
                 // Chỉ hiển thị tài khoản có role Teacher và chưa gán cho GV nào
