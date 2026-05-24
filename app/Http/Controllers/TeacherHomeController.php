@@ -229,7 +229,10 @@ class TeacherHomeController extends Controller
                                 'class_name' => $currentClass->code,
                                 'status' => 'Đang học',
                             ];
-                        });
+                        })->sortBy(function($s) {
+                            $parts = explode(' ', trim($s->name));
+                            return end($parts) . ' ' . $s->name;
+                        })->values();
                 }
             } elseif ($scheduleId) {
                 $currentSchedule = $schedules->firstWhere('id', $scheduleId);
@@ -249,7 +252,10 @@ class TeacherHomeController extends Controller
                             'class_name' => $student->classroom->name ?? '—',
                             'status' => 'Đang học',
                         ];
-                    });
+                    })->sortBy(function($s) {
+                        $parts = explode(' ', trim($s->name));
+                        return end($parts) . ' ' . $s->name;
+                    })->values();
                 }
             } else {
                 // Default to first class room if none selected
@@ -332,7 +338,10 @@ class TeacherHomeController extends Controller
                             'class_name' => $student->classroom->name ?? '—',
                             'is_present' => $attendance ? ($attendance->status == 1) : true
                         ];
-                    });
+                    })->sortBy(function($s) {
+                        $parts = explode(' ', trim($s->name));
+                        return end($parts) . ' ' . $s->name;
+                    })->values();
                 }
             }
         } elseif ($schedules->count() > 0) {
@@ -415,7 +424,10 @@ class TeacherHomeController extends Controller
                         'score_c' => $enrollment->grade->score_c ?? '',
                         'score_b' => $enrollment->grade->score_b ?? '',
                     ];
-                });
+                })->sortBy(function($s) {
+                    $parts = explode(' ', trim($s->name));
+                    return end($parts) . ' ' . $s->name;
+                })->values();
             }
         } elseif ($schedules->count() > 0) {
             return redirect()->route('teacher.grades', ['schedule_id' => $schedules->first()->id]);
