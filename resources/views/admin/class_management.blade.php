@@ -176,11 +176,23 @@
                     pg.innerHTML = '';
                     return;
                 }
-                let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-                for (let i = 1; i <= totalPages; i++) html +=
-                    `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                let html = `<button onclick="goPage(1)" ${currentPage===1?'disabled':''}>«</button>`;
+                html += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, currentPage + 2);
+                if (endPage - startPage < 4) {
+                    if (startPage === 1) endPage = Math.min(totalPages, 5);
+                    else if (endPage === totalPages) startPage = Math.max(1, totalPages - 4);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                }
+
                 html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -192,8 +204,12 @@
             function populateDropdowns(selectedFac, selectedTeach) {
                 document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + allFaculties.map(
                     f => `<option value="${f.id}" ${f.id==selectedFac?'selected':''}>${f.name}</option>`).join('');
+                
+                const usedTeacherIds = allData.map(c => c.teacher_id).filter(id => id && id !== selectedTeach);
+                const availableTeachers = allTeachers.filter(t => !usedTeacherIds.includes(t.id));
+                
                 document.getElementById('teacherId').innerHTML = '<option value="">-- Chọn GV (tùy chọn) --</option>' +
-                    allTeachers.map(t =>
+                    availableTeachers.map(t =>
                         `<option value="${t.id}" ${t.id==selectedTeach?'selected':''}>${t.name} (${t.teacher_code||'N/A'})</option>`
                     ).join('');
             }

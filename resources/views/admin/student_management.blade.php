@@ -212,12 +212,23 @@
                     pg.innerHTML = '';
                     return;
                 }
-                let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-                for (let i = 1; i <= totalPages; i++) {
+                let html = `<button onclick="goPage(1)" ${currentPage===1?'disabled':''}>«</button>`;
+                html += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, currentPage + 2);
+                if (endPage - startPage < 4) {
+                    if (startPage === 1) endPage = Math.min(totalPages, 5);
+                    else if (endPage === totalPages) startPage = Math.max(1, totalPages - 4);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
                     html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
                 }
+
                 html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -226,11 +237,12 @@
                 renderPage();
             }
 
-            async function loadDropdowns() {
+            async function loadDropdowns(currentAccountId = null) {
                 const [accounts, classrooms] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/classrooms').then(r => r.json())]);
-                // Chỉ hiển thị tài khoản có role Student
-                const studentAccounts = accounts.filter(a => a.role && a.role.name === 'Student');
+                // Chỉ hiển thị tài khoản có role Student chưa được sử dụng
+                const usedAccountIds = allStudents.map(s => s.account_id).filter(id => id && id !== currentAccountId);
+                const studentAccounts = accounts.filter(a => a.role && a.role.name === 'Student' && !usedAccountIds.includes(a.id));
                 document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' +
                     studentAccounts.map(a => `<option value="${a.id}">${a.username}</option>`).join('');
                 document.getElementById('classroomId').innerHTML = '<option value="">-- Chọn lớp --</option>' + classrooms
@@ -251,7 +263,7 @@
             function editStudent(s) {
                 document.getElementById('modalTitle').textContent = 'Cập nhật Sinh viên';
                 document.getElementById('studentId').value = s.id;
-                loadDropdowns().then(() => {
+                loadDropdowns(s.account_id).then(() => {
                     document.getElementById('accountId').value = s.account_id || '';
                     document.getElementById('accountId').disabled = true;
                     document.getElementById('classroomId').value = s.classroom_id || '';

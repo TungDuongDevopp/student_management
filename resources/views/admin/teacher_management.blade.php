@@ -217,11 +217,23 @@
                     pg.innerHTML = '';
                     return;
                 }
-                let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-                for (let i = 1; i <= totalPages; i++) html +=
-                    `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                let html = `<button onclick="goPage(1)" ${currentPage===1?'disabled':''}>«</button>`;
+                html += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, currentPage + 2);
+                if (endPage - startPage < 4) {
+                    if (startPage === 1) endPage = Math.min(totalPages, 5);
+                    else if (endPage === totalPages) startPage = Math.max(1, totalPages - 4);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                }
+
                 html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                html += `<button onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
                 pg.innerHTML = html;
             }
 
@@ -230,11 +242,12 @@
                 renderPage();
             }
 
-            async function loadDropdowns() {
+            async function loadDropdowns(currentAccountId = null) {
                 const [accounts, faculties] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/faculties').then(r => r.json())]);
-                // Chỉ hiển thị tài khoản có role Teacher
-                const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher');
+                // Chỉ hiển thị tài khoản có role Teacher chưa được sử dụng
+                const usedAccountIds = allData.map(t => t.account_id).filter(id => id && id !== currentAccountId);
+                const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher' && !usedAccountIds.includes(a.id));
                 document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' +
                     teacherAccounts.map(a => `<option value="${a.id}">${a.username}</option>`).join('');
                 document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + faculties
@@ -255,7 +268,7 @@
             function editEntity(t) {
                 document.getElementById('modalTitle').textContent = 'Cập nhật Giảng viên';
                 document.getElementById('entityId').value = t.id;
-                loadDropdowns().then(() => {
+                loadDropdowns(t.account_id).then(() => {
                     document.getElementById('accountId').value = t.account_id || '';
                     document.getElementById('accountId').disabled = true;
                     document.getElementById('facultyId').value = t.faculty_id || '';
