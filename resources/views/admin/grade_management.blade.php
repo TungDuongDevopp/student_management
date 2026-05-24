@@ -372,19 +372,50 @@
         }
 
         function renderPagination(totalPages) {
-            const pg = document.getElementById('pagination');
-            if (totalPages <= 1) {
-                pg.innerHTML = '';
-                return;
+                const pg = document.getElementById('pagination');
+                if (totalPages <= 1) {
+                    pg.innerHTML = '';
+                    return;
+                }
+                let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+                
+                const delta = 2;
+                const left = currentPage - delta;
+                const right = currentPage + delta;
+                const range = [];
+                const rangeWithDots = [];
+                let l;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= left && i <= right)) {
+                        range.push(i);
+                    }
+                }
+
+                for (let i of range) {
+                    if (l) {
+                        if (i - l === 2) {
+                            rangeWithDots.push(l + 1);
+                        } else if (i - l !== 1) {
+                            rangeWithDots.push('...');
+                        }
+                    }
+                    rangeWithDots.push(i);
+                    l = i;
+                }
+
+                for (let i of rangeWithDots) {
+                    if (i === '...') {
+                        html += `<span class="page-dots">...</span>`;
+                    } else {
+                        html += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+                    }
+                }
+                
+                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
+                html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+                pg.innerHTML = html;
             }
-            let html = `<button onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
-            for (let i = 1; i <= totalPages; i++)
-                html += `<button class="${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
-            html += `<span class="page-info">${filteredData.length} đăng ký</span>`;
-            html +=
-                `<button onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
-            pg.innerHTML = html;
-        }
 
         function goPage(p) {
             currentPage = p;
