@@ -37,7 +37,7 @@
                 <a href="{{ route('admin.info') }}">
                     <i class="fa-regular fa-circle-user"></i> Thông tin cá nhân
                 </a>
-                <a href="#">
+                <a href="{{ route('admin.change_password') }}">
                     <i class="fa-solid fa-key"></i> Đổi mật khẩu
                 </a>
                 <div class="topbar-dropdown-divider"></div>

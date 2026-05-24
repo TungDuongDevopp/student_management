@@ -4,9 +4,31 @@
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
     <div class="content-wrapper">
 
-        <div class="page-header">
-            <h1>Quản lý Sinh viên</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Sinh viên</button>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Quản lý Sinh viên</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến sinh viên.</div>
+            </div>
+            <div class="ab-action">
+                <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Sinh viên</button>
+            </div>
+            <div class="ab-decor"></div>
+        </div>
+        
+        <div class="stats-row" style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#3b82f6;" id="statTotalStudents">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Tổng Sinh Viên</span>
+            </div>
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#22c55e;" id="statActiveStudents">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Đang Học</span>
+            </div>
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#ef4444;" id="statInactiveStudents">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Nghỉ / Dừng</span>
+            </div>
         </div>
         <div class="filter-tabs" id="filterTabs"></div>
         <div class="search-bar">
@@ -144,6 +166,13 @@
                 const counts = {
                     all: allStudents.length
                 };
+                
+                const active = allStudents.filter(s => !s.account || !s.account.is_locked).length;
+                const inactive = allStudents.length - active;
+                document.getElementById('statTotalStudents').textContent = allStudents.length;
+                document.getElementById('statActiveStudents').textContent = active;
+                document.getElementById('statInactiveStudents').textContent = inactive;
+
                 allClassrooms.forEach(c => {
                     counts[c.id] = allStudents.filter(s => s.classroom_id === c.id).length;
                 });
@@ -214,7 +243,7 @@
                 }
                 let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
                 
-                const delta = 2;
+                const delta = 1;
                 const left = currentPage - delta;
                 const right = currentPage + delta;
                 const range = [];
@@ -247,7 +276,6 @@
                     }
                 }
                 
-                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
                 pg.innerHTML = html;
             }
@@ -260,8 +288,18 @@
             async function loadDropdowns() {
                 const [accounts, classrooms] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/classrooms').then(r => r.json())]);
-                // Chỉ hiển thị tài khoản có role Student
-                const studentAccounts = accounts.filter(a => a.role && a.role.name === 'Student');
+                // Chỉ hiển thị tài khoản có role Student và chưa được gán cho sinh viên nào khác
+                const studentAccounts = accounts.filter(a => a.role && a.role.name === 'Student' && !a.student);
+                
+                // Khi sửa, nếu tài khoản hiện tại đang thuộc về sinh viên này thì vẫn cho hiển thị
+                const currentAccountId = document.getElementById('studentId').value ? document.getElementById('accountId').dataset.current : null;
+                if (currentAccountId) {
+                    const currentAcc = accounts.find(a => a.id == currentAccountId);
+                    if (currentAcc && !studentAccounts.find(a => a.id == currentAcc.id)) {
+                        studentAccounts.push(currentAcc);
+                    }
+                }
+
                 document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' +
                     studentAccounts.map(a => `<option value="${a.id}">${a.username}</option>`).join('');
                 document.getElementById('classroomId').innerHTML = '<option value="">-- Chọn lớp --</option>' + classrooms
@@ -282,6 +320,7 @@
             function editStudent(s) {
                 document.getElementById('modalTitle').textContent = 'Cập nhật Sinh viên';
                 document.getElementById('studentId').value = s.id;
+                document.getElementById('accountId').dataset.current = s.account_id || '';
                 loadDropdowns().then(() => {
                     document.getElementById('accountId').value = s.account_id || '';
                     document.getElementById('accountId').disabled = true;
@@ -348,7 +387,8 @@
                     const res = await fetch(url, {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                            'Accept': 'application/json'
                         },
                         body: formData
                     });

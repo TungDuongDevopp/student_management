@@ -171,9 +171,9 @@
 </head>
 
 <body>
-    @if(session('error_popup'))
+    @if($errors->any())
     <div class="toast-notification">
-        {{ session('error_popup') }}
+        {{ $errors->first() }}
     </div>
     @endif
 
@@ -182,43 +182,48 @@
             class="school-logo">
 
         <div class="header-text">
-            <h1>Đăng nhập hệ thống</h1>
-            <p>Vui lòng nhập username và password của bạn</p>
+            <h1>Đặt Lại Mật Khẩu</h1>
+            <p>Vui lòng nhập mật khẩu mới cho tài khoản của bạn.</p>
         </div>
 
-        <form action="{{ route('admin.login.post') }}" method="POST">
+        <form action="{{ route('password.update') }}" method="POST">
             @csrf
+            <input type="hidden" name="token" value="{{ $token }}">
+            
             <div class="input-group">
-                <label for="username">Username</label>
+                <label for="email">Địa chỉ Email</label>
                 <div class="input-wrapper">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://w3.org">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                        </path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Nhập username" required>
+                    <input type="email" id="email" name="email" value="{{ $email ?? old('email') }}" required readonly style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
-                @error('username')
+            </div>
+
+            <div class="input-group">
+                <label for="password">Mật khẩu mới</label>
+                <div class="input-wrapper">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <input type="password" id="password" name="password" placeholder="Tối thiểu 6 ký tự" required>
+                </div>
+                @error('password')
                     <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem;">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="input-group">
-                <label for="password">Mật khẩu</label>
+                <label for="password_confirmation">Xác nhận mật khẩu mới</label>
                 <div class="input-wrapper">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
-                <div class="forgot-pass">
-                    <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
+                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Nhập lại mật khẩu" required>
                 </div>
             </div>
 
-            <button type="submit" class="btn-login">Đăng Nhập</button>
+            <button type="submit" class="btn-login">Cập Nhật Mật Khẩu</button>
         </form>
     </div>
 

@@ -178,8 +178,16 @@
 
     <div class="content-wrapper">
         <div class="breadcrumb"><a href="{{ route('admin.dashboard') }}">Dashboard</a> / Quản lý Phản hồi</div>
-        <div class="page-header">
-            <h1>💬 Quản lý Phản hồi</h1>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">💬 Quản lý Phản hồi</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến 💬 phản hồi.</div>
+            </div>
+            <div class="ab-action">
+                
+            </div>
+            <div class="ab-decor"></div>
         </div>
 
         {{-- Stats --}}
@@ -265,27 +273,79 @@
 
         {{-- Detail / Reply Modal --}}
         <div class="modal-overlay detail-modal" id="detailModal">
-            <div class="modal" style="width:600px">
+            <div class="modal" style="width: 1200px; max-width: 95vw;">
                 <div class="modal-header">
                     <h2 id="detailModalTitle">Chi tiết phản hồi</h2>
                     <button class="modal-close" onclick="closeDetailModal()">&times;</button>
                 </div>
-                <div class="modal-body">
-                    <div class="meta-info" id="detailMeta"></div>
-                    <div class="form-group">
-                        <label>📩 Nội dung phản hồi từ người dùng</label>
-                        <div class="detail-block" id="detailContent"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>💬 Phản hồi của Admin</label>
-                        <textarea class="detail-block" id="replyInput" rows="4" placeholder="Nhập nội dung phản hồi..."
-                            style="resize:vertical;width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem;padding:0.85rem 1rem;font-family:'Inter',sans-serif;line-height:1.6;"></textarea>
+                <div class="modal-body" style="padding: 1.5rem;">
+                    <div class="meta-info" id="detailMeta" style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border);"></div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Left Column: User's feedback -->
+                        <div class="feedback-left-col">
+                            <h3 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-user-pen" style="color: #3b82f6;"></i> NỘI DUNG TICKET</h3>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Danh mục góp ý</label>
+                                    <div class="detail-block" id="detailCategory" style="padding: 0.6rem 0.8rem; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: #3b82f6;"></div>
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Mức độ ưu tiên</label>
+                                    <div class="detail-block" id="detailPriority" style="padding: 0.6rem 0.8rem; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: #ef4444;"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">📩 Tiêu đề phản hồi</label>
+                                <div class="detail-block" id="detailTitle" style="font-weight: 700; font-size: 1rem; padding: 0.75rem; background: var(--bg-input);"></div>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">📝 Nội dung chi tiết</label>
+                                <div class="detail-block" id="detailContent" style="min-height: 120px; background: var(--bg-input);"></div>
+                            </div>
+                            
+                            <div class="form-group" id="detailFileContainer" style="display: none; margin-bottom: 0;">
+                                <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">📎 Tệp đính kèm</label>
+                                <div style="margin-top: 0.25rem;">
+                                    <a id="detailFile" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: #eff6ff; color: #2563eb; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; border: 1px solid #bfdbfe; transition: all 0.2s;">
+                                        <i class="fa-solid fa-cloud-arrow-down"></i> <span>Tải xuống tệp đính kèm</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Admin Reply -->
+                        <div class="feedback-right-col" style="display: flex; flex-direction: column;">
+                            <h3 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-reply-all" style="color: #22c55e;"></i> TRẢ LỜI TICKET</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 1rem;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Tiêu đề trả lời</label>
+                                <input type="text" id="replyTitleInput" placeholder="Nhập tiêu đề cho phản hồi..."
+                                    style="width: 100%; background: var(--bg-input); border: 2px solid var(--border); border-radius: 8px; color: var(--text-main); font-size: 0.95rem; padding: 0.75rem 1rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s; box-sizing: border-box;">
+                            </div>
+
+                            <div class="form-group" style="flex: 1; display: flex; flex-direction: column; margin-bottom: 1rem;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Nội dung phản hồi của Admin <span style="color: #ef4444;">*</span></label>
+                                <textarea class="detail-block" id="replyInput" placeholder="Nhập nội dung phản hồi chi tiết để trả lời người dùng..."
+                                    style="flex: 1; min-height: 180px; resize: none; width: 100%; background: var(--bg-input); border: 2px solid var(--border); border-radius: 8px; color: var(--text-main); font-size: 0.95rem; padding: 1rem; font-family: 'Inter', sans-serif; line-height: 1.6; transition: border-color 0.2s; box-sizing: border-box;"></textarea>
+                            </div>
+
+                            <div class="form-group" style="margin: 0;">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Đính kèm file (Nếu có)</label>
+                                <div style="background: var(--bg-input); border: 2px dashed var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                                    <input type="file" id="replyFileInput" name="reply_file" accept=".jpg,.png,.pdf" style="font-size: 0.85rem;">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="padding: 1rem 1.5rem; background: var(--bg-primary); border-top: 1px solid var(--border);">
                     <button class="btn btn-secondary" onclick="closeDetailModal()">Đóng</button>
                     <button class="btn btn-seen" id="btnMarkSeen" onclick="markSeen()">✔ Đánh dấu đã xem</button>
-                    <button class="btn btn-reply" onclick="sendReply()">📤 Gửi phản hồi</button>
+                    <button class="btn btn-reply" onclick="sendReply()" style="background: #22c55e; color: white; border: none; font-weight: 600; padding: 0.5rem 1.5rem;"><i class="fa-regular fa-paper-plane"></i> Gửi phản hồi</button>
                 </div>
             </div>
         </div>
@@ -387,8 +447,9 @@
                 const matchStatus = statusFilter === 'all' || String(f.status) === statusFilter;
                 const roleId = f.account?.role_id ?? null;
                 const matchRole = roleFilter === 'all' || String(roleId) === roleFilter;
+                const senderName = f.account?.student?.full_name || f.account?.teacher?.full_name || f.account?.username || '';
                 const matchSearch = !q ||
-                    (f.account?.name || '').toLowerCase().includes(q) ||
+                    senderName.toLowerCase().includes(q) ||
                     (f.content || '').toLowerCase().includes(q) ||
                     (f.reply || '').toLowerCase().includes(q);
                 return matchStatus && matchRole && matchSearch;
@@ -420,9 +481,10 @@
                     const seenBtn = f.status == 0 ?
                         `<button class="btn btn-sm btn-seen" onclick="quickMarkSeen(${f.id}, event)">✔ Đã xem</button>` :
                         '';
+                    const senderName = f.account?.student?.full_name || f.account?.teacher?.full_name || f.account?.username || '—';
                     return `<tr id="row-${f.id}">
                         <td><strong>#${f.id}</strong></td>
-                        <td><strong>${escHtml(f.account?.name || '—')}</strong></td>
+                        <td><strong>${escHtml(senderName)}</strong></td>
                         <td><span class="badge ${roleBadge}">${roleName}</span></td>
                         <td><div class="content-preview" title="${escHtml(f.content||'')}">${escHtml(f.content||'—')}</div></td>
                         <td>${replyCell}</td>
@@ -447,7 +509,7 @@
                 }
                 let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
                 
-                const delta = 2;
+                const delta = 1;
                 const left = currentPage - delta;
                 const right = currentPage + delta;
                 const range = [];
@@ -480,7 +542,6 @@
                     }
                 }
                 
-                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
                 pg.innerHTML = html;
             }
@@ -495,15 +556,51 @@
             currentId = f.id;
             const roleId = f.account?.role_id ?? null;
             const roleName = ROLE_MAP[roleId] || 'Không rõ';
-            document.getElementById('detailModalTitle').textContent = `Phản hồi #${f.id}`;
+            const senderName = f.account?.student?.full_name || f.account?.teacher?.full_name || f.account?.username || '—';
+            document.getElementById('detailModalTitle').textContent = `Chi tiết Ticket #${f.id}`;
             document.getElementById('detailMeta').innerHTML = `
-                <span><strong>Người gửi:</strong> ${escHtml(f.account?.name || '—')}</span>
+                <span><strong>Người gửi:</strong> ${escHtml(senderName)}</span>
                 <span><strong>Vai trò:</strong> ${roleName}</span>
                 <span><strong>Ngày gửi:</strong> ${f.created_at ? new Date(f.created_at).toLocaleDateString('vi-VN') : '—'}</span>
                 <span><strong>Trạng thái:</strong> ${f.status == 0 ? '⏳ Chưa xem' : '✅ Đã xem'}</span>
             `;
-            document.getElementById('detailContent').textContent = f.content || '(Không có nội dung)';
+            document.getElementById('detailTitle').textContent = f.title || '(Không có tiêu đề)';
+            
+            // Parse category and priority from content if combined
+            let rawContent = f.content || '';
+            let category = 'Không xác định';
+            let priority = 'Bình thường';
+            let detailContent = rawContent;
+            
+            const match = rawContent.match(/^\[(.*?)\]\s*\[Mức độ:\s*(.*?)\]\s*Chi tiết:\s*([\s\S]*)$/);
+            if (match) {
+                category = match[1].trim();
+                priority = match[2].trim();
+                detailContent = match[3].trim();
+            } else {
+                const matchOld = rawContent.match(/^\[(.*?)\]\s*\[Mức độ:\s*(.*?)\]\s*Tiêu đề:(.*?)\s*Chi tiết:\s*([\s\S]*)$/);
+                if (matchOld) {
+                    category = matchOld[1].trim();
+                    priority = matchOld[2].trim();
+                    detailContent = matchOld[4].trim();
+                }
+            }
+            
+            document.getElementById('detailCategory').textContent = category;
+            document.getElementById('detailPriority').textContent = priority;
+            document.getElementById('detailContent').textContent = detailContent || '(Không có nội dung)';
+            
+            if (f.file_path) {
+                document.getElementById('detailFileContainer').style.display = 'block';
+                document.getElementById('detailFile').href = '/storage/' + f.file_path;
+            } else {
+                document.getElementById('detailFileContainer').style.display = 'none';
+            }
+
+            document.getElementById('replyTitleInput').value = f.reply_title || '';
             document.getElementById('replyInput').value = f.reply || '';
+            document.getElementById('replyFileInput').value = '';
+
             document.getElementById('btnMarkSeen').style.display = f.status == 0 ? '' : 'none';
             document.getElementById('detailModal').classList.add('active');
         }
@@ -516,22 +613,30 @@
         // ── REPLY ────────────────────────────────────────────────────────────
         async function sendReply() {
             if (!currentId) return;
+            const replyTitle = document.getElementById('replyTitleInput').value.trim();
             const reply = document.getElementById('replyInput').value.trim();
+            const fileInput = document.getElementById('replyFileInput');
+
             if (!reply) {
                 showToast('Vui lòng nhập nội dung phản hồi', 'error');
                 return;
             }
+
+            const formData = new FormData();
+            formData.append('reply_title', replyTitle);
+            formData.append('reply', reply);
+            if (fileInput.files[0]) {
+                formData.append('reply_file', fileInput.files[0]);
+            }
+
             try {
                 const res = await fetch(API_REPLY(currentId), {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        reply
-                    })
+                    body: formData
                 });
                 if (!res.ok) throw new Error((await res.json()).message || 'Lỗi');
                 showToast('Phản hồi đã được gửi!', 'success');

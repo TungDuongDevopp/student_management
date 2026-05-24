@@ -10,7 +10,7 @@ class FeedbackController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Feedback::with('account');
+        $query = Feedback::with(['account.student', 'account.teacher']);
 
         // Lọc theo trạng thái nếu có
         if ($request->has('status')) {
@@ -25,8 +25,16 @@ class FeedbackController extends Controller
     {
         $validated = $request->validate([
             'account_id' => 'nullable|integer|exists:accounts,id',
+            'title'      => 'nullable|string|max:255',
             'content'    => 'nullable|string',
+            'file'       => 'nullable|file|max:5120', // Tối đa 5MB
         ]);
+
+        // Xử lý upload file nếu có
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('feedbacks', 'public');
+            $validated['file_path'] = $path;
+        }
 
         // Khi tạo mới, mặc định status = 0 (chưa xem)
         $validated['status'] = Feedback::STATUS_UNREAD;
@@ -70,13 +78,23 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($id);
 
         $validated = $request->validate([
+            'reply_title' => 'nullable|string|max:255',
             'reply' => 'required|string',
+            'reply_file' => 'nullable|file|max:5120',
         ]);
 
-        $feedback->update([
+        $updateData = [
+            'reply_title' => $validated['reply_title'] ?? null,
             'reply'  => $validated['reply'],
             'status' => Feedback::STATUS_READ,
-        ]);
+        ];
+
+        if ($request->hasFile('reply_file')) {
+            $path = $request->file('reply_file')->store('feedbacks/replies', 'public');
+            $updateData['reply_file_path'] = $path;
+        }
+
+        $feedback->update($updateData);
 
         return response()->json([
             'message'  => 'Phản hồi đã được gửi thành công.',

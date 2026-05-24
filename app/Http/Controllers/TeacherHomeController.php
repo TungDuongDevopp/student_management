@@ -217,29 +217,30 @@ class TeacherHomeController extends Controller
                 $currentClass = $classRooms->firstWhere('id', $classId);
                 if ($currentClass) {
                     $title = "Lớp hành chính: " . $currentClass->name;
-                    $students = \App\Models\Student::with('account')
+                    $paginator = \App\Models\Student::with('account')
                         ->where('classroom_id', $classId)
-                        ->get()
-                        ->map(function ($student) use ($currentClass) {
-                            return (object) [
-                                'id' => $student->id,
-                                'name' => $student->name,
-                                'code' => $student->student_code,
-                                'email' => $student->email ?? '',
-                                'class_name' => $currentClass->code,
-                                'status' => 'Đang học',
-                            ];
-                        });
+                        ->paginate(10);
+                    
+                    $students = $paginator->through(function ($student) use ($currentClass) {
+                        return (object) [
+                            'id' => $student->id,
+                            'name' => $student->name,
+                            'code' => $student->student_code,
+                            'email' => $student->email ?? '',
+                            'class_name' => $currentClass->code,
+                            'status' => 'Đang học',
+                        ];
+                    });
                 }
             } elseif ($scheduleId) {
                 $currentSchedule = $schedules->firstWhere('id', $scheduleId);
                 if ($currentSchedule) {
                     $title = "Lớp học phần: " . ($currentSchedule->subject->name ?? '') . " (Nhóm " . $currentSchedule->group_code . ")";
-                    $enrollments = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
+                    $paginator = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
                         ->where('schedule_id', $scheduleId)
-                        ->get();
+                        ->paginate(10);
 
-                    $students = $enrollments->map(function ($enrollment) {
+                    $students = $paginator->through(function ($enrollment) {
                         $student = $enrollment->student;
                         return (object) [
                             'id' => $student->id,

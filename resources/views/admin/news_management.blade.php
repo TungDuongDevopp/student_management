@@ -4,9 +4,16 @@
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 
     <div class="content-wrapper">
-        <div class="page-header">
-            <h1>Tin tức & Thông báo nội bộ</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Bài viết</button>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Tin tức & Thông báo nội bộ</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến tin tức & thông báo nội bộ.</div>
+            </div>
+            <div class="ab-action">
+                <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Bài viết</button>
+            </div>
+            <div class="ab-decor"></div>
         </div>
         
         <div class="search-bar">

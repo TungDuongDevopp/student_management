@@ -2,7 +2,7 @@
 @section('title', 'Kết quả Điểm danh')
 @section('content')
 <style>
-.att-wrap { width: 100%; max-width: 100%; padding: 0 1rem; box-sizing: border-box; }
+.att-wrap { width: 100%; box-sizing: border-box; }
 .page-hero { background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);color:#fff;border-radius:10px;padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem;border:1px solid #1d4ed8; }
 .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
 .hero-content { position:relative;z-index:1; }

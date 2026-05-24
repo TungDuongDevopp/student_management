@@ -4,9 +4,31 @@
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
     <div class="content-wrapper">
 
-        <div class="page-header">
-            <h1>Quản lý Giảng viên</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Giảng viên</button>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Quản lý Giảng viên</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến giảng viên.</div>
+            </div>
+            <div class="ab-action">
+                <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Giảng viên</button>
+            </div>
+            <div class="ab-decor"></div>
+        </div>
+        
+        <div class="stats-row" style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#3b82f6;" id="statTotalTeachers">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Tổng Giảng Viên</span>
+            </div>
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#22c55e;" id="statActiveTeachers">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Đang Giảng Dạy</span>
+            </div>
+            <div class="stat-card" style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1.25rem; display:flex; flex-direction:column; gap:0.2rem; text-align:center;">
+                <span style="font-size:1.8rem; font-weight:700; color:#ef4444;" id="statInactiveTeachers">—</span>
+                <span style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Nghỉ / Dừng</span>
+            </div>
         </div>
         <div class="filter-tabs" id="filterTabs"></div>
         <div class="search-bar">
@@ -154,6 +176,13 @@
                 const counts = {
                     all: allData.length
                 };
+                
+                const active = allData.filter(t => !t.account || !t.account.is_locked).length;
+                const inactive = allData.length - active;
+                document.getElementById('statTotalTeachers').textContent = allData.length;
+                document.getElementById('statActiveTeachers').textContent = active;
+                document.getElementById('statInactiveTeachers').textContent = inactive;
+
                 allFaculties.forEach(f => {
                     counts[f.id] = allData.filter(t => t.faculty_id === f.id).length;
                 });
@@ -219,7 +248,7 @@
                 }
                 let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
                 
-                const delta = 2;
+                const delta = 1;
                 const left = currentPage - delta;
                 const right = currentPage + delta;
                 const range = [];
@@ -252,7 +281,6 @@
                     }
                 }
                 
-                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
                 pg.innerHTML = html;
             }
@@ -265,8 +293,17 @@
             async function loadDropdowns() {
                 const [accounts, faculties] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
                     '/api/faculties').then(r => r.json())]);
-                // Chỉ hiển thị tài khoản có role Teacher
-                const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher');
+                // Chỉ hiển thị tài khoản có role Teacher và chưa gán cho GV nào
+                const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher' && !a.teacher);
+                
+                const currentAccountId = document.getElementById('entityId').value ? document.getElementById('accountId').dataset.current : null;
+                if (currentAccountId) {
+                    const currentAcc = accounts.find(a => a.id == currentAccountId);
+                    if (currentAcc && !teacherAccounts.find(a => a.id == currentAcc.id)) {
+                        teacherAccounts.push(currentAcc);
+                    }
+                }
+
                 document.getElementById('accountId').innerHTML = '<option value="">-- Chọn tài khoản --</option>' +
                     teacherAccounts.map(a => `<option value="${a.id}">${a.username}</option>`).join('');
                 document.getElementById('facultyId').innerHTML = '<option value="">-- Chọn khoa --</option>' + faculties
@@ -287,6 +324,7 @@
             function editEntity(t) {
                 document.getElementById('modalTitle').textContent = 'Cập nhật Giảng viên';
                 document.getElementById('entityId').value = t.id;
+                document.getElementById('accountId').dataset.current = t.account_id || '';
                 loadDropdowns().then(() => {
                     document.getElementById('accountId').value = t.account_id || '';
                     document.getElementById('accountId').disabled = true;
@@ -354,7 +392,8 @@
                     const res = await fetch(url, {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                            'Accept': 'application/json'
                         },
                         body: fd
                     });

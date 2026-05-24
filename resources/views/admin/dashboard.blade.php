@@ -1,6 +1,55 @@
 @extends('layouts.admin.sidebar')
 @section('title', 'Dashboard')
 @section('content')
+
+@php
+    $cntStudents = \App\Models\Student::count();
+    $cntTeachers = \App\Models\Teacher::count();
+    $cntFaculties = \App\Models\Faculty::count();
+    $cntSubjects = \App\Models\Subject::count();
+    $cntFeedbacks = \App\Models\Feedback::where('status', 0)->count();
+    $cntSchedules = \App\Models\Schedule::count();
+    
+    $tuitionsList = \App\Models\Tuition::all(['total_amount', 'paid_amount']);
+    $debtCount = 0;
+    $totalRevenue = 0;
+    foreach($tuitionsList as $t) {
+        $total = floatval($t->total_amount);
+        $paid = floatval($t->paid_amount);
+        if ($total > 0 && $paid < $total) $debtCount++;
+        $totalRevenue += $paid;
+    }
+    
+    $formattedRevenue = '0';
+    if ($totalRevenue >= 1000000000) {
+        $formattedRevenue = number_format($totalRevenue / 1000000000, 1) . ' Tỷ';
+    } elseif ($totalRevenue >= 1000000) {
+        $formattedRevenue = number_format($totalRevenue / 1000000, 0) . ' Tr';
+    } elseif ($totalRevenue > 0) {
+        $formattedRevenue = number_format($totalRevenue) . 'đ';
+    }
+
+    $activeSemester = \App\Models\Semester::where('status', 1)->first() ?? \App\Models\Semester::latest()->first();
+    $semName = $activeSemester ? $activeSemester->semester_name : 'Chưa có dữ liệu';
+    $semYear = $activeSemester ? 'Năm học: ' . $activeSemester->school_year : '';
+    
+    $semSchedules = $activeSemester ? \App\Models\Schedule::where('semester_id', $activeSemester->id)->count() : 0;
+    
+    $semEnrollments = 0;
+    if ($activeSemester) {
+        $scheduleIds = \App\Models\Schedule::where('semester_id', $activeSemester->id)->pluck('id');
+        $semEnrollments = \App\Models\Enrollment::whereIn('schedule_id', $scheduleIds)->count();
+    }
+
+    $semDebt = 0;
+    if ($activeSemester) {
+        $semDebt = \App\Models\Tuition::where('semester_id', $activeSemester->id)
+                    ->whereColumn('paid_amount', '<', 'total_amount')
+                    ->where('total_amount', '>', 0)
+                    ->count();
+    }
+@endphp
+
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
@@ -22,8 +71,8 @@
         /* ── Admin Welcome Banner ── */
         .admin-banner {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-radius: 8px;
-            padding: 2.5rem 3rem;
+            border-radius: 6px;
+            padding: 1.25rem 1.5rem;
             color: #fff;
             margin-bottom: 2rem;
             position: relative;
@@ -36,18 +85,18 @@
         }
         
         .ab-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             color: #94a3b8;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
             text-transform: uppercase;
         }
         
         .ab-title {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
             color: #f8fafc;
         }
         
@@ -115,7 +164,8 @@
 
         .sem-stat-val {
             font-size: 1.4rem;
-            font-weight: 400;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
             color: #212529;
         }
         [data-theme="dark"] .sem-stat-val { color: #fff; }
@@ -165,7 +215,8 @@
 
         .stat-value {
             font-size: 2rem;
-            font-weight: 400;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
             line-height: 1.2;
             margin-bottom: 0.2rem;
             color: #fff !important;
@@ -427,32 +478,34 @@
 
     <div class="content-wrapper">
         
-        {{-- Admin Welcome Banner --}}
+        {{-- Admin Banner --}}
         <div class="admin-banner">
-            <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
-            <div class="ab-title">Xin chào Quản trị viên, {{ Auth::user()->name ?? 'Admin' }}!</div>
-            <div class="ab-desc" id="bannerDesc">Chào mừng bạn quay trở lại. Hệ thống đang hoạt động ổn định. Chúc bạn một ngày làm việc hiệu quả!</div>
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Tổng quan Hệ thống</div>
+                <div class="ab-desc" id="bannerDesc">Đang tải...</div>
+            </div>
             <div class="ab-decor"></div>
         </div>
 
         {{-- Active semester banner --}}
-        <div class="sem-banner" id="semBanner" style="display:none">
+        <div class="sem-banner" id="semBanner">
             <div class="sem-info">
                 <div class="sem-label">Học kỳ đang hoạt động</div>
-                <div class="sem-name" id="semName">—</div>
-                <div class="sem-label" id="semYear" style="color: #17a2b8;"></div>
+                <div class="sem-name" id="semName">{{ $semName }}</div>
+                <div class="sem-label" id="semYear" style="color: #17a2b8;">{{ $semYear }}</div>
             </div>
             <div class="sem-stats-group">
                 <div class="sem-stat">
-                    <div class="sem-stat-val" id="semSchedules">—</div>
+                    <div class="sem-stat-val" id="semSchedules">{{ number_format($semSchedules) }}</div>
                     <div class="sem-stat-lbl">Lớp học phần</div>
                 </div>
                 <div class="sem-stat">
-                    <div class="sem-stat-val" id="semEnrollments">—</div>
+                    <div class="sem-stat-val" id="semEnrollments">{{ number_format($semEnrollments) }}</div>
                     <div class="sem-stat-lbl">Lượt đăng ký</div>
                 </div>
                 <div class="sem-stat">
-                    <div class="sem-stat-val" id="semDebt">—</div>
+                    <div class="sem-stat-val" id="semDebt">{{ number_format($semDebt) }}</div>
                     <div class="sem-stat-lbl">SV nợ học phí</div>
                 </div>
             </div>
@@ -462,56 +515,56 @@
         <div class="stats-grid">
             <a href="{{ route('admin.students') }}" class="stat-card sc-blue">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntStudents">—</div>
+                    <div class="stat-value" id="cntStudents">{{ $cntStudents }}</div>
                     <div class="stat-label">Tổng Sinh viên</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
             </a>
             <a href="{{ route('admin.teachers') }}" class="stat-card sc-purple">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntTeachers">—</div>
+                    <div class="stat-value" id="cntTeachers">{{ $cntTeachers }}</div>
                     <div class="stat-label">Tổng Giảng viên</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
             </a>
             <a href="{{ route('admin.faculties') }}" class="stat-card sc-cyan">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntFaculties">—</div>
-                    <div class="stat-label">Khoa / Viện</div>
+                    <div class="stat-value" id="cntFaculties">{{ $cntFaculties }}</div>
+                    <div class="stat-label">Tổng Khoa</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-building-columns"></i></div>
             </a>
             <a href="{{ route('admin.subjects') }}" class="stat-card sc-teal">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntSubjects">—</div>
+                    <div class="stat-value" id="cntSubjects">{{ $cntSubjects }}</div>
                     <div class="stat-label">Tổng Môn học</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
             </a>
             <a href="{{ route('admin.schedules') }}" class="stat-card sc-green">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntSchedules">—</div>
+                    <div class="stat-value" id="cntSchedules">{{ $cntSchedules }}</div>
                     <div class="stat-label">Lớp học phần</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-calendar-alt"></i></div>
             </a>
             <a href="{{ route('admin.fees') }}" class="stat-card sc-orange">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntRevenue">—</div>
+                    <div class="stat-value" id="cntRevenue">{{ $formattedRevenue }}</div>
                     <div class="stat-label">Doanh thu</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-sack-dollar"></i></div>
             </a>
             <a href="{{ route('admin.feedbacks') }}" class="stat-card sc-gray">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntFeedbacks">—</div>
+                    <div class="stat-value" id="cntFeedbacks">{{ $cntFeedbacks }}</div>
                     <div class="stat-label">Phản hồi mới</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-comments"></i></div>
             </a>
             <a href="{{ route('admin.fees') }}" class="stat-card sc-red">
                 <div class="stat-info">
-                    <div class="stat-value" id="cntDebt">—</div>
+                    <div class="stat-value" id="cntDebt">{{ $debtCount }}</div>
                     <div class="stat-label">Nợ học phí</div>
                 </div>
                 <div class="stat-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
@@ -535,7 +588,7 @@
                     ['url' => route('admin.accounts'),    'icon' => '👤',  'label' => 'Tài khoản'],
                     ['url' => route('admin.feedbacks'),   'icon' => '💬',  'label' => 'Phản hồi'],
                     ['url' => route('admin.semesters'),   'icon' => '🗓️', 'label' => 'Học kỳ'],
-                    ['url' => route('admin.faculties'),   'icon' => '🏛️', 'label' => 'Khoa'],
+                    ['url' => route('admin.news'),        'icon' => '📰', 'label' => 'Bài viết'],
                 ];
                 @endphp
                 @foreach($quickLinks as $ql)
@@ -626,9 +679,7 @@
 
         // ── BOOT ─────────────────────────────────────────────────────────────────
         async function boot() {
-            document.getElementById('bannerDesc').textContent = 'Chào mừng bạn quay trở lại. Dữ liệu hệ thống được cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN') + '. Chúc bạn một ngày làm việc hiệu quả!';
-            // 
-                'Cập nhật: ' + new Date().toLocaleTimeString('vi-VN');
+            document.getElementById('bannerDesc').textContent = 'Cập nhật lần cuối: ' + new Date().toLocaleTimeString('vi-VN');
 
             try {
                 const [students, teachers, faculties, subjects, feedbacks,

@@ -5,16 +5,25 @@
 
     <div class="content-wrapper">
 
-        <div class="page-header">
-            <h1>Quản lý Tài khoản</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Tài khoản</button>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Quản lý Tài khoản</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến tài khoản.</div>
+            </div>
+            <div class="ab-action">
+                <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Tài khoản</button>
+            </div>
+            <div class="ab-decor"></div>
         </div>
 
         <!-- Role Tabs -->
         <div class="role-tabs" id="roleTabs"></div>
 
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Tìm kiếm theo username..." oninput="filterTable()">
+            <input type="text" style="display:none" autocomplete="username">
+            <input type="password" style="display:none" autocomplete="current-password">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm theo username..." autocomplete="off" spellcheck="false" oninput="filterTable()">
         </div>
         <div class="card">
             <div class="table-wrapper">
@@ -210,7 +219,7 @@
                 }
                 let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
                 
-                const delta = 2;
+                const delta = 1;
                 const left = currentPage - delta;
                 const right = currentPage + delta;
                 const range = [];
@@ -243,7 +252,6 @@
                     }
                 }
                 
-                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
                 pg.innerHTML = html;
             }

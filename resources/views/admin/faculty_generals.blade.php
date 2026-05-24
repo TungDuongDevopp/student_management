@@ -4,9 +4,16 @@
     <link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 
     <div class="content-wrapper">
-        <div class="page-header">
-            <h1>Cấu hình Đào tạo (Nhóm Khoa)</h1>
-            <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Nhóm Khoa</button>
+        <div class="admin-banner">
+            <div class="ab-content">
+                <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+                <div class="ab-title">Cấu hình Đào tạo (Nhóm Khoa)</div>
+                <div class="ab-desc">Quản lý, theo dõi và cấu hình các thông tin liên quan đến cấu hình đào tạo (nhóm khoa).</div>
+            </div>
+            <div class="ab-action">
+                <button class="btn btn-primary" onclick="openAddModal()">+ Thêm Nhóm Khoa</button>
+            </div>
+            <div class="ab-decor"></div>
         </div>
         
         <div class="search-bar">
@@ -128,7 +135,7 @@
                 }
                 let html = `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
                 
-                const delta = 2;
+                const delta = 1;
                 const left = currentPage - delta;
                 const right = currentPage + delta;
                 const range = [];
@@ -161,7 +168,6 @@
                     }
                 }
                 
-                html += `<span class="page-info">${filteredData.length} bản ghi</span>`;
                 html += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
                 pg.innerHTML = html;
             }

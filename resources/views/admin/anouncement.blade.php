@@ -2,78 +2,11 @@
 @section('title', 'Quản lý Thông báo')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/admin-shared.css') }}">
 <style>
-    /* VIBE HIỆN ĐẠI TƯƠNG TỰ MAPLEARN EDU (MINIMALIST, CLEAN) */
-    .admin-container {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: #334155;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
+    /* Custom styles for content */
 
-    /* Breadcrumb Header - Khung riêng, rõ ràng */
-    .page-header-block {
-        margin-bottom: 2rem;
-    }
 
-    .breadcrumb-nav {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.8rem;
-        color: #64748b;
-        margin-bottom: 1rem;
-        font-weight: 500;
-    }
-
-    .breadcrumb-nav a {
-        color: #3b82f6;
-        text-decoration: none;
-    }
-
-    .breadcrumb-nav a:hover {
-        text-decoration: underline;
-    }
-
-    .breadcrumb-nav i {
-        font-size: 0.6rem;
-        color: #cbd5e1;
-    }
-
-    .header-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        padding-bottom: 1.25rem;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .header-title-row h1 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin: 0;
-        letter-spacing: -0.01em;
-    }
-
-    .btn-primary {
-        background: #2563eb;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 0.6rem 1.25rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: background 0.2s;
-    }
-
-    .btn-primary:hover {
-        background: #1d4ed8;
-    }
 
     /* KHUNG DANH SÁCH BÀI VIẾT (TIN TỨC) */
     .content-block {
@@ -86,6 +19,7 @@
 
     .filter-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
         margin-bottom: 2rem;
     }
@@ -148,6 +82,7 @@
 
     .article-info {
         flex: 1;
+        min-width: 0;
         display: flex;
         flex-direction: column;
     }
@@ -274,34 +209,35 @@
     
     .form-group { margin-bottom: 1.5rem; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem; }
-    .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; }
+    .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; background-color: #fff; color: #0f172a; }
     .form-control:focus { outline: none; border-color: #3b82f6; }
 </style>
 
-<div class="admin-container">
+<div class="content-wrapper">
 
-    <!-- KHUNG HEADER VÀ BREADCRUMB -->
-    <div class="page-header-block">
-        <div class="breadcrumb-nav">
-            <i class="fa-solid fa-house" style="font-size: 0.75rem;"></i>
-            <a href="#">Dashboard</a>
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>Quản lý nội dung</span>
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>Thông báo</span>
+    <div class="admin-banner">
+        <div class="ab-content">
+            <div class="ab-subtitle">ADMINISTRATION PORTAL</div>
+            <div class="ab-title">Quản lý Thông báo</div>
+            <div class="ab-desc">Soạn thảo, quản lý và xuất bản tin tức, thông báo cho sinh viên và giảng viên.</div>
         </div>
-
-        <div class="header-title-row">
-            <h1>Tin tức & Thông báo</h1>
-            <button class="btn-primary" onclick="openModal('newsModal')">
+        <div class="ab-action">
+            <button class="btn btn-primary" onclick="openModal('newsModal')">
                 <i class="fa-solid fa-plus"></i> Soạn bài viết mới
             </button>
         </div>
+        <div class="ab-decor"></div>
     </div>
 
     <!-- KHUNG NỘI DUNG CHÍNH -->
     <div class="content-block">
         
+        @if(session('success'))
+            <div style="padding: 1rem; background: #dcfce7; color: #166534; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid #bbf7d0;">
+                <i class="fa-solid fa-check-circle"></i> {{ session('success') }}
+            </div>
+        @endif
+
         <div class="filter-row">
             <input type="text" class="search-input" placeholder="Tìm kiếm tiêu đề, người đăng...">
             <select class="filter-select">
@@ -317,67 +253,50 @@
         </div>
 
         <div class="article-list">
-            
-            <!-- BÀI VIẾT 1 -->
+            @forelse($news as $article)
             <div class="article-item">
-                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c476?w=600&h=400&fit=crop" alt="Thumbnail" class="article-cover">
+                <img src="{{ asset($article->thumbnail) }}" alt="Thumbnail" class="article-cover">
                 
                 <div class="article-info">
                     <div class="article-tags">
-                        <span class="badge badge-blue">Đào tạo & Học vụ</span>
-                        <span class="badge badge-green">Đã xuất bản</span>
+                        <span class="badge badge-blue">{{ $article->category ?? 'Tin chung' }}</span>
+                        @if($article->is_published)
+                            <span class="badge badge-green">Đã xuất bản</span>
+                        @endif
+                        @if($article->target_audience == 'student')
+                            <span class="badge" style="background:#fef3c7; color:#b45309;">Chỉ SV</span>
+                        @elseif($article->target_audience == 'teacher')
+                            <span class="badge" style="background:#fee2e2; color:#b91c1c;">Chỉ GV</span>
+                        @endif
                     </div>
                     
-                    <a href="#" class="article-title">Thông báo lịch thi kết thúc học phần – Kỳ 2 năm học 2025–2026</a>
+                    <a href="#" class="article-title">{{ $article->title }}</a>
                     
-                    <p class="article-desc">Căn cứ vào kế hoạch năm học 2025-2026, Phòng Đào tạo chính thức thông báo lịch thi kết thúc học phần cho Kỳ 2. Các bạn sinh viên vui lòng truy cập vào tài khoản cá nhân để xem lịch trình chi tiết và chuẩn bị đầy đủ giấy tờ cần thiết trước khi vào phòng thi.</p>
+                    <div class="article-desc">{!! strip_tags(Str::limit($article->content, 200)) !!}</div>
                     
                     <div class="article-meta">
                         <div class="meta-group">
-                            <img src="https://ui-avatars.com/api/?name=Đào+Tạo&background=f1f5f9&color=0f172a" class="meta-avatar">
-                            <span style="font-weight: 500; color: #0f172a;">Phòng Đào Tạo</span>
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=f1f5f9&color=0f172a" class="meta-avatar">
+                            <span style="font-weight: 500; color: #0f172a;">Admin</span>
                         </div>
-                        <div class="meta-group"><i class="fa-regular fa-clock"></i> 07/05/2026 - 14:30</div>
-                        <div class="meta-group"><i class="fa-regular fa-eye"></i> 1,245 lượt xem</div>
+                        <div class="meta-group"><i class="fa-regular fa-clock"></i> {{ $article->created_at->format('d/m/Y - H:i') }}</div>
                     </div>
                 </div>
 
                 <div class="article-actions">
-                    <button class="btn-action" title="Sửa bài"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action delete" title="Xóa bài"><i class="fa-solid fa-trash"></i></button>
+                    <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa bài viết này không?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn-action delete" title="Xóa bài"><i class="fa-solid fa-trash"></i></button>
+                    </form>
                 </div>
             </div>
-
-            <!-- BÀI VIẾT 2 -->
-            <div class="article-item">
-                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop" alt="Thumbnail" class="article-cover">
-                
-                <div class="article-info">
-                    <div class="article-tags">
-                        <span class="badge" style="background:#fff7ed; color:#c2410c;">Hoạt động Đoàn</span>
-                        <span class="badge badge-green">Đã xuất bản</span>
-                    </div>
-                    
-                    <a href="#" class="article-title">Đăng ký tham gia giải bóng đá Sinh viên toàn trường 2026</a>
-                    
-                    <p class="article-desc">Đoàn Thanh niên trường phát động giải bóng đá truyền thống khối sinh viên. Các liên chi đoàn nhanh chóng thành lập đội tuyển và nộp danh sách thi đấu về văn phòng Đoàn trường trước ngày 15/05/2026.</p>
-                    
-                    <div class="article-meta">
-                        <div class="meta-group">
-                            <img src="https://ui-avatars.com/api/?name=Đoàn+TN&background=f1f5f9&color=0f172a" class="meta-avatar">
-                            <span style="font-weight: 500; color: #0f172a;">Đoàn Thanh Niên</span>
-                        </div>
-                        <div class="meta-group"><i class="fa-regular fa-clock"></i> 05/05/2026 - 09:00</div>
-                        <div class="meta-group"><i class="fa-regular fa-eye"></i> 856 lượt xem</div>
-                    </div>
-                </div>
-
-                <div class="article-actions">
-                    <button class="btn-action" title="Sửa bài"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action delete" title="Xóa bài"><i class="fa-solid fa-trash"></i></button>
-                </div>
+            @empty
+            <div style="text-align: center; padding: 3rem 1rem; color: #94a3b8;">
+                <i class="fa-regular fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; color: #cbd5e1;"></i>
+                <p>Chưa có bài viết hay thông báo nào trong cơ sở dữ liệu.</p>
             </div>
-
+            @endforelse
         </div>
 
     </div>
@@ -387,70 +306,105 @@
 <!-- Modal Thêm/Sửa Bài Viết (Tích hợp TinyMCE) -->
 <div class="modal-overlay" id="newsModal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h2>Soạn Thảo Bài Viết / Thông Báo</h2>
-            <button onclick="closeModal('newsModal')" style="background:transparent; border:none; font-size:1.5rem; color:#94a3b8; cursor:pointer;">&times;</button>
-        </div>
-        <div class="modal-body">
-            
-            <div class="form-group">
-                <label>Tiêu đề bài viết <span style="color:#dc2626">*</span></label>
-                <input type="text" class="form-control" placeholder="Nhập tiêu đề rõ ràng, súc tích...">
+        <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-header">
+                <h2>Soạn Thảo Bài Viết / Thông Báo</h2>
+                <button type="button" onclick="closeModal('newsModal')" style="background:transparent; border:none; font-size:1.5rem; color:#94a3b8; cursor:pointer;">&times;</button>
             </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="modal-body">
+                
                 <div class="form-group">
-                    <label>Chuyên mục</label>
-                    <select class="form-control">
-                        <option>Đào tạo & Học vụ</option>
-                        <option>Hoạt động Đoàn Hội</option>
-                        <option>Học phí & Tài chính</option>
-                    </select>
+                    <label>Tiêu đề bài viết <span style="color:#dc2626">*</span></label>
+                    <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề rõ ràng, súc tích..." required>
                 </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>Chuyên mục</label>
+                        <select name="category" class="form-control">
+                            <option value="Đào tạo & Học vụ">Đào tạo & Học vụ</option>
+                            <option value="Hoạt động Đoàn Hội">Hoạt động Đoàn Hội</option>
+                            <option value="Học phí & Tài chính">Học phí & Tài chính</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Đối tượng <span style="color:#dc2626">*</span></label>
+                        <select name="target_audience" class="form-control" required>
+                            <option value="all">Tất cả (SV & GV)</option>
+                            <option value="student">Chỉ Sinh viên</option>
+                            <option value="teacher">Chỉ Giảng viên</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label>Người đăng (Tác giả)</label>
-                    <input type="text" class="form-control" value="Phòng Đào Tạo" readonly style="background:#f8fafc;">
+                    <label>Ảnh đại diện (Cover Image)</label>
+                    <input type="file" name="thumbnail" id="thumbnail-input" class="form-control" accept="image/*" onchange="previewImage(event)">
+                    <small style="color:#64748b; margin-top:0.5rem; display:block;">Tỉ lệ ảnh chuẩn: 16:9. Dùng làm thumbnail hiển thị (Có thể bỏ trống).</small>
+                    <div id="image-preview-container" style="display: none; margin-top: 1rem; position: relative;">
+                        <img id="image-preview" src="#" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Ảnh đại diện (Cover Image) <span style="color:#dc2626">*</span></label>
-                <input type="file" class="form-control" accept="image/*">
-                <small style="color:#64748b; margin-top:0.5rem; display:block;">Tỉ lệ ảnh chuẩn: 16:9 (Ví dụ: 800x450px). Dùng làm thumbnail hiển thị.</small>
-            </div>
+                <div class="form-group">
+                    <label>Nội dung chi tiết <span style="color:#dc2626">*</span></label>
+                    <!-- Trình soạn thảo giống phần Feedback -->
+                    <textarea id="admin-news-editor" name="content"></textarea>
+                </div>
 
-            <div class="form-group">
-                <label>Mô tả ngắn (Hiển thị ngoài danh sách)</label>
-                <textarea class="form-control" rows="3" placeholder="Nhập đoạn tóm tắt nội dung bài viết khoảng 2-3 câu..."></textarea>
             </div>
-
-            <div class="form-group">
-                <label>Nội dung chi tiết <span style="color:#dc2626">*</span></label>
-                <!-- Trình soạn thảo giống phần Feedback -->
-                <textarea id="admin-news-editor"></textarea>
+            <div class="modal-header" style="background:#f8fafc; border-top:1px solid #e2e8f0; border-bottom:none; justify-content:flex-end; gap:1rem;">
+                <button type="button" onclick="closeModal('newsModal')" style="padding:0.6rem 1.25rem; border:1px solid #cbd5e1; border-radius:6px; background:#fff; color:#475569; font-weight:600; cursor:pointer;">Hủy bỏ</button>
+                <button type="submit" class="btn-primary">Lưu & Xuất bản</button>
             </div>
-
-        </div>
-        <div class="modal-header" style="background:#f8fafc; border-top:1px solid #e2e8f0; border-bottom:none; justify-content:flex-end; gap:1rem;">
-            <button onclick="closeModal('newsModal')" style="padding:0.6rem 1.25rem; border:1px solid #cbd5e1; border-radius:6px; background:#fff; color:#475569; font-weight:600; cursor:pointer;">Hủy bỏ</button>
-            <button class="btn-primary">Lưu & Xuất bản</button>
-        </div>
+        </form>
     </div>
 </div>
 
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Init TinyMCE
-    tinymce.init({
-        selector: '#admin-news-editor',
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('image-preview');
+            var container = document.getElementById('image-preview-container');
+            output.src = reader.result;
+            container.style.display = 'block';
+        }
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+
+    // Tắt cảnh báo phiên bản CKEditor
+    CKEDITOR.config.versionCheck = false;
+
+    // Init CKEditor 4
+    CKEDITOR.replace('content', {
         height: 350,
-        plugins: 'advlist autolink lists link image preview table wordcount',
-        toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image table',
-        menubar: false,
-        branding: false
+        language: 'vi',
+        removeButtons: 'About',
+        toolbarGroups: [
+            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+            { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+            { name: 'forms', groups: [ 'forms' ] },
+            '/',
+            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+            { name: 'links', groups: [ 'links' ] },
+            { name: 'insert', groups: [ 'insert' ] },
+            '/',
+            { name: 'styles', groups: [ 'styles' ] },
+            { name: 'colors', groups: [ 'colors' ] },
+            { name: 'tools', groups: [ 'tools' ] },
+            { name: 'others', groups: [ 'others' ] }
+        ]
     });
 </script>
 @endsection

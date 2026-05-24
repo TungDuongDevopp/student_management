@@ -14,7 +14,7 @@ class AccountController extends Controller
     //GET /api/accounts
     public function index()
     {
-        $accounts = Account::with('role')->get();
+        $accounts = Account::with(['role', 'student', 'teacher'])->get();
         return response()->json($accounts);
     }
     // Tạo tài khoản

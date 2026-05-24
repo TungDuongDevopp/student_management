@@ -375,8 +375,9 @@
                     <a href="{{ route('teacher.feedback') }}" class="btn"><i class="fa-regular fa-message"></i>
                         Gửi hỗ
                         trợ (Ticket)</a>
+                    <a href="{{ route('user.change_password') }}" class="btn"><i class="fa-solid fa-lock"></i> Đổi mật khẩu</a>
                 </div>
             </aside>
-        </section>
+        </div> <!-- Đóng content-grid -->
     </main>
 @endsection

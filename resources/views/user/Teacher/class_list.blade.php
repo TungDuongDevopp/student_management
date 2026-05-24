@@ -2,7 +2,7 @@
 @section('title', 'Danh sách Lớp học')
 @section('content')
 <style>
-    .cls-wrapper { max-width: 1200px; }
+    .cls-wrapper { width: 100%; box-sizing: border-box; }
     .page-hero { background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 100%);color:#fff;border-radius:10px;padding:1.75rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;position:relative;overflow:hidden;margin-bottom:1.5rem; }
     .page-hero::after { content:"";position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,.08);transform:rotate(45deg); }
     .hero-content { position:relative;z-index:1; }

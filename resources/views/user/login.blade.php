@@ -171,6 +171,12 @@
 </head>
 
 <body>
+    @if(session('success_popup'))
+    <div class="toast-notification" style="background-color: #16a34a;">
+        {{ session('success_popup') }}
+    </div>
+    @endif
+
     @if(session('error_popup'))
     <div class="toast-notification">
         {{ session('error_popup') }}
@@ -214,7 +220,7 @@
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
                 <div class="forgot-pass">
-                    <a href="#">Quên mật khẩu?</a>
+                    <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
                 </div>
             </div>
 

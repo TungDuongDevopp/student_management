@@ -408,7 +408,7 @@
             <div class="section-header">
                 <h2 id="news-heading"><i class="fa-regular fa-newspaper" style="margin-right:8px; color:#dc2626;"></i>Tin
                     tức & Thông báo nội bộ</h2>
-                <a href="#">Xem tất cả →</a>
+                <a href="{{ route('user.news.index') }}">Xem tất cả →</a>
             </div>
             <div class="news-list">
                 @forelse($news ?? [] as $article)

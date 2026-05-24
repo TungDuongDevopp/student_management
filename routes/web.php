@@ -20,6 +20,11 @@ Route::get('/login', function () {
 })->name('user.login');
 Route::post('/login', [AuthController::class, 'userLogin'])->name('user.login.post');
 
+// Forgot Password Routes
+Route::get('/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [\App\Http\Controllers\ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [\App\Http\Controllers\ForgotPasswordController::class, 'reset'])->name('password.update');
 Route::middleware('auth')->group(function () {
     Route::get('/news', function () {
         $target = (Auth::user()->role_id == 2) ? 'teacher' : 'student';
@@ -34,6 +39,9 @@ Route::middleware('auth')->group(function () {
         $article = \App\Models\News::findOrFail($id);
         return view('user.news_show', compact('article'));
     })->name('user.news.show');
+
+    Route::get('/change-password', [\App\Http\Controllers\AuthController::class, 'showUserChangePassword'])->name('user.change_password');
+    Route::post('/change-password', [\App\Http\Controllers\AuthController::class, 'updatePassword'])->name('user.change_password.post');
 });
 
 // Admin Login
@@ -54,6 +62,9 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
     Route::get('/info', function () {
         return view('admin.info');
     })->name('admin.info');
+
+    Route::get('/change-password', [\App\Http\Controllers\AuthController::class, 'showChangePassword'])->name('admin.change_password');
+    Route::post('/change-password', [\App\Http\Controllers\AuthController::class, 'updatePassword'])->name('admin.change_password.post');
 
     Route::get('/students', function () {
         return view('admin.student_management');
@@ -117,8 +128,11 @@ Route::prefix('admin')->middleware('role:1')->group(function () {
 
     Route::get('/news', function () {
         $news = \App\Models\News::orderBy('created_at', 'desc')->get();
-        return view('admin.news_management', compact('news'));
+        return view('admin.anouncement', compact('news'));
     })->name('admin.news');
+
+    Route::post('/news/store', [App\Http\Controllers\AdminNewsController::class, 'store'])->name('admin.news.store');
+    Route::delete('/news/{id}', [App\Http\Controllers\AdminNewsController::class, 'destroy'])->name('admin.news.destroy');
 });
 
 // Admin configuration routes
@@ -190,6 +204,19 @@ Route::post('/admin/logout', function () {
     session()->regenerateToken();
     return redirect()->route('admin.login');
 })->name('admin.logout');
+
+Route::middleware('auth')->group(function() {
+    Route::get('/news', function () {
+        $news = \App\Models\News::orderBy('created_at', 'desc')->get();
+        return view('user.news_index', compact('news'));
+    })->name('user.news.index');
+
+    Route::get('/news/{id}', function ($id) {
+        $article = \App\Models\News::findOrFail($id);
+        $recentNews = \App\Models\News::where('id', '!=', $id)->orderBy('created_at', 'desc')->take(5)->get();
+        return view('user.news_show', compact('article', 'recentNews'));
+    })->name('user.news.show');
+});
 
 // ===== PAYMENT API =====
 // SePay Webhook — nhận callback khi có giao dịch thành công
