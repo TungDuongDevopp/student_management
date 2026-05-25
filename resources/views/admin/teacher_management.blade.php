@@ -151,7 +151,7 @@
         <div class="toast" id="toast"></div>
 
         <script>
-            const API = '/api/teachers';
+            const API = '{{ url('api/teachers') }}';
             const PER_PAGE = 10;
             let allData = [],
                 allFaculties = [],
@@ -161,7 +161,7 @@
 
             async function fetchData() {
                 try {
-                    const [teachersRes, facultiesRes] = await Promise.all([fetch(API), fetch('/api/faculties')]);
+                    const [teachersRes, facultiesRes] = await Promise.all([fetch(API), fetch('{{ url('api/faculties') }}')]);
                     allData = await teachersRes.json();
                     allFaculties = await facultiesRes.json();
                     renderFilterTabs();
@@ -292,12 +292,12 @@
             }
 
             async function loadDropdowns(currentAccountId = null) {
-                const [accounts, faculties] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
-                    '/api/faculties').then(r => r.json())]);
+                const [accounts, faculties] = await Promise.all([fetch('{{ url('api/accounts') }}').then(r => r.json()), fetch(
+                    '{{ url('api/faculties') }}').then(r => r.json())]);
                 // Chỉ hiển thị tài khoản có role Teacher và chưa gán cho GV nào
                 const teacherAccounts = accounts.filter(a => a.role && a.role.name === 'Teacher' && !a.teacher);
                 
-                const currentAccountId = document.getElementById('entityId').value ? document.getElementById('accountId').dataset.current : null;
+                currentAccountId = document.getElementById('entityId').value ? document.getElementById('accountId').dataset.current : null;
                 if (currentAccountId) {
                     const currentAcc = accounts.find(a => a.id == currentAccountId);
                     if (currentAcc && !teacherAccounts.find(a => a.id == currentAcc.id)) {

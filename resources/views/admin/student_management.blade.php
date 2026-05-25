@@ -141,7 +141,7 @@
         <div class="toast" id="toast"></div>
 
         <script>
-            const API = '/api/students';
+            const API = '{{ url('api/students') }}';
             const PER_PAGE = 10;
             let allStudents = [],
                 allClassrooms = [],
@@ -151,7 +151,7 @@
 
             async function fetchStudents() {
                 try {
-                    const [studentsRes, classroomsRes] = await Promise.all([fetch(API), fetch('/api/classrooms')]);
+                    const [studentsRes, classroomsRes] = await Promise.all([fetch(API), fetch('{{ url('api/classrooms') }}')]);
                     allStudents = await studentsRes.json();
                     allClassrooms = await classroomsRes.json();
                     renderFilterTabs();
@@ -287,13 +287,13 @@
             }
 
             async function loadDropdowns(currentAccountId = null) {
-                const [accounts, classrooms] = await Promise.all([fetch('/api/accounts').then(r => r.json()), fetch(
-                    '/api/classrooms').then(r => r.json())]);
+                const [accounts, classrooms] = await Promise.all([fetch('{{ url('api/accounts') }}').then(r => r.json()), fetch(
+                    '{{ url('api/classrooms') }}').then(r => r.json())]);
                 // Chỉ hiển thị tài khoản có role Student và chưa được gán cho sinh viên nào khác
                 const studentAccounts = accounts.filter(a => a.role && a.role.name === 'Student' && !a.student);
                 
                 // Khi sửa, nếu tài khoản hiện tại đang thuộc về sinh viên này thì vẫn cho hiển thị
-                const currentAccountId = document.getElementById('studentId').value ? document.getElementById('accountId').dataset.current : null;
+                currentAccountId = document.getElementById('studentId').value ? document.getElementById('accountId').dataset.current : null;
                 if (currentAccountId) {
                     const currentAcc = accounts.find(a => a.id == currentAccountId);
                     if (currentAcc && !studentAccounts.find(a => a.id == currentAcc.id)) {

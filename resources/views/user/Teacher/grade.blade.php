@@ -199,6 +199,14 @@
             </div>
         @endif
 
+        @if (isset($allGraded) && $allGraded && $isGradingOpen)
+            <div
+                style="background:#dcfce7; border:1px solid #86efac; padding:0.75rem 1.25rem; border-radius:8px; color:#166534; font-weight:600; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; font-size:0.88rem;">
+                <i class="fa-solid fa-check-circle" style="font-size:1.1rem;"></i>
+                <span>Tất cả điểm của lớp đã được nhập đầy đủ. Hệ thống đã tự động khóa cập nhật. Vui lòng liên hệ Admin nếu cần chỉnh sửa.</span>
+            </div>
+        @endif
+
         <div class="sl-header">
             <h1><i class="fa-solid fa-pen-to-square" style="color:#16a34a; margin-right:0.5rem;"></i>Cập nhật Điểm Sinh viên
             </h1>
@@ -228,7 +236,7 @@
                         <span style="font-size:0.85rem; font-weight: 600; color:#475569;"><i class="fa-solid fa-users"></i>
                             Tổng số: {{ $students->count() }} SV</span>
                         <button class="btn-save" onclick="saveGrades()"
-                            {{ !$isGradingOpen ? 'disabled style=background:#94a3b8;cursor:not-allowed;opacity:0.75;' : '' }}><i
+                            {{ (!$isGradingOpen || (isset($allGraded) && $allGraded)) ? 'disabled style=background:#94a3b8;cursor:not-allowed;opacity:0.75;' : '' }}><i
                                 class="fa-solid fa-save"></i> Chốt
                             & Lưu điểm</button>
                     </div>
@@ -271,7 +279,7 @@
                                             name="score_c[{{ $sv->enrollment_id }}]" min="0" max="10"
                                             step="0.1" value="{{ $sv->score_c }}" placeholder="--"
                                             oninput="checkAttendance(this)"
-                                            {{ !$isGradingOpen ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
+                                            {{ (!$isGradingOpen || (isset($allGraded) && $allGraded)) ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
                                         <div class="banned-badge"
                                             style="display:{{ $sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0 ? 'block' : 'none' }}; font-size:0.72rem; color:#ef4444; font-weight:600; margin-top:2px;">
                                             🚫 Cấm thi</div>
@@ -280,7 +288,7 @@
                                         <input type="number" class="grade-input" name="score_b[{{ $sv->enrollment_id }}]"
                                             min="0" max="10" step="0.1" value="{{ $sv->score_b }}"
                                             placeholder="--"
-                                            {{ !$isGradingOpen ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
+                                            {{ (!$isGradingOpen || (isset($allGraded) && $allGraded)) ? 'disabled style=background:#f8fafc;color:#94a3b8;cursor:not-allowed;' : '' }}>
                                     </td>
                                     <td style="text-align:center;">
                                         @if ($sv->score_c !== null && $sv->score_c !== '' && floatval($sv->score_c) == 0)

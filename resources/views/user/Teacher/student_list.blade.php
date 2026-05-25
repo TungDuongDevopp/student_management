@@ -275,9 +275,9 @@
                 <div class="sl-card-header">
                     <h2>{{ $title }}</h2>
                     <div class="sl-stats">
-                        <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng số: {{ $students->total() }} SV</span>
+                        <span class="sl-stat"><i class="fa-solid fa-users"></i> Tổng số: {{ method_exists($students, 'total') ? $students->total() : $students->count() }} SV</span>
                         <span class="sl-stat" style="background:#dcfce7; color:#166534;"><i
-                                class="fa-solid fa-check-circle"></i> Đang học: {{ $students->total() }}</span>
+                                class="fa-solid fa-check-circle"></i> Đang học: {{ method_exists($students, 'total') ? $students->total() : $students->count() }}</span>
                     </div>
                 </div>
 
@@ -335,7 +335,7 @@
                     </table>
                 </div>
                 
-                @if($students->hasPages())
+                @if(method_exists($students, 'hasPages') && $students->hasPages())
                     <div style="padding: 1rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: center;">
                         {{ $students->appends(request()->query())->links('pagination::bootstrap-4') }}
                     </div>
