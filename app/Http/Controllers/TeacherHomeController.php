@@ -217,43 +217,42 @@ class TeacherHomeController extends Controller
                 $currentClass = $classRooms->firstWhere('id', $classId);
                 if ($currentClass) {
                     $title = "Lớp hành chính: " . $currentClass->name;
-                    $paginator = \App\Models\Student::with('account')
+                    $students = \App\Models\Student::with('account')
                         ->where('classroom_id', $classId)
-                        ->paginate(10);
-                    
-                    $students = $paginator->through(function ($student) use ($currentClass) {
-                        return (object) [
-                            'id' => $student->id,
-                            'name' => $student->name,
-                            'code' => $student->student_code,
-                            'email' => $student->email ?? '',
-                            'class_name' => $currentClass->code,
-                            'status' => 'Đang học',
-                        ];
-                    });
+                        ->orderByRaw('SUBSTRING_INDEX(TRIM(name), " ", -1) ASC, name ASC')
+                        ->paginate(10)
+                        ->through(function ($student) use ($currentClass) {
+                            return (object) [
+                                'id' => $student->id,
+                                'name' => $student->name,
+                                'code' => $student->student_code,
+                                'email' => $student->email ?? '',
+                                'class_name' => $currentClass->code,
+                                'status' => 'Đang học',
+                            ];
+                        });
                 }
             } elseif ($scheduleId) {
                 $currentSchedule = $schedules->firstWhere('id', $scheduleId);
                 if ($currentSchedule) {
                     $title = "Lớp học phần: " . ($currentSchedule->subject->name ?? '') . " (Nhóm " . $currentSchedule->group_code . ")";
-                    $paginator = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
+                    $students = \App\Models\Enrollment::with(['student.account', 'student.classroom'])
                         ->where('schedule_id', $scheduleId)
-                        ->paginate(10);
-
-                    $students = $paginator->through(function ($enrollment) {
-                        $student = $enrollment->student;
-                        return (object) [
-                            'id' => $student->id,
-                            'name' => $student->name,
-                            'code' => $student->student_code,
-                            'email' => $student->email ?? '',
-                            'class_name' => $student->classroom->name ?? '—',
-                            'status' => 'Đang học',
-                        ];
-                    })->sortBy(function($s) {
-                        $parts = explode(' ', trim($s->name));
-                        return end($parts) . ' ' . $s->name;
-                    })->values();
+                        ->join('students', 'enrollments.student_id', '=', 'students.id')
+                        ->orderByRaw('SUBSTRING_INDEX(TRIM(students.name), " ", -1) ASC, students.name ASC')
+                        ->select('enrollments.*')
+                        ->paginate(10)
+                        ->through(function ($enrollment) {
+                            $student = $enrollment->student;
+                            return (object) [
+                                'id' => $student->id,
+                                'name' => $student->name,
+                                'code' => $student->student_code,
+                                'email' => $student->email ?? '',
+                                'class_name' => $student->classroom->name ?? '—',
+                                'status' => 'Đang học',
+                            ];
+                        });
                 }
             } else {
                 // Default to first class room if none selected
@@ -337,7 +336,7 @@ class TeacherHomeController extends Controller
                             'is_present' => $attendance ? ($attendance->status == 1) : true
                         ];
                     })->sortBy(function($s) {
-                        $parts = explode(' ', trim($s->name));
+                        $parts = explode(' ', trim((string)$s->name));
                         return end($parts) . ' ' . $s->name;
                     })->values();
                 }
@@ -403,6 +402,7 @@ class TeacherHomeController extends Controller
 
         $students = collect();
         $currentSchedule = null;
+        $allGraded = false;
 
         if ($scheduleId) {
             $currentSchedule = $schedules->firstWhere('id', $scheduleId);
@@ -411,19 +411,28 @@ class TeacherHomeController extends Controller
                     ->where('schedule_id', $scheduleId)
                     ->get();
 
-                $students = $enrollments->map(function ($enrollment) {
+                $allGraded = $enrollments->count() > 0;
+
+                $students = $enrollments->map(function ($enrollment) use (&$allGraded) {
                     $student = $enrollment->student;
+                    $scoreC = $enrollment->grade->score_c ?? '';
+                    $scoreB = $enrollment->grade->score_b ?? '';
+                    
+                    if ($scoreC === '' || $scoreB === '') {
+                        $allGraded = false;
+                    }
+
                     return (object) [
                         'id' => $student->id,
                         'enrollment_id' => $enrollment->id,
                         'name' => $student->name,
                         'code' => $student->student_code,
                         'class_name' => $student->classroom->name ?? '—',
-                        'score_c' => $enrollment->grade->score_c ?? '',
-                        'score_b' => $enrollment->grade->score_b ?? '',
+                        'score_c' => $scoreC,
+                        'score_b' => $scoreB,
                     ];
                 })->sortBy(function($s) {
-                    $parts = explode(' ', trim($s->name));
+                    $parts = explode(' ', trim((string)$s->name));
                     return end($parts) . ' ' . $s->name;
                 })->values();
             }
@@ -434,7 +443,7 @@ class TeacherHomeController extends Controller
         $isRegistrationOpen = (\App\Models\SystemConfig::getValue('is_registration_open', '1') === '1');
         $isGradingOpen = (\App\Models\SystemConfig::getValue('is_grading_open', '0') === '1');
 
-        return view('user.Teacher.grade', compact('teacher', 'schedules', 'students', 'currentSchedule', 'isRegistrationOpen', 'isGradingOpen'));
+        return view('user.Teacher.grade', compact('teacher', 'schedules', 'students', 'currentSchedule', 'isRegistrationOpen', 'isGradingOpen', 'allGraded'));
     }
 
     public function saveGrades(\Illuminate\Http\Request $request)
@@ -442,6 +451,28 @@ class TeacherHomeController extends Controller
         $isGradingOpen = (\App\Models\SystemConfig::getValue('is_grading_open', '0') === '1');
         if (!$isGradingOpen) {
             return response()->json(['success' => false, 'message' => 'Cổng nhập điểm hiện đang ĐÓNG. Vui lòng liên hệ Admin để mở đợt chấm điểm.'], 403);
+        }
+
+        // Kiểm tra xem tất cả điểm đã được nhập hết chưa (nếu đã khóa thì không cho save)
+        $enrollmentIds = array_keys($request->input('grades', []));
+        if (count($enrollmentIds) > 0) {
+            $scheduleId = \App\Models\Enrollment::where('id', $enrollmentIds[0])->value('schedule_id');
+            if ($scheduleId) {
+                $allEnrollments = \App\Models\Enrollment::with('grade')->where('schedule_id', $scheduleId)->get();
+                if ($allEnrollments->count() > 0) {
+                    $isAllGraded = true;
+                    foreach ($allEnrollments as $enr) {
+                        $grade = $enr->grade;
+                        if (!$grade || $grade->score_c === null || $grade->score_c === '' || $grade->score_b === null || $grade->score_b === '') {
+                            $isAllGraded = false;
+                            break;
+                        }
+                    }
+                    if ($isAllGraded) {
+                        return response()->json(['success' => false, 'message' => 'Tất cả điểm đã được nhập và tự động khóa. Không thể cập nhật thêm.'], 403);
+                    }
+                }
+            }
         }
 
         $validated = $request->validate([

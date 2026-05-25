@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Account extends Authenticatable
 {
+    public $timestamps = false;
     protected $fillable = [
         'role_id',
         'username',
