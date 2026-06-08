@@ -339,6 +339,38 @@ class StudentHomeController extends Controller
             return response()->json(['success' => false, 'message' => 'Không có học kỳ nào đang mở.'], 400);
         }
 
+        // Kiểm tra trước toàn bộ danh sách schedule_ids được gửi lên xem có trùng môn học không
+        $requestedSchedules = \App\Models\Schedule::whereIn('id', $scheduleIds)->with('subject')->get();
+        
+        $requestedSubjectIds = [];
+        foreach ($requestedSchedules as $schedule) {
+            $subjectId = $schedule->subject_id;
+            
+            // 1. Kiểm tra trùng môn trong chính danh sách gửi lên
+            if (in_array($subjectId, $requestedSubjectIds)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn đã chọn nhiều nhóm của cùng môn học "' . ($schedule->subject->name ?? 'Không xác định') . '". Vui lòng chỉ chọn 1 nhóm cho mỗi môn.'
+                ], 400);
+            }
+            $requestedSubjectIds[] = $subjectId;
+            
+            // 2. Kiểm tra trùng môn với các môn đã đăng ký thành công trong DB (cùng học kỳ)
+            $alreadyEnrolledSubject = Enrollment::where('student_id', $student->id)
+                ->where('schedule_id', '!=', $schedule->id)
+                ->whereHas('schedule', function($q) use ($subjectId, $activeSemester) {
+                    $q->where('subject_id', $subjectId)
+                      ->where('semester_id', $activeSemester->id);
+                })->first();
+                
+            if ($alreadyEnrolledSubject) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn đã đăng ký một nhóm khác của môn "' . ($schedule->subject->name ?? 'Không xác định') . '". Không thể đăng ký trùng môn.'
+                ], 400);
+            }
+        }
+
         // Tự động sửa cấu hình cột tuition_id thành nullable đề phòng lỗi DB schema
         try {
             \Illuminate\Support\Facades\DB::statement("ALTER TABLE enrollments MODIFY tuition_id BIGINT UNSIGNED NULL DEFAULT NULL");

@@ -713,6 +713,16 @@
                                         ];
                                         $isFull = $s[6] >= $s[5];
                                         $remaining = max(0, $s[5] - $s[6]);
+                                        
+                                        $subjectCode = $s[8] ?? $s[0];
+                                        $isAlreadyEnrolled = false;
+                                        foreach ($enrolledSchedules as $es) {
+                                            if (($es['subject_code'] ?? '') == $subjectCode || $es['id'] == $s[0]) {
+                                                $isAlreadyEnrolled = true;
+                                                break;
+                                            }
+                                        }
+                                        $isDisabledRow = $isFull || $isAlreadyEnrolled;
 
                                         $scheduleText = 'Nhà trường sắp xếp';
                                         if (is_array($s[4]) && count($s[4]) > 0) {
@@ -730,33 +740,33 @@
                                             $scheduleText = implode('<br>', $parts);
                                         }
                                     @endphp
-                                    <tr class="subject-row {{ $isFull ? 'row-full' : '' }}"
-                                        style="{{ $isFull ? 'background-color: #f8fafc;' : '' }}"
+                                    <tr class="subject-row {{ $isDisabledRow ? 'row-full' : '' }}"
+                                        style="{{ $isDisabledRow ? 'background-color: #f8fafc;' : '' }}"
                                         data-type="{{ $s[3] }}" data-id="{{ $s[0] }}"
                                         data-code="{{ $s[8] ?? $s[0] }}" data-credits="{{ $s[2] }}"
                                         data-sessions="{{ json_encode($s[4]) }}" data-name="{{ $s[1] }}"
                                         data-schedule="{{ strip_tags($scheduleText) }}">
 
-                                        <td style="font-weight: 600; color: {{ $isFull ? '#94a3b8' : '#475569' }};">
+                                        <td style="font-weight: 600; color: {{ $isDisabledRow ? '#94a3b8' : '#475569' }};">
                                             {{ $s[8] ?? $s[0] }}</td>
                                         <td>
-                                            <div class="subj-name" style="{{ $isFull ? 'color: #94a3b8;' : '' }}">
+                                            <div class="subj-name" style="{{ $isDisabledRow ? 'color: #94a3b8;' : '' }}">
                                                 {{ $s[1] }}</div>
                                         </td>
                                         <td
-                                            style="font-weight: 800; color: {{ $isFull ? '#94a3b8' : '#2563eb' }}; font-size: 0.85rem;">
+                                            style="font-weight: 800; color: {{ $isDisabledRow ? '#94a3b8' : '#2563eb' }}; font-size: 0.85rem;">
                                             {{ $s[2] }}</td>
-                                        <td style="font-weight: 600; color: {{ $isFull ? '#94a3b8' : '#0f172a' }};">
+                                        <td style="font-weight: 600; color: {{ $isDisabledRow ? '#94a3b8' : '#0f172a' }};">
                                             {{ $s[7] }}</td>
                                         <td>{{ $s[5] }}</td>
-                                        <td style="color: {{ $isFull ? '#94a3b8' : 'red' }}; font-weight: 700;">
+                                        <td style="color: {{ $isDisabledRow ? '#94a3b8' : 'red' }}; font-weight: 700;">
                                             {{ $remaining }}</td>
                                         <td style="text-align: center;">
                                             <input type="checkbox" class="enroll-checkbox" id="cb-{{ $s[0] }}"
                                                 value="{{ $s[0] }}"
-                                                {{ $isFull || !$registrationOpen ? 'disabled' : '' }}
+                                                {{ $isDisabledRow || !$registrationOpen ? 'disabled' : '' }}
                                                 onchange="toggleSubject('{{ $s[0] }}', event)"
-                                                style="cursor: {{ $isFull || !$registrationOpen ? 'not-allowed' : 'pointer' }}; width: 18px; height: 18px;">
+                                                style="cursor: {{ $isDisabledRow || !$registrationOpen ? 'not-allowed' : 'pointer' }}; width: 18px; height: 18px;">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -1126,7 +1136,8 @@
                 let remaining = Math.max(0, s[5] - s[6]);
 
                 let isChecked = cart[s[0]] ? 'checked' : '';
-                let isAlreadyEnrolled = enrolledSchedules.some(es => es.id === s[0]);
+                let subjectCode = s[8] || s[0];
+                let isAlreadyEnrolled = enrolledSchedules.some(es => es.subject_code == subjectCode || es.id === s[0]);
                 let isDisabled = (isFull || isAlreadyEnrolled || !registrationOpen) ? 'disabled' : '';
                 let cursorStyle = (isFull || isAlreadyEnrolled || !registrationOpen) ? 'not-allowed' : 'pointer';
                 let rowBg = (isFull || isAlreadyEnrolled) ? 'background-color: #f8fafc;' : '';
@@ -1206,6 +1217,20 @@
                 if (cb) cb.checked = false;
                 triggerInteractiveToast(`Đã gỡ môn: ${s.name}`);
             } else {
+                const isAlreadyInCart = Object.values(cart).some(item => item.code === s.code);
+                if (isAlreadyInCart) {
+                    alert(`Bạn đã chọn một nhóm khác của môn "${s.name}". Không thể chọn nhiều nhóm của cùng một môn!`);
+                    if (cb) cb.checked = false;
+                    return;
+                }
+                
+                const isAlreadyEnrolled = enrolledSchedules.some(es => es.subject_code == s.code);
+                if (isAlreadyEnrolled) {
+                    alert(`Bạn đã đăng ký môn "${s.name}" rồi. Không thể đăng ký thêm nhóm khác!`);
+                    if (cb) cb.checked = false;
+                    return;
+                }
+                
                 cart[code] = s;
                 if (cb) cb.checked = true;
                 triggerInteractiveToast(`Đã thêm môn: ${s.name}`);
